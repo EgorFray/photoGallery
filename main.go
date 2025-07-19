@@ -2,17 +2,20 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
+	"net/http"
 
+	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
 )
 
 type Post struct {
-	ID int `json: "id"`
-	Image string `json: "image"`
-	Description string `json: "description"`
+	ID int `json:"id"`
+	Image string `json:"image"`
+	Description string `json:"description"`
 }
+
+var db *sql.DB
 
 
 func errHandle(err error) {
@@ -21,7 +24,9 @@ func errHandle(err error) {
 	}
 }
 
-func getPosts(db *sql.DB) ([]Post, error) {
+func getPosts(c *gin.Context) {
+	c.Header("Content-Type", "application/json")
+
 	rows, err := db.Query("SELECT * FROM posts")
 	errHandle(err)
 	defer rows.Close()
@@ -30,26 +35,28 @@ func getPosts(db *sql.DB) ([]Post, error) {
 
 	for rows.Next() {
 		var pst Post
-		if err := rows.Scan(&pst.ID, &pst.Image, &pst.Description); err != nil {
-			return posts, err
+		err := rows.Scan(&pst.ID, &pst.Image, &pst.Description)
+		errHandle(err)	
+		posts = append(posts, pst)		
 		}
-		posts = append(posts, pst)
-	}
-	if err = rows.Err(); err != nil {
-		return posts, err
-	}
-	return posts, nil
-}
+	err = rows.Err()
+	errHandle(err)	
 
-
+	c.IndentedJSON(http.StatusOK, posts)
+	}
+	
 func main() {
 	connStr := "user=admin dbname=galery sslmode=disable"
-	db, err := sql.Open("postgres", connStr)
+	var err error
+	db, err = sql.Open("postgres", connStr)
 	defer db.Close()
 	errHandle(err)
 
 	err = db.Ping()
 	errHandle(err)
 
-	getPosts(db)
+	router := gin.Default()
+	router.GET("/posts", getPosts)
+	router.Run("localhost:8080")
+
 }
