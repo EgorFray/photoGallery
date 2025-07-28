@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useState } from "react";
 
-function Header() {
+function Header({ onOpen }) {
 	return (
 		<div className="header">
 			<div className="header-box">
@@ -11,7 +11,9 @@ function Header() {
 
 				<div className="header-box--right">
 					<h2 className="header-text--right">Only your memories</h2>
-					<button className="post-button">Post</button>
+					<button className="post-button" onClick={onOpen}>
+						Post
+					</button>
 				</div>
 			</div>
 		</div>
@@ -29,21 +31,23 @@ function Search() {
 	);
 }
 
-function CreatePostForm() {
+function CreatePostForm({ onOpen }) {
 	return (
 		<div className="popup-overlay">
 			<div className="popup">
 				<form className="popup-form">
 					<h2 className="popup-heading">Add your memory</h2>
 
-					<button class="close-popup">x</button>
+					<button class="close-popup" onClick={onOpen}>
+						x
+					</button>
 
 					<label className="popup-image">Add picture</label>
 					<input type="file" className="images-val" name="images" />
 
 					<label for="description">Description</label>
 					<textarea
-						class="description"
+						className="description"
 						name="description"
 						placeholder="Add description"
 					></textarea>
@@ -109,11 +113,17 @@ function List() {
 }
 
 function App() {
+	const [isOpen, setIsOpen] = useState(false);
+
+	function toggleForm() {
+		setIsOpen(!isOpen);
+	}
+
 	return (
 		<div>
-			<Header />
+			<Header onOpen={toggleForm} />
 			<Search />
-			<CreatePostForm />
+			{isOpen && <CreatePostForm onOpen={toggleForm} />}
 			<Main />
 		</div>
 	);

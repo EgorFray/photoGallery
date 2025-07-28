@@ -24,10 +24,14 @@ export default defineConfig([
 			},
 		},
 		rules: {
-			"react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
+			"react-refresh/only-export-components": [
+				"warn",
+				{ allowConstantExport: true },
+			],
 			"react/prop-types": "off",
 			"react/jsx-key": "off",
 			"no-unused-vars": "off",
+			"no-restricted-globals": "off",
 		},
 	},
 ]);
