@@ -178,14 +178,20 @@ section {
 	margin: 0 auto;
 }
 
-.posts-list {
-	list-style: none;
-	display: grid;
-	grid-template-columns: repeat(4, 1fr);
-	gap: 3.2rem;
+.my-masonry-grid {
+	display: -webkit-box; /* Not needed if autoprefixing */
+	display: -ms-flexbox; /* Not needed if autoprefixing */
+	display: flex;
+	margin-left: -3rem; /* gutter size offset */
+	width: auto;
+}
+.my-masonry-grid_column {
+	padding-left: 3rem; /* gutter size */
+	background-clip: padding-box;
 }
 
 .post {
+	list-style: none;
 	box-shadow: 0 1.2rem 2.4rem rgba(0, 0, 0, 0.2);
 	border-radius: 1.2rem;
 	overflow: hidden;
