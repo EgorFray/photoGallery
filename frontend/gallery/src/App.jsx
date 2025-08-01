@@ -44,6 +44,7 @@ function CreatePostForm({ onOpen, setPosts }) {
 
 		const formData = new FormData(e.target);
 		await createPost(formData);
+		onOpen();
 	}
 
 	async function createPost(newPost) {
