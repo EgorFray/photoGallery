@@ -104,6 +104,19 @@ body {
 	border-radius: 1.4rem;
 }
 
+.no-posts-wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	margin-bottom: 10.8rem;
+}
+
+.no-posts {
+	font-size: 6.8rem;
+	font-weight: 600;
+}
+
 /* POPUP CREATE POST */
 .popup-overlay {
 	position: fixed;
@@ -219,4 +232,17 @@ section {
 
 .post-desc {
 	font-size: 1.8rem;
+}
+
+/* FOOTER */
+.footer {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	margin: 3.2rem;
+}
+
+.footer-text {
+	font-size: 1.6rem;
 }

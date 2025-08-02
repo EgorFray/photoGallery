@@ -21,8 +21,32 @@ function Header({ onOpen }) {
 	);
 }
 
-function Search() {
+function Search({ setPosts, setError }) {
 	const [query, setQuery] = useState("");
+
+	useEffect(
+		function () {
+			async function getSearchedPosts() {
+				try {
+					setError("");
+					const res = await fetch(
+						`http://localhost:8080/posts/search?description=${query}`
+					);
+					const data = await res.json();
+					console.log(data);
+					setPosts(data);
+				} catch (err) {
+					if (err.name !== "AbortError") {
+						setError(err.message);
+					}
+				}
+				setError("");
+			}
+			getSearchedPosts();
+		},
+		[query]
+	);
+
 	return (
 		<div className="search">
 			<input
@@ -31,9 +55,6 @@ function Search() {
 				placeholder="Search your memory"
 				onChange={(e) => setQuery(e.target.value)}
 			/>
-			<button type="submit" className="search-button">
-				X
-			</button>
 		</div>
 	);
 }
@@ -100,10 +121,8 @@ function List({ posts, setPosts, setError }) {
 			try {
 				setError("");
 				const res = await fetch("http://localhost:8080/posts");
-				console.log(res);
 				if (!res.ok) throw new Error("Something went wrong whil fetching data");
 				const data = await res.json();
-				console.log(data);
 				setPosts(data);
 			} catch (err) {
 				if (err.name !== "AbortError") {
@@ -122,7 +141,7 @@ function List({ posts, setPosts, setError }) {
 		500: 1,
 	};
 
-	return (
+	return posts ? (
 		<Masonry
 			breakpointCols={breakpointColumnsObj}
 			className="my-masonry-grid"
@@ -142,6 +161,18 @@ function List({ posts, setPosts, setError }) {
 				</li>
 			))}
 		</Masonry>
+	) : (
+		<div className="no-posts-wrapper">
+			<p className="no-posts">There are no posts 🥲</p>
+		</div>
+	);
+}
+
+function Footer() {
+	return (
+		<footer className="footer">
+			<p className="footer-text">Live life. Be creative</p>{" "}
+		</footer>
 	);
 }
 
@@ -158,11 +189,12 @@ function App() {
 	return (
 		<div>
 			<Header onOpen={toggleForm} />
-			<Search />
+			<Search setPosts={setPosts} setError={setError} />
 			{isOpen && <CreatePostForm onOpen={toggleForm} setPosts={setPosts} />}
 			<Main>
 				<List posts={posts} setPosts={setPosts} setError={setError} />
 			</Main>
+			<Footer />
 		</div>
 	);
 }
