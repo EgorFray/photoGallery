@@ -2,6 +2,19 @@ import { useEffect } from "react";
 import { useState } from "react";
 import Masonry from "react-masonry-css";
 
+function NavBar() {
+	return (
+		<nav className="navbar">
+			<div className="logo-box">
+				<img src="../public/Logo.png" className="logo" />
+			</div>
+			<div className="text-box">
+				<p className="memorize">Memorize</p>
+			</div>
+		</nav>
+	);
+}
+
 function Header({ onOpen }) {
 	return (
 		<div className="header">
@@ -188,6 +201,7 @@ function App() {
 
 	return (
 		<div>
+			<NavBar />
 			<Header onOpen={toggleForm} />
 			<Search setPosts={setPosts} setError={setError} />
 			{isOpen && <CreatePostForm onOpen={toggleForm} setPosts={setPosts} />}
