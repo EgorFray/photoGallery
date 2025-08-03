@@ -1,0 +1,28 @@
+.navbar {
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+
+.logoBox {
+	margin-left: 2.4rem;
+}
+
+.textBox {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.memorize {
+	font-family: "LilitaOne", sans-serif;
+	font-size: 6.4rem;
+	text-transform: capitalize;
+
+	color: #ffe600;
+}
+
+.logo {
+	width: 9.4rem;
+	height: 9.4rem;
+}

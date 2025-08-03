@@ -1,0 +1,42 @@
+.myMasonryGrid {
+	display: -webkit-box; /* Not needed if autoprefixing */
+	display: -ms-flexbox; /* Not needed if autoprefixing */
+	display: flex;
+	margin-left: -3rem; /* gutter size offset */
+	width: auto;
+}
+.myMasonryGridColumn {
+	padding-left: 3rem; /* gutter size */
+	background-clip: padding-box;
+}
+
+.post {
+	list-style: none;
+	cursor: pointer;
+	box-shadow: 0 1.2rem 2.4rem rgba(0, 0, 0, 0.2);
+	border-radius: 1.2rem;
+	overflow: hidden;
+	position: relative;
+	margin-bottom: 3.2rem;
+}
+
+.postImg {
+	width: 100%;
+	height: auto;
+	transition: transform 0.3s ease;
+	z-index: 1;
+}
+
+.post:hover .postImg {
+	transform: scale(1.1);
+}
+
+.postBox {
+	position: relative;
+	padding: 2.4rem;
+	z-index: 2;
+}
+
+.postDesc {
+	font-size: 1.8rem;
+}

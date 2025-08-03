@@ -1,0 +1,66 @@
+.popupOverlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.6);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 999;
+}
+
+.popupForm {
+	background-color: #fff;
+	padding: 2rem;
+	border-radius: 15px;
+	width: 90%;
+	max-width: 50rem;
+}
+
+.popupHeading {
+	font-size: 3.6rem;
+	margin-bottom: 2.4rem;
+}
+
+.popupForm label {
+	display: block;
+	margin: 1.6rem 0 1.2rem 0;
+	font-weight: 500;
+	font-size: 1.8rem;
+}
+
+.popupForm textarea {
+	max-width: 27rem;
+	width: 100%;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+	padding: 0.8rem;
+	margin-bottom: 1.2rem;
+}
+
+/* !CREATE ONE REUSABLE BUTTON! */
+.buttonSubmit {
+	cursor: pointer;
+	padding: 1rem 2rem;
+	border-radius: 2rem;
+	border: none;
+	background-color: burlywood;
+	box-shadow: 0 0.8rem 1.6rem rgba(0, 0, 0, 0.2);
+
+	font-size: 2rem;
+}
+
+.closePopup {
+	position: fixed;
+	top: 2%;
+	left: 95%;
+	background-color: transparent;
+	color: #fff;
+	border: none;
+	font-size: 3.4rem;
+	opacity: 0.5;
+	cursor: pointer;
+	transition: all 0.5s;
+}
