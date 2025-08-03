@@ -1,7 +1,7 @@
-import { useEffect } from "react";
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import Masonry from "react-masonry-css";
 import { PostsProvider, usePosts } from "./context/PostsContext";
+import { debounce } from "lodash-es";
 
 function NavBar() {
 	return (
@@ -39,7 +39,11 @@ function Search() {
 	const { getSearchedPosts } = usePosts();
 	const [query, setQuery] = useState("");
 
-	useEffect(getSearchedPosts(query), [query]);
+	const debouncedSearch = useCallback(debounce(getSearchedPosts, 800), []);
+
+	useEffect(() => {
+		debouncedSearch(query)
+	}, [query]);
 
 	return (
 		<div className="search">
@@ -54,9 +58,6 @@ function Search() {
 }
 
 function CreatePostForm({ onOpen }) {
-	console.log("CreatePostForm mounted");
-	const ctx = usePosts();
-	console.log(ctx);
 	const { createPost } = usePosts();
 
 	async function handleSubmit(e) {
@@ -73,7 +74,7 @@ function CreatePostForm({ onOpen }) {
 				<form className="popup-form" onSubmit={handleSubmit}>
 					<h2 className="popup-heading">Add your memory</h2>
 
-					<button class="close-popup" onClick={onOpen}>
+					<button className="close-popup" onClick={onOpen}>
 						x
 					</button>
 
@@ -103,8 +104,6 @@ function Main({ children }) {
 
 function List() {
 	const { posts } = usePosts();
-	const ctx = usePosts();
-	console.log(ctx);
 
 	const breakpointColumnsObj = {
 		default: 4,
