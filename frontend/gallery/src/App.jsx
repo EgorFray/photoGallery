@@ -1,13 +1,13 @@
-import { useEffect } from "react";
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import Masonry from "react-masonry-css";
 import { PostsProvider, usePosts } from "./context/PostsContext";
+import { debounce } from "lodash-es";
 
 function NavBar() {
 	return (
 		<nav className="navbar">
 			<div className="logo-box">
-				<img src="../public/Logo.png" className="logo" />
+				<img src="../public/Logo.png" alt='' className="logo" />
 			</div>
 			<div className="text-box">
 				<p className="memorize">Memorize</p>
@@ -39,7 +39,11 @@ function Search() {
 	const { getSearchedPosts } = usePosts();
 	const [query, setQuery] = useState("");
 
-	useEffect(getSearchedPosts(query), [query]);
+	const debouncedSearch = useCallback(debounce(getSearchedPosts, 800), []);
+
+	useEffect(() => {
+		debouncedSearch(query)
+	}, [query]);
 
 	return (
 		<div className="search">
@@ -54,9 +58,6 @@ function Search() {
 }
 
 function CreatePostForm({ onOpen }) {
-	console.log("CreatePostForm mounted");
-	const ctx = usePosts();
-	console.log(ctx);
 	const { createPost } = usePosts();
 
 	async function handleSubmit(e) {
@@ -73,20 +74,20 @@ function CreatePostForm({ onOpen }) {
 				<form className="popup-form" onSubmit={handleSubmit}>
 					<h2 className="popup-heading">Add your memory</h2>
 
-					<button class="close-popup" onClick={onOpen}>
+					<button className="close-popup" onClick={onOpen}>
 						x
 					</button>
 
 					<label className="popup-image">Add picture</label>
 					<input type="file" className="images-val" name="image" />
 
-					<label for="description">Description</label>
+					<label htmlFor="description">Description</label>
 					<textarea
 						id="description"
 						className="description"
 						name="description"
 						placeholder="Add description"
-					></textarea>
+					/>
 
 					<button type="submit" className="button-submit">
 						Post
@@ -103,8 +104,6 @@ function Main({ children }) {
 
 function List() {
 	const { posts } = usePosts();
-	const ctx = usePosts();
-	console.log(ctx);
 
 	const breakpointColumnsObj = {
 		default: 4,
