@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import Masonry from "react-masonry-css";
-import { PostsProvider, usePosts } from "./context/PostsContext";
 
 function NavBar() {
 	return (
@@ -35,11 +34,31 @@ function Header({ onOpen }) {
 	);
 }
 
-function Search() {
-	const { getSearchedPosts } = usePosts();
+function Search({ setPosts, setError }) {
 	const [query, setQuery] = useState("");
 
-	useEffect(getSearchedPosts(query), [query]);
+	useEffect(
+		function () {
+			async function getSearchedPosts() {
+				try {
+					setError("");
+					const res = await fetch(
+						`http://localhost:8080/posts/search?description=${query}`
+					);
+					const data = await res.json();
+					console.log(data);
+					setPosts(data);
+				} catch (err) {
+					if (err.name !== "AbortError") {
+						setError(err.message);
+					}
+				}
+				setError("");
+			}
+			getSearchedPosts();
+		},
+		[query]
+	);
 
 	return (
 		<div className="search">
@@ -53,18 +72,26 @@ function Search() {
 	);
 }
 
-function CreatePostForm({ onOpen }) {
-	console.log("CreatePostForm mounted");
-	const ctx = usePosts();
-	console.log(ctx);
-	const { createPost } = usePosts();
-
+function CreatePostForm({ onOpen, setPosts }) {
 	async function handleSubmit(e) {
 		e.preventDefault();
 
 		const formData = new FormData(e.target);
 		await createPost(formData);
 		onOpen();
+	}
+
+	async function createPost(newPost) {
+		try {
+			const res = await fetch("http://localhost:8080/posts", {
+				method: "POST",
+				body: newPost,
+			});
+			const data = await res.json();
+			setPosts((posts) => [...posts, data]);
+		} catch {
+			alert("There was an error loading data");
+		}
 	}
 
 	return (
@@ -101,10 +128,24 @@ function Main({ children }) {
 	return <section>{children}</section>;
 }
 
-function List() {
-	const { posts } = usePosts();
-	const ctx = usePosts();
-	console.log(ctx);
+function List({ posts, setPosts, setError }) {
+	useEffect(function () {
+		async function fetchGetData() {
+			try {
+				setError("");
+				const res = await fetch("http://localhost:8080/posts");
+				if (!res.ok) throw new Error("Something went wrong whil fetching data");
+				const data = await res.json();
+				setPosts(data);
+			} catch (err) {
+				if (err.name !== "AbortError") {
+					setError(err.message);
+				}
+			}
+			setError("");
+		}
+		fetchGetData();
+	}, []);
 
 	const breakpointColumnsObj = {
 		default: 4,
@@ -143,7 +184,7 @@ function List() {
 function Footer() {
 	return (
 		<footer className="footer">
-			<p className="footer-text">Live life. Be creative</p>
+			<p className="footer-text">Live life. Be creative</p>{" "}
 		</footer>
 	);
 }
@@ -151,22 +192,23 @@ function Footer() {
 function App() {
 	const [isOpen, setIsOpen] = useState(false);
 
+	const [posts, setPosts] = useState([]);
+	const [error, setError] = useState("");
+
 	function toggleForm() {
 		setIsOpen(!isOpen);
 	}
 
 	return (
 		<div>
-			<PostsProvider>
-				<NavBar />
-				<Header onOpen={toggleForm} />
-				<Search />
-				{isOpen && <CreatePostForm onOpen={toggleForm} />}
-				<Main>
-					<List />
-				</Main>
-				<Footer />
-			</PostsProvider>
+			<NavBar />
+			<Header onOpen={toggleForm} />
+			<Search setPosts={setPosts} setError={setError} />
+			{isOpen && <CreatePostForm onOpen={toggleForm} setPosts={setPosts} />}
+			<Main>
+				<List posts={posts} setPosts={setPosts} setError={setError} />
+			</Main>
+			<Footer />
 		</div>
 	);
 }
