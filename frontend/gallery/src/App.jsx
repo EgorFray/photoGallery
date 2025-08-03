@@ -7,7 +7,7 @@ function NavBar() {
 	return (
 		<nav className="navbar">
 			<div className="logo-box">
-				<img src="../public/Logo.png" className="logo" />
+				<img src="../public/Logo.png" alt='' className="logo" />
 			</div>
 			<div className="text-box">
 				<p className="memorize">Memorize</p>
@@ -81,13 +81,13 @@ function CreatePostForm({ onOpen }) {
 					<label className="popup-image">Add picture</label>
 					<input type="file" className="images-val" name="image" />
 
-					<label for="description">Description</label>
+					<label htmlFor="description">Description</label>
 					<textarea
 						id="description"
 						className="description"
 						name="description"
 						placeholder="Add description"
-					></textarea>
+					/>
 
 					<button type="submit" className="button-submit">
 						Post
