@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
+	"strconv"
+	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -20,6 +22,12 @@ type Post struct {
 type PostRequest struct {
 	Image string `json:"image"`
 	Description string `json:"description"`
+}
+
+type PostDetail struct {
+	Image string `json:"image"`
+	Description string `json:"description"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 var db *sql.DB
@@ -51,6 +59,28 @@ func getPosts(c *gin.Context) {
 
 	c.IndentedJSON(http.StatusOK, posts)
 	}
+
+func getPostById(c *gin.Context) {
+	idParam := c.Param("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid post id"})
+		return
+	}
+
+	var post PostDetail
+	err = db.QueryRow("SELECT image, description, created_at FROM posts WHERE id = $1", id).Scan(&post.Image, &post.Description, &post.CreatedAt)
+	if err == sql.ErrNoRows {
+		c.JSON(http.StatusNotFound, gin.H{"error": "post not found"})
+		return
+	} else if err !=nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, post)
+	}
+
 
 func postPosts(c *gin.Context) {
 	file, err := c.FormFile("image")
@@ -132,6 +162,7 @@ func main() {
 	router.Static("/images", "./images")
 	router.Use(cors.Default())
 	router.GET("/posts", getPosts)
+	router.GET("/posts/:id", getPostById)
 	router.GET("/posts/search", searchPosts)
 	router.POST("/posts", postPosts)
 	router.Run("localhost:8080")
