@@ -42,7 +42,7 @@ func errHandle(err error) {
 func getPosts(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
 
-	rows, err := db.Query("SELECT * FROM posts")
+	rows, err := db.Query("SELECT id, image, description FROM posts")
 	errHandle(err)
 	defer rows.Close()
 
