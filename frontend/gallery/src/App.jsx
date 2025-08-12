@@ -6,7 +6,9 @@ import Search from "./components/Search";
 import CreatePostForm from "./components/CreatePostForm";
 import Main from "./components/Main";
 import List from "./components/List";
+import PostDetail from "./components/PostDetail";
 import Footer from "./components/Footer";
+import { Routes, Route } from "react-router-dom";
 
 function App() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -23,7 +25,10 @@ function App() {
 				<Search />
 				{isOpen && <CreatePostForm onOpen={toggleForm} />}
 				<Main>
-					<List />
+					<Routes>
+						<Route path="/" element={<List />} />
+						<Route path="posts/:id" element={<PostDetail />} />
+					</Routes>
 				</Main>
 				<Footer />
 			</PostsProvider>
