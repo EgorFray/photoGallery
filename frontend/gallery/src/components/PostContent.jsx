@@ -7,6 +7,14 @@ function PostContent() {
 	const { id } = useParams();
 	const { post, getPostById } = usePostDetail();
 
+	const formatDate = (date) =>
+		new Intl.DateTimeFormat("en", {
+			day: "numeric",
+			month: "long",
+			year: "numeric",
+			weekday: "long",
+		}).format(new Date(date));
+
 	useEffect(
 		function () {
 			getPostById(id);
@@ -25,7 +33,7 @@ function PostContent() {
 			<div className={styles.detailBox}>
 				<p className={styles.detailDescription}>{post.description}</p>
 				<div className={styles.boxBottom}>
-					<p className={styles.detailDate}>{post.created_at}</p>
+					<p className={styles.detailDate}>{formatDate(post.created_at)}</p>
 					<button className={styles.deleteButton}>Delete</button>
 				</div>
 			</div>
