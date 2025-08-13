@@ -33,7 +33,7 @@ function PostContent() {
 			<div className={styles.detailBox}>
 				<p className={styles.detailDescription}>{post.description}</p>
 				<div className={styles.boxBottom}>
-					<p className={styles.detailDate}>{formatDate(post.created_at)}</p>
+					<p className={styles.detailDate}>{formatDate(post.created_at || null)}</p>
 					<button className={styles.deleteButton}>Delete</button>
 				</div>
 			</div>
