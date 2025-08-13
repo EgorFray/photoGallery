@@ -1,0 +1,22 @@
+.detailLayout {
+	display: grid;
+	grid-template-columns: 2fr 1fr;
+	background-color: green;
+}
+
+.detailImage {
+	max-width: 100%;
+	height: 36rm;
+}
+
+.detailBox {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.boxBottom {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
