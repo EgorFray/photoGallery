@@ -123,6 +123,24 @@ func postPosts(c *gin.Context) {
 	c.IndentedJSON(http.StatusCreated, post)
 }
 
+func deletePost(c *gin.Context) {
+	idParam := c.Param("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid post id"})
+		return
+	}
+
+	query := "DELETE FROM posts WHERE id = $1"
+	_, err = db.Exec(query, id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Post deleted successfully"})
+}
+
 func searchPosts(c *gin.Context) {
 	queryDb := "SELECT id, image, description FROM posts WHERE description ILIKE $1"
 	queryUrl := c.Query("description")
@@ -165,5 +183,6 @@ func main() {
 	router.GET("/posts/:id", getPostById)
 	router.GET("/posts/search", searchPosts)
 	router.POST("/posts", postPosts)
+	router.DELETE("/posts/:id", deletePost)
 	router.Run("localhost:8080")
 }
