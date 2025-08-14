@@ -3,6 +3,7 @@ import PostDetail from "./pages/PostDetail";
 import { Routes, Route } from "react-router-dom";
 import MainPage from "./pages/MainPage";
 import { PostDetailProvider } from "./context/PostDetailContext";
+import CreatePost from "./pages/CreatePost";
 
 function App() {
 	return (
@@ -10,7 +11,8 @@ function App() {
 			<PostsProvider>
 				<PostDetailProvider>
 					<Routes>
-						<Route path="/" element={<MainPage />} />
+						<Route index element={<MainPage />} />
+						<Route path="/create" element={<CreatePost />} />
 						<Route path="posts/:id" element={<PostDetail />} />
 					</Routes>
 				</PostDetailProvider>

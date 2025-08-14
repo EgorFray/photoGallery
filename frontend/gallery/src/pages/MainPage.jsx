@@ -18,7 +18,6 @@ function MainPage() {
 		<div>
 			<NavBar />
 			<Header onOpen={toggleForm} />
-			<Search />
 			{isOpen && <CreatePostForm onOpen={toggleForm} />}
 			<Main>
 				<List />
