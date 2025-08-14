@@ -1,0 +1,11 @@
+.logoBox {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-right: 1px solid #494848;
+}
+
+.logo {
+	width: 5.4rem;
+	height: 5.4rem;
+}

@@ -2,8 +2,6 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-
-	margin-bottom: 10.8rem;
 }
 
 .searchInput {
@@ -13,8 +11,8 @@
 	font-size: 2rem;
 
 	background-color: transparent;
-	border: 1px solid #ccc;
-	border-radius: 1.4rem;
+	border: none;
+	outline: none;
 }
 
 :global(.noPostsWrapper) {
