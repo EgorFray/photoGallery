@@ -55,8 +55,21 @@ function PostsProvider({ children }) {
 		}
 	}
 
+	async function deletePost(id) {
+		try {
+			await fetch(`http://localhost:8080/posts/${id}`, {
+				method: "DELETE",
+			});
+			setPosts((posts) => posts.filter((post) => post.id !== id));
+		} catch {
+			alert("There was an error deleting post");
+		}
+	}
+
 	return (
-		<PostsContext.Provider value={{ posts, createPost, getSearchedPosts }}>
+		<PostsContext.Provider
+			value={{ posts, createPost, deletePost, getSearchedPosts }}
+		>
 			{children}
 		</PostsContext.Provider>
 	);

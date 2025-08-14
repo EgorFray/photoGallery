@@ -1,11 +1,14 @@
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { usePostDetail } from "../context/PostDetailContext";
+import { usePosts } from "../context/PostsContext";
 import styles from "./PostContent.module.css";
 
 function PostContent() {
 	const { id } = useParams();
 	const { post, getPostById } = usePostDetail();
+	const { deletePost } = usePosts();
+	const navigate = useNavigate();
 
 	const formatDate = (date) =>
 		new Intl.DateTimeFormat("en", {
@@ -22,7 +25,10 @@ function PostContent() {
 		[id]
 	);
 
-	console.log(JSON.stringify(post));
+	function handleClick() {
+		deletePost(id);
+		navigate("/");
+	}
 
 	return (
 		<div className={styles.detailLayout}>
@@ -34,7 +40,9 @@ function PostContent() {
 				<p className={styles.detailDescription}>{post.description}</p>
 				<div className={styles.boxBottom}>
 					<p className={styles.detailDate}>{formatDate(post.created_at || null)}</p>
-					<button className={styles.deleteButton}>Delete</button>
+					<button className={styles.deleteButton} onClick={handleClick}>
+						Delete
+					</button>
 				</div>
 			</div>
 		</div>
