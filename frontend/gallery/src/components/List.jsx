@@ -2,9 +2,10 @@ import { usePosts } from "../context/PostsContext";
 import Masonry from "react-masonry-css";
 import styles from "./List.module.css";
 import Post from "./Post";
+import Spinner from "./Spinner";
 
 function List() {
-	const { posts } = usePosts();
+	const { posts, isLoading } = usePosts();
 
 	const breakpointColumnsObj = {
 		default: 4,
@@ -12,6 +13,8 @@ function List() {
 		700: 2,
 		500: 1,
 	};
+
+	if (isLoading) return <Spinner />;
 
 	return posts ? (
 		<Masonry

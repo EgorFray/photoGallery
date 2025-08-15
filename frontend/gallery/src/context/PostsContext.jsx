@@ -12,6 +12,7 @@ function PostsProvider({ children }) {
 	useEffect(function () {
 		async function fetchGetData() {
 			try {
+				setIsLoading(true);
 				setError("");
 				const res = await fetch("http://localhost:8080/posts");
 				if (!res.ok) throw new Error("Something went wrong whil fetching data");
@@ -21,6 +22,8 @@ function PostsProvider({ children }) {
 				if (err.name !== "AbortError") {
 					setError(err.message);
 				}
+			} finally {
+				setIsLoading(false);
 			}
 			setError("");
 		}
@@ -59,6 +62,7 @@ function PostsProvider({ children }) {
 
 	async function createPost(newPost) {
 		try {
+			setIsLoading(true);
 			const res = await fetch("http://localhost:8080/posts", {
 				method: "POST",
 				body: newPost,
@@ -67,17 +71,22 @@ function PostsProvider({ children }) {
 			setPosts((posts) => [...posts, data]);
 		} catch {
 			alert("There was an error loading data");
+		} finally {
+			setIsLoading(false);
 		}
 	}
 
 	async function deletePost(id) {
 		try {
+			setIsLoading(true);
 			await fetch(`http://localhost:8080/posts/${id}`, {
 				method: "DELETE",
 			});
 			setPosts((posts) => posts.filter((post) => post.id !== id));
 		} catch {
 			alert("There was an error deleting post");
+		} finally {
+			setIsLoading(false);
 		}
 	}
 

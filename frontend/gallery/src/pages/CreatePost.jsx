@@ -1,12 +1,16 @@
 import Header from "../components/Header";
+import Main from "../components/Main";
 import NavBar from "../components/NavBar";
+import CreatePostForm from "../components/CreatePostForm";
 
 function CreatePost() {
 	return (
 		<>
 			<NavBar />
 			<Header />
-			<p>Create post</p>
+			<Main>
+				<CreatePostForm />
+			</Main>
 		</>
 	);
 }

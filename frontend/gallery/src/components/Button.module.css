@@ -1,0 +1,10 @@
+.button {
+	cursor: pointer;
+	padding: 1rem 2rem;
+	border: none;
+	font-family: "Montserrat";
+	color: #f9feff;
+	background-color: #494848;
+
+	font-size: 2rem;
+}

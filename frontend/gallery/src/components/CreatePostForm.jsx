@@ -1,43 +1,44 @@
 import { usePosts } from "../context/PostsContext";
 import styles from "./CreatePostForm.module.css";
+import { useNavigate } from "react-router-dom";
+import Spinner from "./Spinner";
+import Button from "./Button";
 
-function CreatePostForm({ onOpen }) {
-	const { createPost } = usePosts();
+function CreatePostForm() {
+	const { createPost, isLoading } = usePosts();
+	const navigate = useNavigate();
 
 	async function handleSubmit(e) {
 		e.preventDefault();
 
 		const formData = new FormData(e.target);
 		await createPost(formData);
-		onOpen();
+		navigate("/");
 	}
 
+	if (isLoading) return <Spinner />;
+
 	return (
-		<div className={styles.popupOverlay}>
-			<div className={styles.popup}>
-				<form className={styles.popupForm} onSubmit={handleSubmit}>
-					<h2 className={styles.popupHeading}>Add your memory</h2>
+		<div className={styles.formContainer}>
+			<form className={styles.createForm} onSubmit={handleSubmit}>
+				<h2 className={styles.createFormHeading}>Add your memory</h2>
 
-					<button className={styles.closePopup} onClick={onOpen}>
-						x
-					</button>
+				<div className={styles.imageContainer}>
+					<label className={styles.createFormImage}>Add picture</label>
+					<input type="file" name="image" />
+				</div>
 
-					<label className={styles.popupImage}>Add picture</label>
-					<input type="file" className={styles.imagesVal} name="image" />
-
-					<label htmlFor={styles.description}>Description</label>
+				<div className={styles.descriptionContainer}>
+					<label className={styles.createFormDescription}>Add description</label>
 					<textarea
 						id="description"
-						className={styles.description}
 						name="description"
 						placeholder="Add description"
 					/>
+				</div>
 
-					<button type="submit" className={styles.buttonSubmit}>
-						Post
-					</button>
-				</form>
-			</div>
+				<Button type="submit">Post </Button>
+			</form>
 		</div>
 	);
 }
