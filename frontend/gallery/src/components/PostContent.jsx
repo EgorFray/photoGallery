@@ -1,14 +1,12 @@
 import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { usePostDetail } from "../context/PostDetailContext";
 import { usePosts } from "../context/PostsContext";
 import styles from "./PostContent.module.css";
 import Spinner from "./Spinner";
 
 function PostContent() {
 	const { id } = useParams();
-	const { post, getPostById, isLoading } = usePostDetail();
-	const { deletePost } = usePosts();
+	const { post, getPostById, isLoading, deletePost } = usePosts();
 	const navigate = useNavigate();
 
 	const formatDate = (date) =>
@@ -32,6 +30,7 @@ function PostContent() {
 	}
 
 	if (isLoading) return <Spinner />;
+
 	return (
 		<div className={styles.detailLayout}>
 			<img

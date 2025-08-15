@@ -5,6 +5,7 @@ const PostsContext = createContext();
 
 function PostsProvider({ children }) {
 	const [posts, setPosts] = useState([]);
+	const [post, setPost] = useState({});
 	const [error, setError] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 
@@ -43,6 +44,19 @@ function PostsProvider({ children }) {
 		setError("");
 	}
 
+	async function getPostById(id) {
+		try {
+			setIsLoading(true);
+			const res = await fetch(`http://localhost:8080/posts/${id}`);
+			const data = await res.json();
+			setPost(data);
+		} catch {
+			alert("There was an error loading post");
+		} finally {
+			setIsLoading(false);
+		}
+	}
+
 	async function createPost(newPost) {
 		try {
 			const res = await fetch("http://localhost:8080/posts", {
@@ -69,7 +83,15 @@ function PostsProvider({ children }) {
 
 	return (
 		<PostsContext.Provider
-			value={{ posts, createPost, deletePost, getSearchedPosts }}
+			value={{
+				posts,
+				post,
+				isLoading,
+				createPost,
+				deletePost,
+				getSearchedPosts,
+				getPostById,
+			}}
 		>
 			{children}
 		</PostsContext.Provider>

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import CreatePostForm from "../components/CreatePostForm";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import List from "../components/List";
