@@ -14,10 +14,11 @@
 	position: relative;
 	text-decoration: none;
 	font-size: 1.6rem;
+	color: #494848;
 }
 
 .header a:global(.active) {
-	color: #fff;
+	color: #f9feff;
 }
 
 .header a:global(.active)::after {

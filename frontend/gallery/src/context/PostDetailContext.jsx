@@ -5,18 +5,22 @@ const PostDetailContext = createContext();
 
 function PostDetailProvider({ children }) {
 	const [post, setPost] = useState({});
+	const [isLoading, setIsLoading] = useState(false);
 
 	async function getPostById(id) {
 		try {
+			setIsLoading(true);
 			const res = await fetch(`http://localhost:8080/posts/${id}`);
 			const data = await res.json();
 			setPost(data);
 		} catch {
 			alert("There was an error loading post");
+		} finally {
+			setIsLoading(false);
 		}
 	}
 	return (
-		<PostDetailContext.Provider value={{ post, getPostById }}>
+		<PostDetailContext.Provider value={{ post, getPostById, isLoading }}>
 			{children}
 		</PostDetailContext.Provider>
 	);

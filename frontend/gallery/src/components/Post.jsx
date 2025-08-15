@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import styles from "./Post.module.css";
 
 function Post({ post }) {
-	const { id, image, description } = post;
+	const { id, image } = post;
 	return (
 		<li key={id} className={styles.post}>
 			<Link to={`posts/${id}`}>
@@ -11,9 +11,9 @@ function Post({ post }) {
 					src={`http://localhost:8080${image}`}
 					alt="Something beeautiful here"
 				/>
-				<div className={styles.postBox}>
+				{/* <div className={styles.postBox}>
 					<p className={styles.postDesc}>{description} </p>
-				</div>
+				</div> */}
 			</Link>
 		</li>
 	);

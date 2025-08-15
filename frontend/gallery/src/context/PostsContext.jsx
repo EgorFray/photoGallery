@@ -6,6 +6,7 @@ const PostsContext = createContext();
 function PostsProvider({ children }) {
 	const [posts, setPosts] = useState([]);
 	const [error, setError] = useState("");
+	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(function () {
 		async function fetchGetData() {
