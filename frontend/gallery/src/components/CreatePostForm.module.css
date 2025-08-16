@@ -6,7 +6,7 @@
 
 .createForm {
 	padding: 2rem;
-	width: 90%;
+	width: 100%;
 	max-width: 50rem;
 }
 
@@ -19,12 +19,13 @@
 .imageContainer {
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
+	gap: 17rem;
 	margin-bottom: 2.4rem;
 }
 
 .createFormImage,
 .createFormDescription {
+	white-space: nowrap;
 	font-size: 2rem;
 	font-weight: 400;
 }

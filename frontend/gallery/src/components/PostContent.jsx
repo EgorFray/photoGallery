@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { usePosts } from "../context/PostsContext";
 import styles from "./PostContent.module.css";
+import Button from "./Button";
 import Spinner from "./Spinner";
 
 function PostContent() {
@@ -41,9 +42,7 @@ function PostContent() {
 				<p className={styles.detailDescription}>{post.description}</p>
 				<div className={styles.boxBottom}>
 					<p className={styles.detailDate}>{formatDate(post.created_at || null)}</p>
-					<button className={styles.deleteButton} onClick={handleClick}>
-						Delete
-					</button>
+					<Button handleClick={handleClick}>Delete</Button>
 				</div>
 			</div>
 		</div>

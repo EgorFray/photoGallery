@@ -2,6 +2,7 @@
 	display: grid;
 	grid-template-columns: 2fr 1fr;
 	gap: 2.4rem;
+	margin-top: 2.4rem;
 }
 
 .detailImage {
