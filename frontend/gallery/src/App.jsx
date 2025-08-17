@@ -3,6 +3,7 @@ import PostDetail from "./pages/PostDetail";
 import { Routes, Route } from "react-router-dom";
 import MainPage from "./pages/MainPage";
 import CreatePost from "./pages/CreatePost";
+import PageNotFound from "./pages/PageNotFound";
 
 function App() {
 	return (
@@ -12,6 +13,7 @@ function App() {
 					<Route index element={<MainPage />} />
 					<Route path="/create" element={<CreatePost />} />
 					<Route path="posts/:id" element={<PostDetail />} />
+					<Route path="*" element={<PageNotFound />} />
 				</Routes>
 			</PostsProvider>
 		</div>

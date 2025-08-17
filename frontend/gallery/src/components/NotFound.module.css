@@ -1,0 +1,10 @@
+.notFoundContainer {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 70vh;
+}
+
+.NotFound {
+	font-size: 3.6rem;
+}
