@@ -1,0 +1,83 @@
+.container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.imgBox {
+	position: relative;
+	width: 100rem; /* подгони под свой дизайн */
+	height: 26rem; /* общая «сцена» для композиции */
+	margin: 0 auto;
+}
+
+.imgWrapper {
+	position: absolute;
+	overflow: hidden; /* всё лишнее обрежется */
+}
+
+.imgWrapper img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.imgBox .imgWrapper:nth-child(1) {
+	width: 34rem;
+	height: 34rem;
+	top: 18rem;
+	left: 7rem;
+	filter: brightness(60%);
+	z-index: 1;
+}
+
+.imgBox .imgWrapper:nth-child(3) {
+	width: 34rem;
+	height: 34rem;
+	top: 18rem;
+	right: 7rem;
+	filter: brightness(60%);
+	z-index: 1;
+}
+
+.imgBox .imgWrapper:nth-child(2) {
+	width: 40rem;
+	height: 40rem;
+	left: 50%;
+	top: 15rem;
+	transform: translateX(-50%);
+	box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+	z-index: 2;
+}
+
+/* .imgBox {
+	position: relative;
+	margin: 0 auto;
+}
+
+.imgWrapper {
+	position: absolute;
+	width: 40rem;
+	height: 40rem;
+	overflow: hidden;
+}
+
+.imgwrapper:nth-child(1) {
+	left: 1rem;
+	z-index: 1;
+}
+
+.imgwrapper:nth-child(3) {
+	right: 1rem;
+	transform: rotate(6deg);
+	z-index: 1;
+}
+
+.imgwrapper:nth-child(2) {
+	left: 50%;
+	top: -30px;
+	transform: translateX(-50%);
+	z-index: 2;
+} */
