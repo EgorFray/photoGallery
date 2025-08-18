@@ -18,7 +18,9 @@ function Presentation() {
 					<img src="/tent.jpg" />
 				</div>
 			</div>
-			<Button>Login</Button>
+			<div className={styles.btnBox}>
+				<Button>Login</Button>
+			</div>
 		</div>
 	);
 }

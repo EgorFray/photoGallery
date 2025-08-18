@@ -2,19 +2,26 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-content: center;
+}
+
+.textBox {
+	margin-top: 5rem;
+}
+
+.text {
+	font-size: 4.4rem;
 }
 
 .imgBox {
 	position: relative;
-	width: 100rem; /* подгони под свой дизайн */
-	height: 26rem; /* общая «сцена» для композиции */
+	width: 100rem;
+	height: 26rem;
 	margin: 0 auto;
 }
 
 .imgWrapper {
 	position: absolute;
-	overflow: hidden; /* всё лишнее обрежется */
+	overflow: hidden;
 }
 
 .imgWrapper img {
@@ -27,7 +34,7 @@
 .imgBox .imgWrapper:nth-child(1) {
 	width: 34rem;
 	height: 34rem;
-	top: 18rem;
+	top: 8rem;
 	left: 7rem;
 	filter: brightness(60%);
 	z-index: 1;
@@ -36,7 +43,7 @@
 .imgBox .imgWrapper:nth-child(3) {
 	width: 34rem;
 	height: 34rem;
-	top: 18rem;
+	top: 8rem;
 	right: 7rem;
 	filter: brightness(60%);
 	z-index: 1;
@@ -46,38 +53,12 @@
 	width: 40rem;
 	height: 40rem;
 	left: 50%;
-	top: 15rem;
+	top: 6rem;
 	transform: translateX(-50%);
 	box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
 	z-index: 2;
 }
 
-/* .imgBox {
-	position: relative;
-	margin: 0 auto;
+.btnBox {
+	margin-top: 25rem;
 }
-
-.imgWrapper {
-	position: absolute;
-	width: 40rem;
-	height: 40rem;
-	overflow: hidden;
-}
-
-.imgwrapper:nth-child(1) {
-	left: 1rem;
-	z-index: 1;
-}
-
-.imgwrapper:nth-child(3) {
-	right: 1rem;
-	transform: rotate(6deg);
-	z-index: 1;
-}
-
-.imgwrapper:nth-child(2) {
-	left: 50%;
-	top: -30px;
-	transform: translateX(-50%);
-	z-index: 2;
-} */
