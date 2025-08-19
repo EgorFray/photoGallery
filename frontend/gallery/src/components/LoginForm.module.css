@@ -1,0 +1,14 @@
+.form {
+	padding: 2rem;
+	width: 100%;
+	max-width: 50rem;
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+}
+
+.row {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
