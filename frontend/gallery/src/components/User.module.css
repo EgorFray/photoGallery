@@ -1,0 +1,22 @@
+.user {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+	height: 5.6rem;
+	border-left: 1px solid #494848;
+}
+
+.user img {
+	border-radius: 10rem;
+	height: 4rem;
+}
+
+.user button {
+	cursor: pointer;
+	padding: 0.5rem 1rem;
+	border: none;
+	font-family: "Montserrat";
+	color: #f9feff;
+	background-color: #494848;
+}
