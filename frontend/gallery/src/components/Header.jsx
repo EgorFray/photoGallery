@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 function Header() {
 	return (
 		<div className={styles.header}>
-			<NavLink to={"/"} className={styles.postsLink}>
+			<NavLink to={"/app"} className={styles.postsLink}>
 				Posts
 			</NavLink>
 

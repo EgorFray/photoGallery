@@ -13,7 +13,7 @@ function CreatePostForm() {
 
 		const formData = new FormData(e.target);
 		await createPost(formData);
-		navigate("/");
+		navigate("/app");
 	}
 
 	if (isLoading) return <Spinner />;

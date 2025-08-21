@@ -5,7 +5,7 @@ function Post({ post }) {
 	const { id, image } = post;
 	return (
 		<li key={id} className={styles.post}>
-			<Link to={`posts/${id}`}>
+			<Link to={`/app/posts/${id}`}>
 				<img
 					className={styles.postImg}
 					src={`http://localhost:8080${image}`}

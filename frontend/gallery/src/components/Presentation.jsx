@@ -1,9 +1,12 @@
 import { motion } from "motion/react";
+import { useNavigate } from "react-router-dom";
 
 import Button from "./Button";
 import styles from "./Presentation.module.css";
 
 function Presentation() {
+	const navigate = useNavigate();
+
 	const MotionButton = motion(Button);
 	return (
 		<div className={styles.container}>
@@ -45,6 +48,7 @@ function Presentation() {
 			</div>
 			<div className={styles.btnBox}>
 				<MotionButton
+					handleClick={() => navigate("/login")}
 					initial={{ opacity: 0, y: 50 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 2, ease: "easeInOut" }}

@@ -14,11 +14,11 @@ function App() {
 			<AuthProvider>
 				<PostsProvider>
 					<Routes>
-						<Route index element={<MainPage />} />
-						<Route path="/homepage" element={<Homepage />} />
+						<Route index element={<Homepage />} />
 						<Route path="/login" element={<Login />} />
+						<Route path="/app" element={<MainPage />} />
 						<Route path="/create" element={<CreatePost />} />
-						<Route path="posts/:id" element={<PostDetail />} />
+						<Route path="/app/posts/:id" element={<PostDetail />} />
 						<Route path="*" element={<PageNotFound />} />
 					</Routes>
 				</PostsProvider>

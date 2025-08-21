@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 function Logo() {
 	return (
 		<div className={styles.logoBox}>
-			<Link to="/">
-				<img src="../public/Logo.png" alt="" className={styles.logo} />
+			<Link to="/app">
+				<img src="/Logo.png" alt="" className={styles.logo} />
 			</Link>
 		</div>
 	);

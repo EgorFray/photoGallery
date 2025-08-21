@@ -7,7 +7,7 @@ import SearchPlaceholder from "./SearchPlaceholder";
 
 function NavBar() {
 	const location = useLocation();
-	const isMainPage = location.pathname === "/";
+	const isMainPage = location.pathname === "/app";
 	return (
 		<nav className={styles.navbar}>
 			<Logo />

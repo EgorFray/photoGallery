@@ -19,7 +19,7 @@ function LoginForm() {
 
 	useEffect(
 		function () {
-			if (isAuthenticated) navigate("/", { replace: true });
+			if (isAuthenticated) navigate("/app", { replace: true });
 		},
 		[isAuthenticated, navigate]
 	);

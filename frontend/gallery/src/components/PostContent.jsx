@@ -27,7 +27,7 @@ function PostContent() {
 
 	function handleClick() {
 		deletePost(id);
-		navigate("/");
+		navigate("/app");
 	}
 
 	if (isLoading) return <Spinner />;
