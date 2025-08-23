@@ -1,4 +1,5 @@
 import { usePosts } from "../context/PostsContext";
+import { motion } from "motion/react";
 import Masonry from "react-masonry-css";
 import styles from "./List.module.css";
 import Post from "./Post";
@@ -14,22 +15,35 @@ function List() {
 		500: 1,
 	};
 
-	if (isLoading) return <Spinner />;
+	if (!posts || posts.length === 0) {
+		return (
+			<div className="noPostsWrapper">
+				<p className="noPosts">There are no posts 🥲</p>
+			</div>
+		);
+	}
 
-	return posts ? (
+	return isLoading ? (
+		<Spinner />
+	) : (
 		<Masonry
 			breakpointCols={breakpointColumnsObj}
 			className={styles.myMasonryGrid}
 			columnClassName={styles.myMasonryGridColumn}
 		>
 			{[...posts].reverse().map((post) => (
-				<Post post={post} />
+				<motion.div
+					key={post.id}
+					initial={{ opacity: 0, y: 50 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{
+						duration: 0.5,
+					}}
+				>
+					<Post post={post} />
+				</motion.div>
 			))}
 		</Masonry>
-	) : (
-		<div className="noPostsWrapper">
-			<p className="noPosts">There are no posts 🥲</p>
-		</div>
 	);
 }
 
