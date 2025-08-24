@@ -33,17 +33,11 @@ type PostDetail struct {
 var db *sql.DB
 
 
-func errHandle(err error) {
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
-func getPosts(c *gin.Context) {
-	c.Header("Content-Type", "application/json")
-
+func dbCallGetPosts() ([]Post, error) {
 	rows, err := db.Query("SELECT id, image, description FROM posts")
-	errHandle(err)
+	if err != nil {
+		return nil, err
+	}
 	defer rows.Close()
 
 	var posts []Post
@@ -51,12 +45,26 @@ func getPosts(c *gin.Context) {
 	for rows.Next() {
 		var pst Post
 		err := rows.Scan(&pst.ID, &pst.Image, &pst.Description)
-		errHandle(err)	
+		if err != nil {
+			return nil, err
+		}
 		posts = append(posts, pst)		
 		}
 	err = rows.Err()
-	errHandle(err)	
+	if err != nil {
+		return nil, err
+	}
+	return posts, err
+}
 
+func getPosts(c *gin.Context) {
+	c.Header("Content-Type", "application/json")
+
+	posts, err := dbCallGetPosts()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	}
+	
 	c.IndentedJSON(http.StatusOK, posts)
 	}
 
@@ -156,11 +164,15 @@ func searchPosts(c *gin.Context) {
 	for rows.Next() {
 		var pst Post
 		err := rows.Scan(&pst.ID, &pst.Image, &pst.Description)
-		errHandle(err)	
+		if err != nil {
+			log.Fatal(err)
+		}	
 		posts = append(posts, pst)		
 		}
 	err = rows.Err()
-	errHandle(err)	
+	if err != nil {
+		log.Fatal(err)
+	}		
 
 	c.IndentedJSON(http.StatusOK, posts)
 }
@@ -170,10 +182,14 @@ func main() {
 	var err error
 	db, err = sql.Open("postgres", connStr)
 	defer db.Close()
-	errHandle(err)
+	if err != nil {
+		log.Fatal(err)
+	}	
 
 	err = db.Ping()
-	errHandle(err)
+	if err != nil {
+		log.Fatal(err)
+	}	
 
 	router := gin.Default()
 
