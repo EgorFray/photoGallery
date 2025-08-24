@@ -57,6 +57,7 @@ func dbCallGetPosts() ([]Post, error) {
 	return posts, err
 }
 
+// This function is for endpoint GetPostById and open Detail view of post on frontend
 func dbCallGetPostById(id int) (PostDetail, error) {
 	var post PostDetail
 	err := db.QueryRow("SELECT image, description, created_at FROM posts WHERE id = $1", id).Scan(&post.Image, &post.Description, &post.CreatedAt)
@@ -70,6 +71,7 @@ func dbCallCreatePost(imagePath, description string) (int64, error) {
 	return insertedID, err
 }
 
+// This function is for endpoit CreatePost and return created Post which then is added to List of posts on frontend
 func dbCallGetCreatedPost(insertedID int64) (Post, error) {
 	var post Post
 	err := db.QueryRow("SELECT id, image, description FROM posts WHERE id = $1", insertedID).Scan(&post.ID, &post.Image, &post.Description)
@@ -145,6 +147,11 @@ func postPosts(c *gin.Context) {
 	c.IndentedJSON(http.StatusCreated, post)
 }
 
+func dbCallDeletePost(id int) (error) {
+	_, err := db.Exec("DELETE FROM posts WHERE id = $1", id)
+	return err
+}
+
 func deletePost(c *gin.Context) {
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)
@@ -153,8 +160,7 @@ func deletePost(c *gin.Context) {
 		return
 	}
 
-	query := "DELETE FROM posts WHERE id = $1"
-	_, err = db.Exec(query, id)
+	err = dbCallDeletePost(id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
