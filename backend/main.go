@@ -57,6 +57,25 @@ func dbCallGetPosts() ([]Post, error) {
 	return posts, err
 }
 
+func dbCallGetPostById(id int) (PostDetail, error) {
+	var post PostDetail
+	err := db.QueryRow("SELECT image, description, created_at FROM posts WHERE id = $1", id).Scan(&post.Image, &post.Description, &post.CreatedAt)
+	return post, err
+}
+
+func dbCallCreatePost(imagePath, description string) (int64, error) {
+	var insertedID int64
+
+	err := db.QueryRow("INSERT INTO posts (image, description) VALUES ($1, $2) RETURNING id", imagePath, description).Scan(&insertedID)
+	return insertedID, err
+}
+
+func dbCallGetCreatedPost(insertedID int64) (Post, error) {
+	var post Post
+	err := db.QueryRow("SELECT id, image, description FROM posts WHERE id = $1", insertedID).Scan(&post.ID, &post.Image, &post.Description)
+	return post, err
+}
+
 func getPosts(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
 
@@ -76,8 +95,8 @@ func getPostById(c *gin.Context) {
 		return
 	}
 
-	var post PostDetail
-	err = db.QueryRow("SELECT image, description, created_at FROM posts WHERE id = $1", id).Scan(&post.Image, &post.Description, &post.CreatedAt)
+	post, err := dbCallGetPostById(id)
+
 	if err == sql.ErrNoRows {
 		c.JSON(http.StatusNotFound, gin.H{"error": "post not found"})
 		return
@@ -88,7 +107,6 @@ func getPostById(c *gin.Context) {
 
 	c.JSON(http.StatusOK, post)
 	}
-
 
 func postPosts(c *gin.Context) {
 	file, err := c.FormFile("image")
@@ -111,18 +129,14 @@ func postPosts(c *gin.Context) {
 	}
 
 	imagePath := "/" + filePath
-	var insertedID int64
 
-	query := "INSERT INTO posts (image, description) VALUES ($1, $2) RETURNING id"
-	err = db.QueryRow(query, imagePath, description).Scan(&insertedID)
+	insertedID, err := dbCallCreatePost(imagePath, description)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	var post Post
-	query = "SELECT id, image, description FROM posts WHERE id = $1"
-	err = db.QueryRow(query, insertedID).Scan(&post.ID, &post.Image, &post.Description)
+	post, err := dbCallGetCreatedPost(insertedID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return 
