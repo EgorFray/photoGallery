@@ -169,34 +169,43 @@ func deletePost(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Post deleted successfully"})
 }
 
-func searchPosts(c *gin.Context) {
-	queryDb := "SELECT id, image, description FROM posts WHERE description ILIKE $1"
-	queryUrl := c.Query("description")
-	rows, err := db.Query(queryDb, "%"+queryUrl+"%")
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	defer rows.Close()
-
-	var posts []Post
-
-	for rows.Next() {
-		var pst Post
-		err := rows.Scan(&pst.ID, &pst.Image, &pst.Description)
+func dbCallSearchPosts(queryUrl string) ([]Post, error) {
+		queryDb := "SELECT id, image, description FROM posts WHERE description ILIKE $1"
+		rows, err := db.Query(queryDb, "%"+queryUrl+"%")
 		if err != nil {
-			log.Fatal(err)
-		}	
-		posts = append(posts, pst)		
+			return nil, err
 		}
-	err = rows.Err()
-	if err != nil {
-		log.Fatal(err)
-	}		
 
-	c.IndentedJSON(http.StatusOK, posts)
+		defer rows.Close()
+	
+		var posts []Post
+	
+		for rows.Next() {
+			var pst Post
+			err := rows.Scan(&pst.ID, &pst.Image, &pst.Description)
+			if err != nil {
+				log.Fatal(err)
+			}	
+			posts = append(posts, pst)		
+			}
+		err = rows.Err()
+		if err != nil {
+			return nil, err
+		}		
+		return posts, err
 }
 	
+func searchPosts(c *gin.Context) {
+		queryUrl := c.Query("description")
+
+		posts, err := dbCallSearchPosts(queryUrl)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		}
+	
+		c.IndentedJSON(http.StatusOK, posts)
+}
+
 func main() {
 	connStr := "user=admin password=admin dbname=galery sslmode=disable host=localhost port=5432"
 	var err error
