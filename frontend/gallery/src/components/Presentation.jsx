@@ -4,10 +4,11 @@ import { useNavigate } from "react-router-dom";
 import Button from "./Button";
 import styles from "./Presentation.module.css";
 
+const MotionButton = motion(Button);
+
 function Presentation() {
 	const navigate = useNavigate();
 
-	const MotionButton = motion(Button);
 	return (
 		<div className={styles.container}>
 			<div className={styles.textBox}>

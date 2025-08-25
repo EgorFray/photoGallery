@@ -24,12 +24,16 @@ function CreatePostForm() {
 				<h2 className={styles.createFormHeading}>Add your memory</h2>
 
 				<div className={styles.imageContainer}>
-					<label className={styles.createFormImage}>Add picture</label>
-					<input type="file" name="image" />
+					<label htmlFor="image" className={styles.createFormImage}>
+						Add picture
+					</label>
+					<input type="file" name="image" id="image" />
 				</div>
 
 				<div className={styles.descriptionContainer}>
-					<label className={styles.createFormDescription}>Add description</label>
+					<label htmlFor="description" className={styles.createFormDescription}>
+						Add description
+					</label>
 					<textarea
 						id="description"
 						name="description"

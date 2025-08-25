@@ -24,6 +24,8 @@ function LoginForm() {
 		[isAuthenticated, navigate]
 	);
 
+	if (isAuthenticated) return null;
+
 	return (
 		<div className={styles.formContainer}>
 			<form className={styles.form} onSubmit={handleSubmit}>

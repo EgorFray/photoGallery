@@ -11,41 +11,39 @@ import ProtectedRoute from "./pages/ProtectedRoute";
 
 function App() {
 	return (
-		<div>
-			<AuthProvider>
-				<PostsProvider>
-					<Routes>
-						<Route index element={<Homepage />} />
-						<Route path="/login" element={<Login />} />
-						<Route
-							path="/app"
-							element={
-								<ProtectedRoute>
-									<MainPage />
-								</ProtectedRoute>
-							}
-						/>
-						<Route
-							path="/create"
-							element={
-								<ProtectedRoute>
-									<CreatePost />
-								</ProtectedRoute>
-							}
-						/>
-						<Route
-							path="/app/posts/:id"
-							element={
-								<ProtectedRoute>
-									<PostDetail />
-								</ProtectedRoute>
-							}
-						/>
-						<Route path="*" element={<PageNotFound />} />
-					</Routes>
-				</PostsProvider>
-			</AuthProvider>
-		</div>
+		<AuthProvider>
+			<PostsProvider>
+				<Routes>
+					<Route index element={<Homepage />} />
+					<Route path="/login" element={<Login />} />
+					<Route
+						path="/app"
+						element={
+							<ProtectedRoute>
+								<MainPage />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="/create"
+						element={
+							<ProtectedRoute>
+								<CreatePost />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="/app/posts/:id"
+						element={
+							<ProtectedRoute>
+								<PostDetail />
+							</ProtectedRoute>
+						}
+					/>
+					<Route path="*" element={<PageNotFound />} />
+				</Routes>
+			</PostsProvider>
+		</AuthProvider>
 	);
 }
 
