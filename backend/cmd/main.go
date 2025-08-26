@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"time"
+	"gallery/backend/internal/repository"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -32,30 +33,31 @@ type PostDetail struct {
 
 var db *sql.DB
 
+// TESTING NEW PROJECT STRUCTURE
 
-func dbCallGetPosts() ([]Post, error) {
-	rows, err := db.Query("SELECT id, image, description FROM posts")
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
+// func dbCallGetPosts() ([]Post, error) {
+// 	rows, err := db.Query("SELECT id, image, description FROM posts")
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	defer rows.Close()
 
-	var posts []Post
+// 	var posts []Post
 
-	for rows.Next() {
-		var pst Post
-		err := rows.Scan(&pst.ID, &pst.Image, &pst.Description)
-		if err != nil {
-			return nil, err
-		}
-		posts = append(posts, pst)		
-		}
-	err = rows.Err()
-	if err != nil {
-		return nil, err
-	}
-	return posts, err
-}
+// 	for rows.Next() {
+// 		var pst Post
+// 		err := rows.Scan(&pst.ID, &pst.Image, &pst.Description)
+// 		if err != nil {
+// 			return nil, err
+// 		}
+// 		posts = append(posts, pst)		
+// 		}
+// 	err = rows.Err()
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return posts, err
+// }
 
 // This function is for endpoint GetPostById and open Detail view of post on frontend
 func dbCallGetPostById(id int) (PostDetail, error) {
@@ -80,8 +82,8 @@ func dbCallGetCreatedPost(insertedID int64) (Post, error) {
 
 func getPosts(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
-
-	posts, err := dbCallGetPosts()
+ 
+	posts, err := repository.DbCallGetPosts()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
