@@ -32,10 +32,10 @@ type PostDetail struct {
 }
 
 type Handler struct {
-	repo repository.Repository
+	repo *repository.Repository
 }
 
-func NewHandler(repo repository.Repository) *Handler {
+func NewHandler(repo *repository.Repository) *Handler {
 	return &Handler{repo: repo}
 } 
 
@@ -91,7 +91,7 @@ func dbCallGetCreatedPost(insertedID int64) (Post, error) {
 func (h *Handler) getPosts(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
  
-	posts, err := repository.DbCallGetPosts()
+	posts, err := h.repo.DbCallGetPosts()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
