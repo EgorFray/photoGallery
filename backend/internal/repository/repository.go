@@ -2,6 +2,19 @@ package repository
 
 import "database/sql"
 
+
+type PostRepository interface {
+	DbCallGetPosts() ([]Post, error)
+}
+
+type Repository struct {
+	db *sql.DB
+}
+
+func New(db *sql.DB) *Repository {
+	return &Repository{db: db}
+}
+
 type Post struct {
 	ID int `json:"id"`
 	Image string `json:"image"`
@@ -10,8 +23,7 @@ type Post struct {
 
 var db *sql.DB
 
-
-func DbCallGetPosts() ([]Post, error) {
+func (r *Repository) DbCallGetPosts() ([]Post, error) {
 	rows, err := db.Query("SELECT id, image, description FROM posts")
 	if err != nil {
 		return nil, err

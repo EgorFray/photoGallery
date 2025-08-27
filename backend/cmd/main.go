@@ -2,12 +2,12 @@ package main
 
 import (
 	"database/sql"
+	"gallery/backend/internal/repository"
 	"log"
 	"net/http"
 	"path/filepath"
 	"strconv"
 	"time"
-	"gallery/backend/internal/repository"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -30,6 +30,14 @@ type PostDetail struct {
 	Description string `json:"description"`
 	CreatedAt time.Time `json:"created_at"`
 }
+
+type Handler struct {
+	repo repository.Repository
+}
+
+func NewHandler(repo repository.Repository) *Handler {
+	return &Handler{repo: repo}
+} 
 
 var db *sql.DB
 
@@ -80,7 +88,7 @@ func dbCallGetCreatedPost(insertedID int64) (Post, error) {
 	return post, err
 }
 
-func getPosts(c *gin.Context) {
+func (h *Handler) getPosts(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
  
 	posts, err := repository.DbCallGetPosts()
@@ -222,11 +230,14 @@ func main() {
 		log.Fatal(err)
 	}	
 
+	repo := repository.New(db)
+	handler := NewHandler(repo)
+
 	router := gin.Default()
 
 	router.Static("/images", "./images")
 	router.Use(cors.Default())
-	router.GET("/posts", getPosts)
+	router.GET("/posts", handler.getPosts)
 	router.GET("/posts/:id", getPostById)
 	router.GET("/posts/search", searchPosts)
 	router.POST("/posts", postPosts)
