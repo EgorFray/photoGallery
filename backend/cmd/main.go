@@ -41,38 +41,6 @@ func NewHandler(repo *repository.Repository) *Handler {
 
 var db *sql.DB
 
-// TESTING NEW PROJECT STRUCTURE
-
-// func dbCallGetPosts() ([]Post, error) {
-// 	rows, err := db.Query("SELECT id, image, description FROM posts")
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	defer rows.Close()
-
-// 	var posts []Post
-
-// 	for rows.Next() {
-// 		var pst Post
-// 		err := rows.Scan(&pst.ID, &pst.Image, &pst.Description)
-// 		if err != nil {
-// 			return nil, err
-// 		}
-// 		posts = append(posts, pst)		
-// 		}
-// 	err = rows.Err()
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return posts, err
-// }
-
-// This function is for endpoint GetPostById and open Detail view of post on frontend
-func dbCallGetPostById(id int) (PostDetail, error) {
-	var post PostDetail
-	err := db.QueryRow("SELECT image, description, created_at FROM posts WHERE id = $1", id).Scan(&post.Image, &post.Description, &post.CreatedAt)
-	return post, err
-}
 
 func dbCallCreatePost(imagePath, description string) (int64, error) {
 	var insertedID int64
@@ -99,7 +67,7 @@ func (h *Handler) getPosts(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, posts)
 	}
 
-func getPostById(c *gin.Context) {
+func (h *Handler) getPostById(c *gin.Context) {
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)
 	if err != nil {
@@ -107,7 +75,7 @@ func getPostById(c *gin.Context) {
 		return
 	}
 
-	post, err := dbCallGetPostById(id)
+	post, err := h.repo.DbCallGetPostById(id)
 
 	if err == sql.ErrNoRows {
 		c.JSON(http.StatusNotFound, gin.H{"error": "post not found"})
@@ -235,10 +203,10 @@ func main() {
 
 	router := gin.Default()
 
-	router.Static("/images", "./images")
+	router.Static("/images", "../images")
 	router.Use(cors.Default())
 	router.GET("/posts", handler.getPosts)
-	router.GET("/posts/:id", getPostById)
+	router.GET("/posts/:id", handler.getPostById)
 	router.GET("/posts/search", searchPosts)
 	router.POST("/posts", postPosts)
 	router.DELETE("/posts/:id", deletePost)

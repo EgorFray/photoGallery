@@ -1,10 +1,14 @@
 package repository
 
-import "database/sql"
+import (
+	"database/sql"
+	"time"
+)
 
 
 type PostRepository interface {
 	DbCallGetPosts() ([]Post, error)
+	DbCallGetPostById(id int) (PostDetail, error)
 }
 
 type Repository struct {
@@ -21,10 +25,15 @@ type Post struct {
 	Description string `json:"description"`
 }
 
-var db *sql.DB
+type PostDetail struct {
+	Image string `json:"image"`
+	Description string `json:"description"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
 
 func (r *Repository) DbCallGetPosts() ([]Post, error) {
-	rows, err := db.Query("SELECT id, image, description FROM posts")
+	rows, err := r.db.Query("SELECT id, image, description FROM posts")
 	if err != nil {
 		return nil, err
 	}
@@ -45,4 +54,11 @@ func (r *Repository) DbCallGetPosts() ([]Post, error) {
 		return nil, err
 	}
 	return posts, err
+}
+
+// This function is for endpoint GetPostById and open Detail view of post on frontend
+func (r *Repository) DbCallGetPostById(id int) (PostDetail, error) {
+	var post PostDetail
+	err := r.db.QueryRow("SELECT image, description, created_at FROM posts WHERE id = $1", id).Scan(&post.Image, &post.Description, &post.CreatedAt)
+	return post, err
 }
