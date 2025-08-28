@@ -10,6 +10,7 @@ type PostRepository interface {
 	DbCallGetPosts() ([]Post, error)
 	DbCallGetPostById(id int) (PostDetail, error)
 	DbCallCreatePost(imagePath, description string) (int64, error)
+	DbCallGetCreatedPost(insertedID int64) (Post, error)
 }
 
 type Repository struct {
@@ -69,4 +70,11 @@ func (r *Repository) DbCallCreatePost(imagePath, description string) (int64, err
 
 	err := r.db.QueryRow("INSERT INTO posts (image, description) VALUES ($1, $2) RETURNING id", imagePath, description).Scan(&insertedID)
 	return insertedID, err
+}
+
+// This function is for endpoit CreatePost and return created Post which then is added to List of posts on frontend
+func (r *Repository) DbCallGetCreatedPost(insertedID int64) (Post, error) {
+	var post Post
+	err := r.db.QueryRow("SELECT id, image, description FROM posts WHERE id = $1", insertedID).Scan(&post.ID, &post.Image, &post.Description)
+	return post, err
 }

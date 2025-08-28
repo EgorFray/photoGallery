@@ -42,20 +42,6 @@ func NewHandler(repo *repository.Repository) *Handler {
 var db *sql.DB
 
 
-// func dbCallCreatePost(imagePath, description string) (int64, error) {
-// 	var insertedID int64
-
-// 	err := db.QueryRow("INSERT INTO posts (image, description) VALUES ($1, $2) RETURNING id", imagePath, description).Scan(&insertedID)
-// 	return insertedID, err
-// }
-
-// This function is for endpoit CreatePost and return created Post which then is added to List of posts on frontend
-func dbCallGetCreatedPost(insertedID int64) (Post, error) {
-	var post Post
-	err := db.QueryRow("SELECT id, image, description FROM posts WHERE id = $1", insertedID).Scan(&post.ID, &post.Image, &post.Description)
-	return post, err
-}
-
 func (h *Handler) getPosts(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
  
@@ -116,7 +102,7 @@ func (h *Handler) createPost(c *gin.Context) {
 		return
 	}
 
-	post, err := dbCallGetCreatedPost(insertedID)
+	post, err := h.repo.DbCallGetCreatedPost(insertedID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return 
