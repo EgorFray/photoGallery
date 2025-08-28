@@ -9,6 +9,7 @@ import (
 type PostRepository interface {
 	DbCallGetPosts() ([]Post, error)
 	DbCallGetPostById(id int) (PostDetail, error)
+	DbCallCreatePost(imagePath, description string) (int64, error)
 }
 
 type Repository struct {
@@ -61,4 +62,11 @@ func (r *Repository) DbCallGetPostById(id int) (PostDetail, error) {
 	var post PostDetail
 	err := r.db.QueryRow("SELECT image, description, created_at FROM posts WHERE id = $1", id).Scan(&post.Image, &post.Description, &post.CreatedAt)
 	return post, err
+}
+
+func (r *Repository) DbCallCreatePost(imagePath, description string) (int64, error) {
+	var insertedID int64
+
+	err := r.db.QueryRow("INSERT INTO posts (image, description) VALUES ($1, $2) RETURNING id", imagePath, description).Scan(&insertedID)
+	return insertedID, err
 }

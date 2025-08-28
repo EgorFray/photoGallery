@@ -42,12 +42,12 @@ func NewHandler(repo *repository.Repository) *Handler {
 var db *sql.DB
 
 
-func dbCallCreatePost(imagePath, description string) (int64, error) {
-	var insertedID int64
+// func dbCallCreatePost(imagePath, description string) (int64, error) {
+// 	var insertedID int64
 
-	err := db.QueryRow("INSERT INTO posts (image, description) VALUES ($1, $2) RETURNING id", imagePath, description).Scan(&insertedID)
-	return insertedID, err
-}
+// 	err := db.QueryRow("INSERT INTO posts (image, description) VALUES ($1, $2) RETURNING id", imagePath, description).Scan(&insertedID)
+// 	return insertedID, err
+// }
 
 // This function is for endpoit CreatePost and return created Post which then is added to List of posts on frontend
 func dbCallGetCreatedPost(insertedID int64) (Post, error) {
@@ -88,7 +88,7 @@ func (h *Handler) getPostById(c *gin.Context) {
 	c.JSON(http.StatusOK, post)
 	}
 
-func postPosts(c *gin.Context) {
+func (h *Handler) createPost(c *gin.Context) {
 	file, err := c.FormFile("image")
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Image file is required"})
@@ -110,7 +110,7 @@ func postPosts(c *gin.Context) {
 
 	imagePath := "/" + filePath
 
-	insertedID, err := dbCallCreatePost(imagePath, description)
+	insertedID, err := h.repo.DbCallCreatePost(imagePath, description)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -208,7 +208,7 @@ func main() {
 	router.GET("/posts", handler.getPosts)
 	router.GET("/posts/:id", handler.getPostById)
 	router.GET("/posts/search", searchPosts)
-	router.POST("/posts", postPosts)
+	router.POST("/posts", handler.createPost)
 	router.DELETE("/posts/:id", deletePost)
 	router.Run("localhost:8080")
 }
