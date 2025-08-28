@@ -7,29 +7,28 @@ import (
 	"net/http"
 	"path/filepath"
 	"strconv"
-	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
 )
 
-type Post struct {
-	ID int `json:"id"`
-	Image string `json:"image"`
-	Description string `json:"description"`
-}
+// type Post struct {
+// 	ID int `json:"id"`
+// 	Image string `json:"image"`
+// 	Description string `json:"description"`
+// }
 
-type PostRequest struct {
-	Image string `json:"image"`
-	Description string `json:"description"`
-}
+// type PostRequest struct {
+// 	Image string `json:"image"`
+// 	Description string `json:"description"`
+// }
 
-type PostDetail struct {
-	Image string `json:"image"`
-	Description string `json:"description"`
-	CreatedAt time.Time `json:"created_at"`
-}
+// type PostDetail struct {
+// 	Image string `json:"image"`
+// 	Description string `json:"description"`
+// 	CreatedAt time.Time `json:"created_at"`
+// }
 
 type Handler struct {
 	repo *repository.Repository
@@ -111,11 +110,6 @@ func (h *Handler) createPost(c *gin.Context) {
 	c.IndentedJSON(http.StatusCreated, post)
 }
 
-// func dbCallDeletePost(id int) (error) {
-// 	_, err := db.Exec("DELETE FROM posts WHERE id = $1", id)
-// 	return err
-// }
-
 func (h *Handler) deletePost(c *gin.Context) {
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)
@@ -132,37 +126,11 @@ func (h *Handler) deletePost(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "Post deleted successfully"})
 }
-
-func dbCallSearchPosts(queryUrl string) ([]Post, error) {
-		queryDb := "SELECT id, image, description FROM posts WHERE description ILIKE $1"
-		rows, err := db.Query(queryDb, "%"+queryUrl+"%")
-		if err != nil {
-			return nil, err
-		}
-
-		defer rows.Close()
 	
-		var posts []Post
-	
-		for rows.Next() {
-			var pst Post
-			err := rows.Scan(&pst.ID, &pst.Image, &pst.Description)
-			if err != nil {
-				log.Fatal(err)
-			}	
-			posts = append(posts, pst)		
-			}
-		err = rows.Err()
-		if err != nil {
-			return nil, err
-		}		
-		return posts, err
-}
-	
-func searchPosts(c *gin.Context) {
+func (h *Handler) searchPosts(c *gin.Context) {
 		queryUrl := c.Query("description")
 
-		posts, err := dbCallSearchPosts(queryUrl)
+		posts, err := h.repo.DbCallSearchPosts(queryUrl)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		}
@@ -193,7 +161,7 @@ func main() {
 	router.Use(cors.Default())
 	router.GET("/posts", handler.getPosts)
 	router.GET("/posts/:id", handler.getPostById)
-	router.GET("/posts/search", searchPosts)
+	router.GET("/posts/search", handler.searchPosts)
 	router.POST("/posts", handler.createPost)
 	router.DELETE("/posts/:id", handler.deletePost)
 	router.Run("localhost:8080")

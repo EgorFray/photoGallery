@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+	"log"
 	"time"
 )
 
@@ -12,6 +13,7 @@ type PostRepository interface {
 	DbCallCreatePost(imagePath, description string) (int64, error)
 	DbCallGetCreatedPost(insertedID int64) (Post, error)
 	DbCallDeletePost(id int) (error)
+	DbCallSearchPosts(queryUrl string) ([]Post, error)
 }
 
 type Repository struct {
@@ -83,4 +85,30 @@ func (r *Repository) DbCallGetCreatedPost(insertedID int64) (Post, error) {
 func (r *Repository) DbCallDeletePost(id int) (error) {
 	_, err := r.db.Exec("DELETE FROM posts WHERE id = $1", id)
 	return err
+}
+
+func (r *Repository) DbCallSearchPosts(queryUrl string) ([]Post, error) {
+	queryDb := "SELECT id, image, description FROM posts WHERE description ILIKE $1"
+	rows, err := r.db.Query(queryDb, "%"+queryUrl+"%")
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	var posts []Post
+
+	for rows.Next() {
+		var pst Post
+		err := rows.Scan(&pst.ID, &pst.Image, &pst.Description)
+		if err != nil {
+			log.Fatal(err)
+		}	
+		posts = append(posts, pst)		
+		}
+	err = rows.Err()
+	if err != nil {
+		return nil, err
+	}		
+	return posts, err
 }
