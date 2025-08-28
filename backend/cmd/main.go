@@ -111,12 +111,12 @@ func (h *Handler) createPost(c *gin.Context) {
 	c.IndentedJSON(http.StatusCreated, post)
 }
 
-func dbCallDeletePost(id int) (error) {
-	_, err := db.Exec("DELETE FROM posts WHERE id = $1", id)
-	return err
-}
+// func dbCallDeletePost(id int) (error) {
+// 	_, err := db.Exec("DELETE FROM posts WHERE id = $1", id)
+// 	return err
+// }
 
-func deletePost(c *gin.Context) {
+func (h *Handler) deletePost(c *gin.Context) {
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)
 	if err != nil {
@@ -124,7 +124,7 @@ func deletePost(c *gin.Context) {
 		return
 	}
 
-	err = dbCallDeletePost(id)
+	err = h.repo.DbCallDeletePost(id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -195,6 +195,6 @@ func main() {
 	router.GET("/posts/:id", handler.getPostById)
 	router.GET("/posts/search", searchPosts)
 	router.POST("/posts", handler.createPost)
-	router.DELETE("/posts/:id", deletePost)
+	router.DELETE("/posts/:id", handler.deletePost)
 	router.Run("localhost:8080")
 }

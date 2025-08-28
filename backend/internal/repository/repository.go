@@ -11,6 +11,7 @@ type PostRepository interface {
 	DbCallGetPostById(id int) (PostDetail, error)
 	DbCallCreatePost(imagePath, description string) (int64, error)
 	DbCallGetCreatedPost(insertedID int64) (Post, error)
+	DbCallDeletePost(id int) (error)
 }
 
 type Repository struct {
@@ -77,4 +78,9 @@ func (r *Repository) DbCallGetCreatedPost(insertedID int64) (Post, error) {
 	var post Post
 	err := r.db.QueryRow("SELECT id, image, description FROM posts WHERE id = $1", insertedID).Scan(&post.ID, &post.Image, &post.Description)
 	return post, err
+}
+
+func (r *Repository) DbCallDeletePost(id int) (error) {
+	_, err := r.db.Exec("DELETE FROM posts WHERE id = $1", id)
+	return err
 }
