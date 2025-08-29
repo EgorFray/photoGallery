@@ -3,17 +3,16 @@ package repository
 import (
 	"database/sql"
 	"log"
-	"time"
+	"gallery/backend/internal/types"
 )
 
-
 type PostRepository interface {
-	DbCallGetPosts() ([]Post, error)
-	DbCallGetPostById(id int) (PostDetail, error)
+	DbCallGetPosts() ([]types.PostModel, error)
+	DbCallGetPostById(id int) (types.PostDetailModel, error)
 	DbCallCreatePost(imagePath, description string) (int64, error)
-	DbCallGetCreatedPost(insertedID int64) (Post, error)
+	DbCallGetCreatedPost(insertedID int64) (types.PostModel, error)
 	DbCallDeletePost(id int) (error)
-	DbCallSearchPosts(queryUrl string) ([]Post, error)
+	DbCallSearchPosts(queryUrl string) ([]types.PostModel, error)
 }
 
 type Repository struct {
@@ -24,30 +23,18 @@ func New(db *sql.DB) *Repository {
 	return &Repository{db: db}
 }
 
-type Post struct {
-	ID int `json:"id"`
-	Image string `json:"image"`
-	Description string `json:"description"`
-}
 
-type PostDetail struct {
-	Image string `json:"image"`
-	Description string `json:"description"`
-	CreatedAt time.Time `json:"created_at"`
-}
-
-
-func (r *Repository) DbCallGetPosts() ([]Post, error) {
+func (r *Repository) DbCallGetPosts() ([]types.PostModel, error) {
 	rows, err := r.db.Query("SELECT id, image, description FROM posts")
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	var posts []Post
+	var posts []types.PostModel
 
 	for rows.Next() {
-		var pst Post
+		var pst types.PostModel
 		err := rows.Scan(&pst.ID, &pst.Image, &pst.Description)
 		if err != nil {
 			return nil, err
@@ -62,8 +49,8 @@ func (r *Repository) DbCallGetPosts() ([]Post, error) {
 }
 
 // This function is for endpoint GetPostById and open Detail view of post on frontend
-func (r *Repository) DbCallGetPostById(id int) (PostDetail, error) {
-	var post PostDetail
+func (r *Repository) DbCallGetPostById(id int) (types.PostDetailModel, error) {
+	var post types.PostDetailModel
 	err := r.db.QueryRow("SELECT image, description, created_at FROM posts WHERE id = $1", id).Scan(&post.Image, &post.Description, &post.CreatedAt)
 	return post, err
 }
@@ -76,8 +63,8 @@ func (r *Repository) DbCallCreatePost(imagePath, description string) (int64, err
 }
 
 // This function is for endpoit CreatePost and return created Post which then is added to List of posts on frontend
-func (r *Repository) DbCallGetCreatedPost(insertedID int64) (Post, error) {
-	var post Post
+func (r *Repository) DbCallGetCreatedPost(insertedID int64) (types.PostModel, error) {
+	var post types.PostModel
 	err := r.db.QueryRow("SELECT id, image, description FROM posts WHERE id = $1", insertedID).Scan(&post.ID, &post.Image, &post.Description)
 	return post, err
 }
@@ -87,7 +74,7 @@ func (r *Repository) DbCallDeletePost(id int) (error) {
 	return err
 }
 
-func (r *Repository) DbCallSearchPosts(queryUrl string) ([]Post, error) {
+func (r *Repository) DbCallSearchPosts(queryUrl string) ([]types.PostModel, error) {
 	queryDb := "SELECT id, image, description FROM posts WHERE description ILIKE $1"
 	rows, err := r.db.Query(queryDb, "%"+queryUrl+"%")
 	if err != nil {
@@ -96,10 +83,10 @@ func (r *Repository) DbCallSearchPosts(queryUrl string) ([]Post, error) {
 
 	defer rows.Close()
 
-	var posts []Post
+	var posts []types.PostModel
 
 	for rows.Next() {
-		var pst Post
+		var pst types.PostModel
 		err := rows.Scan(&pst.ID, &pst.Image, &pst.Description)
 		if err != nil {
 			log.Fatal(err)

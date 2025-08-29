@@ -13,23 +13,6 @@ import (
 	_ "github.com/lib/pq"
 )
 
-// type Post struct {
-// 	ID int `json:"id"`
-// 	Image string `json:"image"`
-// 	Description string `json:"description"`
-// }
-
-// type PostRequest struct {
-// 	Image string `json:"image"`
-// 	Description string `json:"description"`
-// }
-
-// type PostDetail struct {
-// 	Image string `json:"image"`
-// 	Description string `json:"description"`
-// 	CreatedAt time.Time `json:"created_at"`
-// }
-
 type Handler struct {
 	repo *repository.Repository
 }
@@ -142,10 +125,11 @@ func main() {
 	connStr := "user=admin password=admin dbname=galery sslmode=disable host=localhost port=5432"
 	var err error
 	db, err = sql.Open("postgres", connStr)
-	defer db.Close()
 	if err != nil {
 		log.Fatal(err)
 	}	
+	
+	defer db.Close()
 
 	err = db.Ping()
 	if err != nil {
