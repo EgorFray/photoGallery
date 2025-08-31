@@ -8,3 +8,10 @@ type UserModel struct {
 	Avatar string `json:"avatar"`
 	Token string `json:"string"`
 }
+
+type UserRequest struct {
+	Name string `json:"name" binding:"required"`
+	Email string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required"`
+	Avatar string `json:"avatar"`
+}

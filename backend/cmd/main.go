@@ -3,6 +3,8 @@ package main
 import (
 	"database/sql"
 	"gallery/backend/internal/repository"
+	"gallery/backend/internal/types"
+	"gallery/backend/internal/user"
 	"log"
 	"net/http"
 	"path/filepath"
@@ -11,6 +13,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type Handler struct {
@@ -20,6 +23,14 @@ type Handler struct {
 func NewHandler(repo *repository.Repository) *Handler {
 	return &Handler{repo: repo}
 } 
+
+type UserHandler struct {
+	uRepo *user.UserRepository
+}
+
+func NewUserHandler(uRepo *user.UserRepository) *UserHandler {
+	return &UserHandler{uRepo: uRepo}
+}
 
 var db *sql.DB
 
@@ -121,6 +132,29 @@ func (h *Handler) searchPosts(c *gin.Context) {
 		c.IndentedJSON(http.StatusOK, posts)
 }
 
+// User endpoints
+// Later transfer it to utils or something
+func hashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
+}
+
+func (u *UserHandler)createUser(c *gin.Context) {
+	var req types.UserRequest
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+      return
+	}
+
+	hashedPassword, err := hashPassword(req.Password)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	}
+
+	userId, err := u.uRepo.DbCallCreateUser()
+}
+
 func main() {
 	connStr := "user=admin password=admin dbname=galery sslmode=disable host=localhost port=5432"
 	var err error
@@ -137,16 +171,21 @@ func main() {
 	}	
 
 	repo := repository.New(db)
+	uRepo := user.NewUserRepository(db)
 	handler := NewHandler(repo)
+	userHandler := NewUserHandler(uRepo)
 
 	router := gin.Default()
 
 	router.Static("/images", "../images")
 	router.Use(cors.Default())
+	// post routers
 	router.GET("/posts", handler.getPosts)
 	router.GET("/posts/:id", handler.getPostById)
 	router.GET("/posts/search", handler.searchPosts)
 	router.POST("/posts", handler.createPost)
 	router.DELETE("/posts/:id", handler.deletePost)
+	// user routers
+	router.POST("/user/create", userHandler.createUser)
 	router.Run("localhost:8080")
 }
