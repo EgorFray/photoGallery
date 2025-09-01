@@ -147,12 +147,22 @@ func (u *UserHandler)createUser(c *gin.Context) {
       return
 	}
 
+	if req.Avatar == "" {
+		req.Avatar = "/avatars/default-icon.png"
+	}
+
 	hashedPassword, err := hashPassword(req.Password)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
 
-	userId, err := u.uRepo.DbCallCreateUser()
+	userId, err := u.uRepo.DbCallCreateUser(req.Name, req.Email, hashedPassword, req.Avatar)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.IndentedJSON(http.StatusCreated, userId)
 }
 
 func main() {
@@ -177,7 +187,8 @@ func main() {
 
 	router := gin.Default()
 
-	router.Static("/images", "../images")
+	router.Static("/postsImg", "../images/postsImg")
+	router.Static("/avatars", "../images/avatars")
 	router.Use(cors.Default())
 	// post routers
 	router.GET("/posts", handler.getPosts)
