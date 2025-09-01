@@ -80,7 +80,7 @@ func (h *Handler) createPost(c *gin.Context) {
 		return
 	}
 
-	filePath := filepath.Join("images", file.Filename)
+	filePath := filepath.Join("postsImg", file.Filename)
 
 	if err := c.SaveUploadedFile(file, filePath); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save image file: " + err.Error()})
@@ -187,8 +187,8 @@ func main() {
 
 	router := gin.Default()
 
-	router.Static("/postsImg", "../images/postsImg")
-	router.Static("/avatars", "../images/avatars")
+	router.Static("/postsImg", "images/postsImg")
+	router.Static("/avatars", "images/avatars")
 	router.Use(cors.Default())
 	// post routers
 	router.GET("/posts", handler.getPosts)
