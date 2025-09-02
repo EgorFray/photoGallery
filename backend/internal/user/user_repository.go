@@ -2,10 +2,12 @@ package user
 
 import (
 	"database/sql"
+	"gallery/backend/internal/types"
 )
 
 type UserInterface interface {
 	DbCallCreateUser(name, email, password string) (int, error)
+	DbCallGetUserByEmail(email string) (types.UserModel, error)
 }
 
 type UserRepository struct {
@@ -21,4 +23,11 @@ func (u *UserRepository) DbCallCreateUser(name, email, password, avatar string) 
 
 	err := u.db.QueryRow("INSERT INTO users (name, email, password, avatar) VALUES ($1, $2, $3, $4) RETURNING id", name, email, password, avatar).Scan(&insertedID)
 	return insertedID, err
+}
+
+func (u *UserRepository) DbCallGetUserByEmail(email string) (types.UserModel, error) {
+	var user types.UserModel
+
+	err := u.db.QueryRow("SELECT FROM users (id, name, email, password, avatar) WHERE email = $1", email).Scan(&user.ID, &user.Name, &user.Email, &user.Password, &user.Avatar)
+	return user, err
 }
