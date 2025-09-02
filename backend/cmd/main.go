@@ -165,6 +165,8 @@ func (u *UserHandler)createUser(c *gin.Context) {
 	c.IndentedJSON(http.StatusCreated, userId)
 }
 
+func login()
+
 func main() {
 	connStr := "user=admin password=admin dbname=galery sslmode=disable host=localhost port=5432"
 	var err error
