@@ -2,9 +2,13 @@ package main
 
 import (
 	"database/sql"
+
+	"gallery/backend/config"
+	"gallery/backend/internal/service"
 	"gallery/backend/internal/repository"
 	"gallery/backend/internal/types"
 	"gallery/backend/internal/user"
+
 	"log"
 	"net/http"
 	"path/filepath"
@@ -32,7 +36,7 @@ func NewUserHandler(uRepo *user.UserRepository) *UserHandler {
 	return &UserHandler{uRepo: uRepo}
 }
 
-var db *sql.DB
+// var db *sql.DB
 
 
 func (h *Handler) getPosts(c *gin.Context) {
@@ -165,12 +169,12 @@ func (u *UserHandler)createUser(c *gin.Context) {
 	c.IndentedJSON(http.StatusCreated, userId)
 }
 
-func login()
+// func login()
 
 func main() {
-	connStr := "user=admin password=admin dbname=galery sslmode=disable host=localhost port=5432"
+	config := config.InitConfig()
 	var err error
-	db, err = sql.Open("postgres", connStr)
+	db, err := sql.Open("postgres", config.PsqlConnUri)
 	if err != nil {
 		log.Fatal(err)
 	}	
@@ -186,6 +190,8 @@ func main() {
 	uRepo := user.NewUserRepository(db)
 	handler := NewHandler(repo)
 	userHandler := NewUserHandler(uRepo)
+
+	authSvc := service.NewAuthService(config)
 
 	router := gin.Default()
 

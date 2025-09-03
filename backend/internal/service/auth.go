@@ -3,20 +3,27 @@ package service
 import (
 	"time"
 
+	"gallery/backend/config"
+
 	"github.com/golang-jwt/jwt"
-	"github.com/joho/godotenv"
 )
 
-type AuthService struct {}
+type AuthService struct {
+	config *config.Config
+}
 
-var jwtSecret = []byte("super-secret-key")
+func NewAuthService(config *config.Config) *AuthService {
+	return &AuthService{config: config}
+}
 
-func GenerateJWT(userId string) (string, error) {
+func (a *AuthService)GenerateJWT(userId string) (string, error) {
 	claims := jwt.MapClaims{
 		"user_id": userId,
-		"exp":     time.Now().Add(time.Hour * 24).Unix(),
+		"exp":     a.config.AccessTokenLife,
 		"iat":     time.Now().Unix(),
 	}
 
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	return token.SignedString(a.config.SecretKey)
 
 }
