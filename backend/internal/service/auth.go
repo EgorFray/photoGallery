@@ -8,6 +8,10 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
+type AuthServiceInterface interface {
+	GenerateJWT(userId string) (string, error)
+}
+
 type AuthService struct {
 	config *config.Config
 }
@@ -25,5 +29,4 @@ func (a *AuthService)GenerateJWT(userId string) (string, error) {
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString(a.config.SecretKey)
-
 }

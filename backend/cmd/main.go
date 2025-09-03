@@ -36,8 +36,9 @@ func NewUserHandler(uRepo *user.UserRepository) *UserHandler {
 	return &UserHandler{uRepo: uRepo}
 }
 
-// var db *sql.DB
+type AuthSvc struct {
 
+}
 
 func (h *Handler) getPosts(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
@@ -138,10 +139,6 @@ func (h *Handler) searchPosts(c *gin.Context) {
 
 // User endpoints
 // Later transfer it to utils or something
-func hashPassword(password string) (string, error) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
-	return string(bytes), err
-}
 
 func (u *UserHandler)createUser(c *gin.Context) {
 	var req types.UserRequest
@@ -206,5 +203,7 @@ func main() {
 	router.DELETE("/posts/:id", handler.deletePost)
 	// user routers
 	router.POST("/user/create", userHandler.createUser)
+	// login
+	router.POST("/auth/login", authSvc.GenerateJWT)
 	router.Run("localhost:8080")
 }
