@@ -4,8 +4,8 @@ import (
 	"database/sql"
 
 	"gallery/backend/config"
-	"gallery/backend/internal/service"
 	"gallery/backend/internal/repository"
+	"gallery/backend/internal/service"
 	"gallery/backend/internal/types"
 	"gallery/backend/internal/user"
 
@@ -139,6 +139,10 @@ func (h *Handler) searchPosts(c *gin.Context) {
 
 // User endpoints
 // Later transfer it to utils or something
+func hashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	return string(bytes), err
+}
 
 func (u *UserHandler)createUser(c *gin.Context) {
 	var req types.UserRequest
