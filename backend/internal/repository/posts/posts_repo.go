@@ -6,7 +6,7 @@ import (
 	"gallery/backend/internal/types"
 )
 
-type PostRepository interface {
+type PostRepositoryInterface interface {
 	DbCallGetPosts() ([]types.PostModel, error)
 	DbCallGetPostById(id int) (types.PostDetailModel, error)
 	DbCallCreatePost(imagePath, description string) (int64, error)
@@ -15,16 +15,16 @@ type PostRepository interface {
 	DbCallSearchPosts(queryUrl string) ([]types.PostModel, error)
 }
 
-type Repository struct {
+type PostRepo struct {
 	db *sql.DB
 }
 
-func New(db *sql.DB) *Repository {
-	return &Repository{db: db}
+func New(db *sql.DB) *PostRepo {
+	return &PostRepo{db: db}
 }
 
 
-func (r *Repository) DbCallGetPosts() ([]types.PostModel, error) {
+func (r *PostRepo) DbCallGetPosts() ([]types.PostModel, error) {
 	rows, err := r.db.Query("SELECT id, image, description FROM posts")
 	if err != nil {
 		return nil, err
@@ -49,13 +49,13 @@ func (r *Repository) DbCallGetPosts() ([]types.PostModel, error) {
 }
 
 // This function is for endpoint GetPostById and open Detail view of post on frontend
-func (r *Repository) DbCallGetPostById(id int) (types.PostDetailModel, error) {
+func (r *PostRepo) DbCallGetPostById(id int) (types.PostDetailModel, error) {
 	var post types.PostDetailModel
 	err := r.db.QueryRow("SELECT image, description, created_at FROM posts WHERE id = $1", id).Scan(&post.Image, &post.Description, &post.CreatedAt)
 	return post, err
 }
 
-func (r *Repository) DbCallCreatePost(imagePath, description string) (int64, error) {
+func (r *PostRepo) DbCallCreatePost(imagePath, description string) (int64, error) {
 	var insertedID int64
 
 	err := r.db.QueryRow("INSERT INTO posts (image, description) VALUES ($1, $2) RETURNING id", imagePath, description).Scan(&insertedID)
@@ -63,18 +63,18 @@ func (r *Repository) DbCallCreatePost(imagePath, description string) (int64, err
 }
 
 // This function is for endpoit CreatePost and return created Post which then is added to List of posts on frontend
-func (r *Repository) DbCallGetCreatedPost(insertedID int64) (types.PostModel, error) {
+func (r *PostRepo) DbCallGetCreatedPost(insertedID int64) (types.PostModel, error) {
 	var post types.PostModel
 	err := r.db.QueryRow("SELECT id, image, description FROM posts WHERE id = $1", insertedID).Scan(&post.ID, &post.Image, &post.Description)
 	return post, err
 }
 
-func (r *Repository) DbCallDeletePost(id int) (error) {
+func (r *PostRepo) DbCallDeletePost(id int) (error) {
 	_, err := r.db.Exec("DELETE FROM posts WHERE id = $1", id)
 	return err
 }
 
-func (r *Repository) DbCallSearchPosts(queryUrl string) ([]types.PostModel, error) {
+func (r *PostRepo) DbCallSearchPosts(queryUrl string) ([]types.PostModel, error) {
 	queryDb := "SELECT id, image, description FROM posts WHERE description ILIKE $1"
 	rows, err := r.db.Query(queryDb, "%"+queryUrl+"%")
 	if err != nil {
