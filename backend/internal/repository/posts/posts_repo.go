@@ -19,7 +19,7 @@ type PostRepo struct {
 	db *sql.DB
 }
 
-func New(db *sql.DB) *PostRepo {
+func NewPostRepository(db *sql.DB) *PostRepo {
 	return &PostRepo{db: db}
 }
 
