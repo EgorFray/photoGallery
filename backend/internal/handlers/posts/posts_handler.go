@@ -49,3 +49,14 @@ func (h *PostHandler) GetPostById(c *gin.Context) {
 
 	c.JSON(http.StatusOK, post)
 }
+
+func (h *PostHandler) SearchPosts(c *gin.Context) {
+	queryUrl := c.Query("description")
+	posts, err := h.postService.SearchPosts(queryUrl)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	
+	c.IndentedJSON(http.StatusOK, posts)
+}

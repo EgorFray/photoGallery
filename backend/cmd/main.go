@@ -15,27 +15,6 @@ import (
 	_ "github.com/lib/pq"
 )
 
-// func (h *Handler) getPostById(c *gin.Context) {
-// 	idParam := c.Param("id")
-// 	id, err := strconv.Atoi(idParam)
-// 	if err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid post id"})
-// 		return
-// 	}
-
-// 	post, err := h.repo.DbCallGetPostById(id)
-
-// 	if err == sql.ErrNoRows {
-// 		c.JSON(http.StatusNotFound, gin.H{"error": "post not found"})
-// 		return
-// 	} else if err !=nil {
-// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-// 		return
-// 	}
-
-// 	c.JSON(http.StatusOK, post)
-// 	}
-
 // func (h *Handler) createPost(c *gin.Context) {
 // 	file, err := c.FormFile("image")
 // 	if err != nil {
@@ -169,7 +148,7 @@ func main() {
 	// post routers
 	router.GET("/posts", postsHandlers.GetPosts)
 	router.GET("/posts/:id", postsHandlers.GetPostById)
-	// router.GET("/posts/search", handler.searchPosts)
+	router.GET("/posts/search", postsHandlers.SearchPosts)
 	// router.POST("/posts", handler.createPost)
 	// router.DELETE("/posts/:id", handler.deletePost)
 	// user routers
