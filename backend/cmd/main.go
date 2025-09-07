@@ -15,37 +15,6 @@ import (
 	_ "github.com/lib/pq"
 )
 
-// type Handler struct {
-// 	repo *repository.Repository
-// }
-
-// func NewHandler(repo *repository.Repository) *Handler {
-// 	return &Handler{repo: repo}
-// }
-
-// type UserHandler struct {
-// 	uRepo *user.UserRepository
-// }
-
-// func NewUserHandler(uRepo *user.UserRepository) *UserHandler {
-// 	return &UserHandler{uRepo: uRepo}
-// }
-
-// type AuthSvc struct {
-
-// }
-
-// func (h *Handler) getPosts(c *gin.Context) {
-// 	c.Header("Content-Type", "application/json")
-
-// 	posts, err := h.repo.DbCallGetPosts()
-// 	if err != nil {
-// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-// 	}
-
-// 	c.IndentedJSON(http.StatusOK, posts)
-// 	}
-
 // func (h *Handler) getPostById(c *gin.Context) {
 // 	idParam := c.Param("id")
 // 	id, err := strconv.Atoi(idParam)
@@ -199,7 +168,7 @@ func main() {
 	router.Use(cors.Default())
 	// post routers
 	router.GET("/posts", postsHandlers.GetPosts)
-	// router.GET("/posts/:id", handler.getPostById)
+	router.GET("/posts/:id", postsHandlers.GetPostById)
 	// router.GET("/posts/search", handler.searchPosts)
 	// router.POST("/posts", handler.createPost)
 	// router.DELETE("/posts/:id", handler.deletePost)

@@ -7,6 +7,7 @@ import (
 
 type PostServiceInterface interface {
 	GetPosts() ([]types.PostModel, error)
+	GetPostById(id int) (*types.PostDetailModel, error)
 }
 
 type PostService struct {
@@ -23,5 +24,13 @@ func (s *PostService) GetPosts() ([]types.PostModel, error) {
 		return nil, err
 	}
 	return posts, nil
+}
+
+func (s *PostService)GetPostById(id int) (*types.PostDetailModel, error) {
+	post, err := s.PostRepo.DbCallGetPostById(id)
+	if err != nil {
+		return nil, err
+	}
+	return &post, err
 }
 
