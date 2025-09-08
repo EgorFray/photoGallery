@@ -52,33 +52,6 @@ import (
 // 	c.IndentedJSON(http.StatusCreated, post)
 // }
 
-// func (h *Handler) deletePost(c *gin.Context) {
-// 	idParam := c.Param("id")
-// 	id, err := strconv.Atoi(idParam)
-// 	if err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid post id"})
-// 		return
-// 	}
-
-// 	err = h.repo.DbCallDeletePost(id)
-// 	if err != nil {
-// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-// 		return
-// 	}
-
-// 	c.JSON(http.StatusOK, gin.H{"message": "Post deleted successfully"})
-// }
-
-// func (h *Handler) searchPosts(c *gin.Context) {
-// 		queryUrl := c.Query("description")
-
-// 		posts, err := h.repo.DbCallSearchPosts(queryUrl)
-// 		if err != nil {
-// 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-// 		}
-
-// 		c.IndentedJSON(http.StatusOK, posts)
-// }
 
 // // User endpoints
 // // Later transfer it to utils or something
@@ -150,7 +123,7 @@ func main() {
 	router.GET("/posts/:id", postsHandlers.GetPostById)
 	router.GET("/posts/search", postsHandlers.SearchPosts)
 	// router.POST("/posts", handler.createPost)
-	// router.DELETE("/posts/:id", handler.deletePost)
+	router.DELETE("/posts/:id", postsHandlers.DeletePost)
 	// user routers
 	// router.POST("/user/create", userHandler.createUser)
 	// login

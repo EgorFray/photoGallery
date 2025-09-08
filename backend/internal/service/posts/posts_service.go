@@ -9,6 +9,7 @@ type PostServiceInterface interface {
 	GetPosts() ([]types.PostModel, error)
 	GetPostById(id int) (*types.PostDetailModel, error)
 	SearchPosts(queryUrl string) ([]types.PostModel, error)
+	DeletePost(id int) error
 }
 
 type PostService struct {
@@ -43,3 +44,10 @@ func (s *PostService) SearchPosts(queryUrl string) ([]types.PostModel, error) {
 	return posts, err
 }
 
+func (s *PostService) DeletePost(id int) error {
+	err := s.PostRepo.DbCallDeletePost(id)
+	if err != nil {
+		return err
+	}
+	return err
+}
