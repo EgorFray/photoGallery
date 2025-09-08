@@ -1,8 +1,11 @@
 package posts
 
 import (
+	"fmt"
 	repository "gallery/backend/internal/repository/posts"
 	"gallery/backend/internal/types"
+	"mime/multipart"
+	"path/filepath"
 )
 
 type PostServiceInterface interface {
@@ -33,7 +36,27 @@ func (s *PostService) GetPostById(id int) (*types.PostDetailModel, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &post, err
+	return &post, nil
+}
+
+func (s *PostService) CreatePost(file *multipart.FileHeader, description string) (*types.PostModel, error) {
+	filePath := filepath.Join("postsImg", file.Filename)
+	if err := saveFile(file, filePath); err != nil {
+		return nil, fmt.Errorf("failed to save file: %w", err)
+	}
+
+
+	imagePath := "/somePath"
+	insertedId, err := s.PostRepo.DbCallCreatePost(imagePath, description)
+	if err != nil {
+		return nil, fmt.Errorf("failed to save file: %w", err)
+	}
+
+	post, err := s.PostRepo.DbCallGetCreatedPost(insertedId)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create post: %w", err)
+	}
+	return &post, nil
 }
 
 func (s *PostService) SearchPosts(queryUrl string) ([]types.PostModel, error) {
@@ -41,7 +64,7 @@ func (s *PostService) SearchPosts(queryUrl string) ([]types.PostModel, error) {
 	if err != nil {
 		return nil, err
 	}
-	return posts, err
+	return posts, nil
 }
 
 func (s *PostService) DeletePost(id int) error {

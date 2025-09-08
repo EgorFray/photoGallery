@@ -15,42 +15,42 @@ import (
 	_ "github.com/lib/pq"
 )
 
-// func (h *Handler) createPost(c *gin.Context) {
-// 	file, err := c.FormFile("image")
-// 	if err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": "Image file is required"})
-// 		return
-// 	}
+func (h *Handler) createPost(c *gin.Context) {
+	file, err := c.FormFile("image")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Image file is required"})
+		return
+	}
 
-// 	description := c.PostForm("description")
-// 	if description == "" {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": "Description is required"})
-// 		return
-// 	}
+	description := c.PostForm("description")
+	if description == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Description is required"})
+		return
+	}
 
-// 	filePath := filepath.Join("postsImg", file.Filename)
+	filePath := filepath.Join("postsImg", file.Filename)
 
-// 	if err := c.SaveUploadedFile(file, filePath); err != nil {
-// 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save image file: " + err.Error()})
-// 		return
-// 	}
+	if err := c.SaveUploadedFile(file, filePath); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save image file: " + err.Error()})
+		return
+	}
 
-// 	imagePath := "/" + filePath
+	imagePath := "/" + filePath
 
-// 	insertedID, err := h.repo.DbCallCreatePost(imagePath, description)
-// 	if err != nil {
-// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-// 		return
-// 	}
+	insertedID, err := h.repo.DbCallCreatePost(imagePath, description)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
-// 	post, err := h.repo.DbCallGetCreatedPost(insertedID)
-// 	if err != nil {
-// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-// 		return
-// 	}
+	post, err := h.repo.DbCallGetCreatedPost(insertedID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
-// 	c.IndentedJSON(http.StatusCreated, post)
-// }
+	c.IndentedJSON(http.StatusCreated, post)
+}
 
 
 // // User endpoints
