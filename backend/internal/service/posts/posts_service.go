@@ -4,6 +4,7 @@ import (
 	"fmt"
 	repository "gallery/backend/internal/repository/posts"
 	"gallery/backend/internal/types"
+	"gallery/backend/internal/utils"
 	"mime/multipart"
 	"path/filepath"
 )
@@ -41,10 +42,10 @@ func (s *PostService) GetPostById(id int) (*types.PostDetailModel, error) {
 
 func (s *PostService) CreatePost(file *multipart.FileHeader, description string) (*types.PostModel, error) {
 	filePath := filepath.Join("postsImg", file.Filename)
-	if err := saveFile(file, filePath); err != nil {
+
+	if err := utils.SaveFile(file, filePath); err != nil {
 		return nil, fmt.Errorf("failed to save file: %w", err)
 	}
-
 
 	imagePath := "/somePath"
 	insertedId, err := s.PostRepo.DbCallCreatePost(imagePath, description)
