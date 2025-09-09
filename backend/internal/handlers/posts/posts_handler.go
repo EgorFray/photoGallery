@@ -50,6 +50,28 @@ func (h *PostHandler) GetPostById(c *gin.Context) {
 	c.JSON(http.StatusOK, post)
 }
 
+func (h *PostHandler) CreatePost(c *gin.Context) {
+	file, err := c.FormFile("image")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Image file is required"})
+		return
+	}
+
+	description := c.PostForm("description")
+	if description == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Description is required"})
+		return
+	}
+
+	post, err := h.postService.CreatePost(file, description)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.IndentedJSON(http.StatusCreated, post)
+}
+
 func (h *PostHandler) SearchPosts(c *gin.Context) {
 	queryUrl := c.Query("description")
 	posts, err := h.postService.SearchPosts(queryUrl)

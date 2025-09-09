@@ -15,44 +15,6 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func (h *Handler) createPost(c *gin.Context) {
-	file, err := c.FormFile("image")
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Image file is required"})
-		return
-	}
-
-	description := c.PostForm("description")
-	if description == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Description is required"})
-		return
-	}
-
-	filePath := filepath.Join("postsImg", file.Filename)
-
-	if err := c.SaveUploadedFile(file, filePath); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save image file: " + err.Error()})
-		return
-	}
-
-	imagePath := "/" + filePath
-
-	insertedID, err := h.repo.DbCallCreatePost(imagePath, description)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	post, err := h.repo.DbCallGetCreatedPost(insertedID)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.IndentedJSON(http.StatusCreated, post)
-}
-
-
 // // User endpoints
 // // Later transfer it to utils or something
 // func hashPassword(password string) (string, error) {
@@ -122,7 +84,7 @@ func main() {
 	router.GET("/posts", postsHandlers.GetPosts)
 	router.GET("/posts/:id", postsHandlers.GetPostById)
 	router.GET("/posts/search", postsHandlers.SearchPosts)
-	// router.POST("/posts", handler.createPost)
+	router.POST("/posts", postsHandlers.CreatePost)
 	router.DELETE("/posts/:id", postsHandlers.DeletePost)
 	// user routers
 	// router.POST("/user/create", userHandler.createUser)

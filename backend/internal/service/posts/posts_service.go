@@ -12,6 +12,7 @@ import (
 type PostServiceInterface interface {
 	GetPosts() ([]types.PostModel, error)
 	GetPostById(id int) (*types.PostDetailModel, error)
+	CreatePost(file *multipart.FileHeader, description string) (*types.PostModel, error)
 	SearchPosts(queryUrl string) ([]types.PostModel, error)
 	DeletePost(id int) error
 }
@@ -47,7 +48,7 @@ func (s *PostService) CreatePost(file *multipart.FileHeader, description string)
 		return nil, fmt.Errorf("failed to save file: %w", err)
 	}
 
-	imagePath := "/somePath"
+	imagePath := "/" + filePath
 	insertedId, err := s.PostRepo.DbCallCreatePost(imagePath, description)
 	if err != nil {
 		return nil, fmt.Errorf("failed to save file: %w", err)
