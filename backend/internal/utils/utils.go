@@ -5,6 +5,8 @@ import (
 	"mime/multipart"
 	"os"
 	"path/filepath"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 func SaveFile(file *multipart.FileHeader, path string ) error {
@@ -28,4 +30,9 @@ func SaveFile(file *multipart.FileHeader, path string ) error {
 	}
 
 	return nil
+}
+
+func HashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	return string(bytes), err
 }

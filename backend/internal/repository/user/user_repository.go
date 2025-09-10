@@ -5,8 +5,8 @@ import (
 	"gallery/backend/internal/types"
 )
 
-type UserInterface interface {
-	DbCallCreateUser(name, email, password string) (int, error)
+type UserRepositoryInterface interface {
+	DbCallCreateUser(name, email, password, avatar string) (int, error)
 	DbCallGetUserByEmail(email string) (types.UserModel, error)
 }
 
