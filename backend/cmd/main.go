@@ -17,31 +17,31 @@ import (
 
 // // User endpoints
 
-// func (u *UserHandler)createUser(c *gin.Context) {
-// 	var req types.UserRequest
+func (u *UserHandler)createUser(c *gin.Context) {
+	var req types.UserRequest
 
-// 	if err := c.ShouldBindJSON(&req); err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-//       return
-// 	}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+      return
+	}
 
-// 	if req.Avatar == "" {
-// 		req.Avatar = "/avatars/default-icon.png"
-// 	}
+	if req.Avatar == "" {
+		req.Avatar = "/avatars/default-icon.png"
+	}
 
-// 	hashedPassword, err := hashPassword(req.Password)
-// 	if err != nil {
-// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-// 	}
+	hashedPassword, err := hashPassword(req.Password)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	}
 
-// 	userId, err := u.uRepo.DbCallCreateUser(req.Name, req.Email, hashedPassword, req.Avatar)
-// 	if err != nil {
-// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-// 		return
-// 	}
+	userId, err := u.uRepo.DbCallCreateUser(req.Name, req.Email, hashedPassword, req.Avatar)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
-// 	c.IndentedJSON(http.StatusCreated, userId)
-// }
+	c.IndentedJSON(http.StatusCreated, userId)
+}
 
 // func login()
 
