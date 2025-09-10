@@ -8,42 +8,16 @@ import (
 	postsRepo "gallery/backend/internal/repository/posts"
 	postsService "gallery/backend/internal/service/posts"
 
+	userHandlers "gallery/backend/internal/handlers/user"
+	userRepo "gallery/backend/internal/repository/user"
+	userService "gallery/backend/internal/service/user"
+
 	"log"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
 )
-
-// // User endpoints
-
-func (u *UserHandler)createUser(c *gin.Context) {
-	var req types.UserRequest
-
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-      return
-	}
-
-	if req.Avatar == "" {
-		req.Avatar = "/avatars/default-icon.png"
-	}
-
-	hashedPassword, err := hashPassword(req.Password)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-	}
-
-	userId, err := u.uRepo.DbCallCreateUser(req.Name, req.Email, hashedPassword, req.Avatar)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.IndentedJSON(http.StatusCreated, userId)
-}
-
-// func login()
 
 func main() {
 	config := config.InitConfig()
@@ -65,10 +39,11 @@ func main() {
 	postsSvc := postsService.NewPostService(postRepo)
 	postsHandlers := PostsHandlers.NewPostHandler(postsSvc) 
 
-	// uRepo := user.NewUserRepository(db)
-	// userHandler := NewUserHandler(uRepo)
+	// User
+	userRepo := userRepo.NewUserRepository(db)
+	userSvc := userService.NewUserService(userRepo)
+	userHandlers := userHandlers.NewUserHandler(userSvc)
 
-	// authSvc := service.NewAuthService(config)
 
 	router := gin.Default()
 
@@ -82,7 +57,7 @@ func main() {
 	router.POST("/posts", postsHandlers.CreatePost)
 	router.DELETE("/posts/:id", postsHandlers.DeletePost)
 	// user routers
-	// router.POST("/user/create", userHandler.createUser)
+	router.POST("/user/create", userHandlers.CreateUser)
 	// login
 	// router.POST("/auth/login", authSvc.GenerateJWT)
 	router.Run("localhost:8080")
