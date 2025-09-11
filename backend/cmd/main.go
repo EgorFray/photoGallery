@@ -44,7 +44,6 @@ func main() {
 	userSvc := userService.NewUserService(userRepo)
 	userHandlers := userHandlers.NewUserHandler(userSvc)
 
-
 	router := gin.Default()
 
 	router.Static("/postsImg", "./images/postsImg")

@@ -1,11 +1,13 @@
 package service
 
 import (
+	"log"
 	"time"
 
 	"gallery/backend/config"
 
 	"github.com/golang-jwt/jwt"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type AuthServiceInterface interface {
@@ -22,11 +24,20 @@ func NewAuthService(config *config.Config) *AuthService {
 
 func (a *AuthService)GenerateJWT(userId string) (string, error) {
 	claims := jwt.MapClaims{
-		"user_id": userId,
+		"sub": userId,
 		"exp":     a.config.AccessTokenLife,
 		"iat":     time.Now().Unix(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(a.config.SecretKey)
+	tokenString, err := token.SignedString(a.config.SecretKey)
+	if err != nil {
+		log.Println(err)
+	}
+	return tokenString, nil
+}
+
+func CheckPasswordHash(hash, password string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
 }
