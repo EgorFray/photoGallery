@@ -5,6 +5,7 @@ import (
 	uService "gallery/backend/internal/service/user"
 	"gallery/backend/internal/types"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -43,5 +44,20 @@ func (h *AuthHandler) Auth(c *gin.Context) {
 		return
 	}
 
-	
+	refreshToken, err := h.authService.GenerateRefreshJWT(userData.ID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	setTokenToCookies(c, refreshToken)
+	c.JSON(http.StatusOK, types.AuthResponse{
+		Token: accessToken,
+		Expired: int(time.Minute * 10),
+	})
+
+}
+
+func setTokenToCookies(c *gin.Context, refreshToken string) {
+	c.SetCookie("refreshToken", refreshToken, int(time.Hour * 24 * 30), "/", "localhost", false, true)
 }

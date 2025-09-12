@@ -12,6 +12,7 @@ import (
 
 type AuthServiceInterface interface {
 	GenerateJWT(userId string) (string, error)
+	GenerateRefreshJWT(userId string) (string, error)
 }
 
 type AuthService struct {
