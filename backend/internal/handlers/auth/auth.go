@@ -26,5 +26,22 @@ func (h *AuthHandler) Auth(c *gin.Context) {
       return
 	}
 
-	userData, err := h.userService. 
+	userData, err := h.userService.GetUserByEmail(authData.Email)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if !aService.CheckPasswordHash(userData.Password, authData.Password) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Auth failed. Please check your credentials and try again"})
+		return
+	}
+
+	accessToken, err := h.authService.GenerateJWT(userData.ID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	
 }

@@ -12,6 +12,7 @@ type Config struct {
 	PsqlConnUri string
 	SecretKey string
 	AccessTokenLife time.Duration
+	RefreshTokenLife time.Duration
 }
 
 func InitConfig() *Config {
@@ -19,7 +20,8 @@ func InitConfig() *Config {
 	return &Config{
 		PsqlConnUri: os.Getenv("PSQL_CONN"),
 		SecretKey: os.Getenv("SECRET_KEY"),
-		AccessTokenLife: time.Minute * 45,
+		AccessTokenLife: time.Minute * 10,
+		RefreshTokenLife: time.Hour * 24 * 30,
 	}
 }
 
