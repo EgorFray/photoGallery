@@ -1,6 +1,8 @@
 package service
 
 import (
+	"errors"
+	"fmt"
 	"log"
 	"time"
 
@@ -13,6 +15,7 @@ import (
 type AuthServiceInterface interface {
 	GenerateJWT(userId string) (string, error)
 	GenerateRefreshJWT(userId string) (string, error)
+	ParseJWT(rawToken string) (*jwt.StandardClaims, error)
 }
 
 type AuthService struct {
@@ -52,6 +55,26 @@ func (a *AuthService)GenerateRefreshJWT(userId string) (string, error) {
 		log.Println(err)
 	}
 	return tokenString, nil
+}
+
+func (a *AuthService) ParseJWT(rawToken string) (*jwt.StandardClaims, error) {
+	token, err := jwt.ParseWithClaims(
+		rawToken, 
+		&jwt.StandardClaims{}, 
+		func(token *jwt.Token) (interface{}, error) {
+			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+			}
+			return []byte(a.config.SecretKey), nil
+		})
+	if err != nil {
+		return nil, err
+	}
+
+	if claims, ok := token.Claims.(*jwt.StandardClaims); ok && token.Valid {
+		return claims, nil
+	}
+	return nil, errors.New("could not parse this token")
 }
 
 func CheckPasswordHash(hash, password string) bool {
