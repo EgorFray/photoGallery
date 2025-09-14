@@ -10,7 +10,7 @@ import (
 )
 
 type PostServiceInterface interface {
-	GetPosts() ([]types.PostModel, error)
+	GetPosts(userId string) ([]types.PostModel, error)
 	GetPostById(id int) (*types.PostDetailModel, error)
 	CreatePost(file *multipart.FileHeader, description string) (*types.PostModel, error)
 	SearchPosts(queryUrl string) ([]types.PostModel, error)
@@ -25,8 +25,8 @@ func NewPostService(postRepository repository.PostRepositoryInterface) *PostServ
 	return &PostService{PostRepo: postRepository}
 }
 
-func (s *PostService) GetPosts() ([]types.PostModel, error) {
-	posts, err := s.PostRepo.DbCallGetPosts()
+func (s *PostService) GetPosts(userId string) ([]types.PostModel, error) {
+	posts, err := s.PostRepo.DbCallGetPosts(userId)
 	if err != nil {
 		return nil, err
 	}

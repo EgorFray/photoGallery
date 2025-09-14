@@ -20,7 +20,12 @@ func NewPostHandler(postService posts.PostServiceInterface) *PostHandler {
 func (h *PostHandler) GetPosts(c *gin.Context) {
 	c.Header("Content-Type", "application/json")
 
-	posts, err := h.postService.GetPosts()
+	userId, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "There is no userID"})
+	}
+
+	posts, err := h.postService.GetPosts(userId.(string))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

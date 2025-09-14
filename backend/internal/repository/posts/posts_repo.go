@@ -2,12 +2,12 @@ package repository
 
 import (
 	"database/sql"
-	"log"
 	"gallery/backend/internal/types"
+	"log"
 )
 
 type PostRepositoryInterface interface {
-	DbCallGetPosts() ([]types.PostModel, error)
+	DbCallGetPosts(userId string) ([]types.PostModel, error)
 	DbCallGetPostById(id int) (types.PostDetailModel, error)
 	DbCallCreatePost(imagePath, description string) (int64, error)
 	DbCallGetCreatedPost(insertedID int64) (types.PostModel, error)
@@ -24,8 +24,8 @@ func NewPostRepository(db *sql.DB) *PostRepo {
 }
 
 
-func (r *PostRepo) DbCallGetPosts() ([]types.PostModel, error) {
-	rows, err := r.db.Query("SELECT id, image, description FROM posts")
+func (r *PostRepo) DbCallGetPosts(userId string) ([]types.PostModel, error) {
+	rows, err := r.db.Query("SELECT id, image, description FROM posts WHERE user_id = $1", userId)
 	if err != nil {
 		return nil, err
 	}
