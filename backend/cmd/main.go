@@ -4,6 +4,7 @@ import (
 	"database/sql"
 
 	"gallery/backend/config"
+	"gallery/backend/internal/handlers/middleware"
 	PostsHandlers "gallery/backend/internal/handlers/posts"
 	postsRepo "gallery/backend/internal/repository/posts"
 	postsService "gallery/backend/internal/service/posts"
@@ -11,6 +12,9 @@ import (
 	userHandlers "gallery/backend/internal/handlers/user"
 	userRepo "gallery/backend/internal/repository/user"
 	userService "gallery/backend/internal/service/user"
+
+	authHandlers "gallery/backend/internal/handlers/auth"
+	authService "gallery/backend/internal/service/auth"
 
 	"log"
 
@@ -44,20 +48,29 @@ func main() {
 	userSvc := userService.NewUserService(userRepo)
 	userHandlers := userHandlers.NewUserHandler(userSvc)
 
+	// Auth
+	authSvc := authService.NewAuthService(config)
+	authHandlers := authHandlers.NewAuthHandler(userSvc, authSvc)
+
 	router := gin.Default()
 
 	router.Static("/postsImg", "./images/postsImg")
 	router.Static("/avatars", "./images/avatars")
 	router.Use(cors.Default())
 	// post routers
-	router.GET("/posts", postsHandlers.GetPosts)
-	router.GET("/posts/:id", postsHandlers.GetPostById)
-	router.GET("/posts/search", postsHandlers.SearchPosts)
-	router.POST("/posts", postsHandlers.CreatePost)
-	router.DELETE("/posts/:id", postsHandlers.DeletePost)
+	protected := router.Group("/")
+	protected.Use(middleware.Authorization(authSvc)) 
+	{
+		protected.GET("/posts", postsHandlers.GetPosts)
+		protected.GET("/posts/:id", postsHandlers.GetPostById)
+		protected.GET("/posts/search", postsHandlers.SearchPosts)
+		protected.POST("/posts", postsHandlers.CreatePost)
+		protected.DELETE("/posts/:id", postsHandlers.DeletePost)
+	}
+
 	// user routers
 	router.POST("/user/create", userHandlers.CreateUser)
 	// login
-	// router.POST("/auth/login", authSvc.GenerateJWT)
+	router.POST("/auth/login", authHandlers.Auth)
 	router.Run("localhost:8080")
 }

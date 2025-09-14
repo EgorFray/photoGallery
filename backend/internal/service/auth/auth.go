@@ -34,7 +34,7 @@ func (a *AuthService)GenerateJWT(userId string) (string, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := token.SignedString(a.config.SecretKey)
+	tokenString, err := token.SignedString([]byte(a.config.SecretKey))
 	if err != nil {
 		log.Println(err)
 	}
@@ -50,7 +50,7 @@ func (a *AuthService)GenerateRefreshJWT(userId string) (string, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := token.SignedString(a.config.SecretKey)
+	tokenString, err := token.SignedString([]byte(a.config.SecretKey))
 	if err != nil {
 		log.Println(err)
 	}

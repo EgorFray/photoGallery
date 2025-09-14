@@ -28,6 +28,6 @@ func (u *UserRepository) DbCallCreateUser(name, email, password, avatar string) 
 func (u *UserRepository) DbCallGetUserByEmail(email string) (types.UserModel, error) {
 	var user types.UserModel
 
-	err := u.db.QueryRow("SELECT FROM users (id, name, email, password, avatar) WHERE email = $1", email).Scan(&user.ID, &user.Name, &user.Email, &user.Password, &user.Avatar)
+	err := u.db.QueryRow("SELECT id, name, email, password, avatar FROM users WHERE email = $1", email).Scan(&user.ID, &user.Name, &user.Email, &user.Password, &user.Avatar)
 	return user, err
 }
