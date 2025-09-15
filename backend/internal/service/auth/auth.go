@@ -45,7 +45,7 @@ func (a *AuthService)GenerateJWT(userId string) (string, error) {
 func (a *AuthService)GenerateRefreshJWT(userId string) (string, error) {
 	claims := jwt.MapClaims{
 		"sub": userId,
-		"exp": time.Now().Add(a.config.AccessTokenLife).Unix(),
+		"exp": time.Now().Add(a.config.RefreshTokenLife).Unix(),
 		"iat": time.Now().Unix(),
 	}
 

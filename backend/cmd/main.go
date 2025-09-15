@@ -72,5 +72,6 @@ func main() {
 	router.POST("/user/create", userHandlers.CreateUser)
 	// login
 	router.POST("/auth/login", authHandlers.Auth)
+	router.POST("/auth/refresh", authHandlers.Refresh)
 	router.Run("localhost:8080")
 }
