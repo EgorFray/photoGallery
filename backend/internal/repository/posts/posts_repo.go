@@ -23,7 +23,6 @@ func NewPostRepository(db *sql.DB) *PostRepo {
 	return &PostRepo{db: db}
 }
 
-
 func (r *PostRepo) DbCallGetPosts(userId string) ([]types.PostModel, error) {
 	rows, err := r.db.Query("SELECT id, image, description FROM posts WHERE user_id = $1", userId)
 	if err != nil {

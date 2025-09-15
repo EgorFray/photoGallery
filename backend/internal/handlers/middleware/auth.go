@@ -3,6 +3,7 @@ package middleware
 import (
 	"net/http"
 	"strings"
+	"time"
 
 	aService "gallery/backend/internal/service/auth"
 
@@ -23,6 +24,11 @@ func Authorization(a aService.AuthServiceInterface) gin.HandlerFunc {
 		if err != nil {
 				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "invalid token: " + err.Error()})
 				return
+		}
+
+		if claims.ExpiresAt < time.Now().Unix() {
+    	c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "token expired"})
+    	return
 		}
 	
 		if claims.Subject == "" {
