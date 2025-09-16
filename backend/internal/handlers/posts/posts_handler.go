@@ -99,6 +99,11 @@ func (h *PostHandler) SearchPosts(c *gin.Context) {
 }
 
 func (h *PostHandler) DeletePost(c *gin.Context) {
+	userId, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "There is no userID"})
+	}
+
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)
 	if err != nil {
@@ -106,7 +111,7 @@ func (h *PostHandler) DeletePost(c *gin.Context) {
 		return
 	}
 
-	err = h.postService.DeletePost(id)
+	err = h.postService.DeletePost(id, userId.(string))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

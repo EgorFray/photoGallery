@@ -10,8 +10,8 @@ type PostRepositoryInterface interface {
 	DbCallGetPosts(userId string) ([]types.PostModel, error)
 	DbCallGetPostById(id int, userId string) (types.PostDetailModel, error)
 	DbCallCreatePost(imagePath, description, userId string) (int64, error)
-	DbCallGetCreatedPost(insertedID int64) (types.PostModel, error)
-	DbCallDeletePost(id int) (error)
+	DbCallGetCreatedPost(insertedID int64, userId string) (types.PostModel, error)
+	DbCallDeletePost(id int, userId string) (error)
 	DbCallSearchPosts(queryUrl string) ([]types.PostModel, error)
 }
 
@@ -62,14 +62,14 @@ func (r *PostRepo) DbCallCreatePost(imagePath, description, userId string) (int6
 }
 
 // This function is for endpoit CreatePost and return created Post which then is added to List of posts on frontend
-func (r *PostRepo) DbCallGetCreatedPost(insertedID int64) (types.PostModel, error) {
+func (r *PostRepo) DbCallGetCreatedPost(insertedID int64, userId string) (types.PostModel, error) {
 	var post types.PostModel
-	err := r.db.QueryRow("SELECT id, image, description FROM posts WHERE id = $1", insertedID).Scan(&post.ID, &post.Image, &post.Description)
+	err := r.db.QueryRow("SELECT id, image, description FROM posts WHERE id = $1 AND user_id = $2", insertedID, userId).Scan(&post.ID, &post.Image, &post.Description)
 	return post, err
 }
 
-func (r *PostRepo) DbCallDeletePost(id int) (error) {
-	_, err := r.db.Exec("DELETE FROM posts WHERE id = $1", id)
+func (r *PostRepo) DbCallDeletePost(id int, userId string) (error) {
+	_, err := r.db.Exec("DELETE FROM posts WHERE id = $1 AND user_id = $2", id, userId)
 	return err
 }
 

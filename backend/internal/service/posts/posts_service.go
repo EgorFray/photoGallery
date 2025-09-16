@@ -14,7 +14,7 @@ type PostServiceInterface interface {
 	GetPostById(id int, userId string) (*types.PostDetailModel, error)
 	CreatePost(file *multipart.FileHeader, description string, userId string) (*types.PostModel, error)
 	SearchPosts(queryUrl string) ([]types.PostModel, error)
-	DeletePost(id int) error
+	DeletePost(id int, userId string) error
 }
 
 type PostService struct {
@@ -54,7 +54,7 @@ func (s *PostService) CreatePost(file *multipart.FileHeader, description string,
 		return nil, fmt.Errorf("failed to save file: %w", err)
 	}
 
-	post, err := s.PostRepo.DbCallGetCreatedPost(insertedId)
+	post, err := s.PostRepo.DbCallGetCreatedPost(insertedId, userId)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create post: %w", err)
 	}
@@ -69,8 +69,8 @@ func (s *PostService) SearchPosts(queryUrl string) ([]types.PostModel, error) {
 	return posts, nil
 }
 
-func (s *PostService) DeletePost(id int) error {
-	err := s.PostRepo.DbCallDeletePost(id)
+func (s *PostService) DeletePost(id int, userId string) error {
+	err := s.PostRepo.DbCallDeletePost(id, userId)
 	if err != nil {
 		return err
 	}
