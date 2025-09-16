@@ -61,6 +61,11 @@ func (h *PostHandler) GetPostById(c *gin.Context) {
 }
 
 func (h *PostHandler) CreatePost(c *gin.Context) {
+	userId, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "There is no userID"})
+	}
+
 	file, err := c.FormFile("image")
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Image file is required"})
@@ -73,7 +78,7 @@ func (h *PostHandler) CreatePost(c *gin.Context) {
 		return
 	}
 
-	post, err := h.postService.CreatePost(file, description)
+	post, err := h.postService.CreatePost(file, description, userId.(string))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

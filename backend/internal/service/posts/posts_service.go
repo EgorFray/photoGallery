@@ -12,7 +12,7 @@ import (
 type PostServiceInterface interface {
 	GetPosts(userId string) ([]types.PostModel, error)
 	GetPostById(id int, userId string) (*types.PostDetailModel, error)
-	CreatePost(file *multipart.FileHeader, description string) (*types.PostModel, error)
+	CreatePost(file *multipart.FileHeader, description string, userId string) (*types.PostModel, error)
 	SearchPosts(queryUrl string) ([]types.PostModel, error)
 	DeletePost(id int) error
 }
@@ -41,7 +41,7 @@ func (s *PostService) GetPostById(id int, userId string) (*types.PostDetailModel
 	return &post, nil
 }
 
-func (s *PostService) CreatePost(file *multipart.FileHeader, description string) (*types.PostModel, error) {
+func (s *PostService) CreatePost(file *multipart.FileHeader, description string, userId string) (*types.PostModel, error) {
 	filePath := filepath.Join("postsImg", file.Filename)
 
 	if err := utils.SaveFile(file, filePath); err != nil {
@@ -49,7 +49,7 @@ func (s *PostService) CreatePost(file *multipart.FileHeader, description string)
 	}
 
 	imagePath := "/" + filePath
-	insertedId, err := s.PostRepo.DbCallCreatePost(imagePath, description)
+	insertedId, err := s.PostRepo.DbCallCreatePost(imagePath, description, userId)
 	if err != nil {
 		return nil, fmt.Errorf("failed to save file: %w", err)
 	}

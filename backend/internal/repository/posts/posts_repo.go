@@ -9,7 +9,7 @@ import (
 type PostRepositoryInterface interface {
 	DbCallGetPosts(userId string) ([]types.PostModel, error)
 	DbCallGetPostById(id int, userId string) (types.PostDetailModel, error)
-	DbCallCreatePost(imagePath, description string) (int64, error)
+	DbCallCreatePost(imagePath, description, userId string) (int64, error)
 	DbCallGetCreatedPost(insertedID int64) (types.PostModel, error)
 	DbCallDeletePost(id int) (error)
 	DbCallSearchPosts(queryUrl string) ([]types.PostModel, error)
@@ -54,10 +54,10 @@ func (r *PostRepo) DbCallGetPostById(id int, userId string) (types.PostDetailMod
 	return post, err
 }
 
-func (r *PostRepo) DbCallCreatePost(imagePath, description string) (int64, error) {
+func (r *PostRepo) DbCallCreatePost(imagePath, description, userId string) (int64, error) {
 	var insertedID int64
 
-	err := r.db.QueryRow("INSERT INTO posts (image, description) VALUES ($1, $2) RETURNING id", imagePath, description).Scan(&insertedID)
+	err := r.db.QueryRow("INSERT INTO posts (image, description, user_id) VALUES ($1, $2, $3) RETURNING id", imagePath, description, userId).Scan(&insertedID)
 	return insertedID, err
 }
 
