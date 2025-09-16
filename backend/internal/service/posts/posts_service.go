@@ -13,7 +13,7 @@ type PostServiceInterface interface {
 	GetPosts(userId string) ([]types.PostModel, error)
 	GetPostById(id int, userId string) (*types.PostDetailModel, error)
 	CreatePost(file *multipart.FileHeader, description string, userId string) (*types.PostModel, error)
-	SearchPosts(queryUrl string) ([]types.PostModel, error)
+	SearchPosts(queryUrl, userId string) ([]types.PostModel, error)
 	DeletePost(id int, userId string) error
 }
 
@@ -61,8 +61,8 @@ func (s *PostService) CreatePost(file *multipart.FileHeader, description string,
 	return &post, nil
 }
 
-func (s *PostService) SearchPosts(queryUrl string) ([]types.PostModel, error) {
-	posts, err := s.PostRepo.DbCallSearchPosts(queryUrl)
+func (s *PostService) SearchPosts(queryUrl, userId string) ([]types.PostModel, error) {
+	posts, err := s.PostRepo.DbCallSearchPosts(queryUrl, userId)
 	if err != nil {
 		return nil, err
 	}

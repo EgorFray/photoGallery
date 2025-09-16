@@ -88,8 +88,13 @@ func (h *PostHandler) CreatePost(c *gin.Context) {
 }
 
 func (h *PostHandler) SearchPosts(c *gin.Context) {
+	userId, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "There is no userID"})
+	}
+
 	queryUrl := c.Query("description")
-	posts, err := h.postService.SearchPosts(queryUrl)
+	posts, err := h.postService.SearchPosts(queryUrl, userId.(string))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

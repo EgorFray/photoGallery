@@ -12,7 +12,7 @@ type PostRepositoryInterface interface {
 	DbCallCreatePost(imagePath, description, userId string) (int64, error)
 	DbCallGetCreatedPost(insertedID int64, userId string) (types.PostModel, error)
 	DbCallDeletePost(id int, userId string) (error)
-	DbCallSearchPosts(queryUrl string) ([]types.PostModel, error)
+	DbCallSearchPosts(queryUrl, userId string) ([]types.PostModel, error)
 }
 
 type PostRepo struct {
@@ -73,9 +73,9 @@ func (r *PostRepo) DbCallDeletePost(id int, userId string) (error) {
 	return err
 }
 
-func (r *PostRepo) DbCallSearchPosts(queryUrl string) ([]types.PostModel, error) {
-	queryDb := "SELECT id, image, description FROM posts WHERE description ILIKE $1"
-	rows, err := r.db.Query(queryDb, "%"+queryUrl+"%")
+func (r *PostRepo) DbCallSearchPosts(queryUrl, userId string) ([]types.PostModel, error) {
+	queryDb := "SELECT id, image, description FROM posts WHERE description ILIKE $1 AND user_id = $2"
+	rows, err := r.db.Query(queryDb, "%"+queryUrl+"%", userId)
 	if err != nil {
 		return nil, err
 	}
