@@ -35,6 +35,11 @@ func (h *PostHandler) GetPosts(c *gin.Context) {
 }
 
 func (h *PostHandler) GetPostById(c *gin.Context) {
+	userId, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "There is no userID"})
+	}
+
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)
 	if err != nil {
@@ -42,7 +47,7 @@ func (h *PostHandler) GetPostById(c *gin.Context) {
 		return
 	}
 
-	post, err := h.postService.GetPostById(id)
+	post, err := h.postService.GetPostById(id, userId.(string))
 
 	if err == sql.ErrNoRows {
 		c.JSON(http.StatusNotFound, gin.H{"error": "post not found"})

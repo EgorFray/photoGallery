@@ -11,7 +11,7 @@ import (
 
 type PostServiceInterface interface {
 	GetPosts(userId string) ([]types.PostModel, error)
-	GetPostById(id int) (*types.PostDetailModel, error)
+	GetPostById(id int, userId string) (*types.PostDetailModel, error)
 	CreatePost(file *multipart.FileHeader, description string) (*types.PostModel, error)
 	SearchPosts(queryUrl string) ([]types.PostModel, error)
 	DeletePost(id int) error
@@ -33,8 +33,8 @@ func (s *PostService) GetPosts(userId string) ([]types.PostModel, error) {
 	return posts, nil
 }
 
-func (s *PostService) GetPostById(id int) (*types.PostDetailModel, error) {
-	post, err := s.PostRepo.DbCallGetPostById(id)
+func (s *PostService) GetPostById(id int, userId string) (*types.PostDetailModel, error) {
+	post, err := s.PostRepo.DbCallGetPostById(id, userId)
 	if err != nil {
 		return nil, err
 	}

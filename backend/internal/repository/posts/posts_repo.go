@@ -8,7 +8,7 @@ import (
 
 type PostRepositoryInterface interface {
 	DbCallGetPosts(userId string) ([]types.PostModel, error)
-	DbCallGetPostById(id int) (types.PostDetailModel, error)
+	DbCallGetPostById(id int, userId string) (types.PostDetailModel, error)
 	DbCallCreatePost(imagePath, description string) (int64, error)
 	DbCallGetCreatedPost(insertedID int64) (types.PostModel, error)
 	DbCallDeletePost(id int) (error)
@@ -48,9 +48,9 @@ func (r *PostRepo) DbCallGetPosts(userId string) ([]types.PostModel, error) {
 }
 
 // This function is for endpoint GetPostById and open Detail view of post on frontend
-func (r *PostRepo) DbCallGetPostById(id int) (types.PostDetailModel, error) {
+func (r *PostRepo) DbCallGetPostById(id int, userId string) (types.PostDetailModel, error) {
 	var post types.PostDetailModel
-	err := r.db.QueryRow("SELECT image, description, created_at FROM posts WHERE id = $1", id).Scan(&post.Image, &post.Description, &post.CreatedAt)
+	err := r.db.QueryRow("SELECT image, description, created_at FROM posts WHERE id = $1 AND user_id = $2", id, userId).Scan(&post.Image, &post.Description, &post.CreatedAt)
 	return post, err
 }
 
