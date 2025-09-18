@@ -26,6 +26,10 @@ function LoginForm() {
 
 	if (isAuthenticated) return null;
 
+	function handleClick() {
+		navigate("/createUser");
+	}
+
 	return (
 		<div className={styles.formContainer}>
 			<form className={styles.form} onSubmit={handleSubmit}>
@@ -51,6 +55,9 @@ function LoginForm() {
 
 				<Button className={styles.btnForm}>Login</Button>
 			</form>
+
+			<h3 className={styles.headingCreateUser}>Or if you don't have an account</h3>
+			<Button handleClick={handleClick}>Create user</Button>
 		</div>
 	);
 }

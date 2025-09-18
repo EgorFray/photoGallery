@@ -1,3 +1,4 @@
+import CreateUserForm from "../components/CreateUserForm";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Layout from "../components/Layout";
@@ -8,7 +9,6 @@ function CreateUser() {
 	return (
 		<Layout>
 			<NavBar />
-			<Header />
 			<Main>
 				<CreateUserForm />
 			</Main>

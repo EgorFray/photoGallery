@@ -3,6 +3,7 @@ import PostDetail from "./pages/PostDetail";
 import { Routes, Route } from "react-router-dom";
 import MainPage from "./pages/MainPage";
 import CreatePost from "./pages/CreatePost";
+import CreateUser from "./pages/CreateUser";
 import PageNotFound from "./pages/PageNotFound";
 import Homepage from "./pages/Homepage";
 import Login from "./pages/Login";
@@ -16,6 +17,7 @@ function App() {
 				<Routes>
 					<Route index element={<Homepage />} />
 					<Route path="/login" element={<Login />} />
+					<Route path="/createUser" element={<CreateUser />} />
 					<Route
 						path="/app"
 						element={

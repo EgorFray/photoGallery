@@ -1,4 +1,5 @@
 import Button from "./Button";
+import styles from "./CreateUserForm.module.css";
 
 function CreateUserForm() {
 	return (
