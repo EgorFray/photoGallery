@@ -3,13 +3,6 @@ import { createContext, useContext } from "react";
 
 const AuthContext = createContext();
 
-const FAKE_USER = {
-	name: "Jack",
-	email: "jackexample@gmail.com",
-	password: "qwerty",
-	avatar: "https://i.pravatar.cc/100?u=zz",
-};
-
 const initialState = {
 	user: null,
 	isAuthenticated: false,
@@ -31,9 +24,25 @@ function reducer(state, action) {
 function AuthProvider({ children }) {
 	const [{ user, isAuthenticated }, dispatch] = useReducer(reducer, initialState);
 
-	function login(email, password) {
-		if (email === FAKE_USER.email && password === FAKE_USER.password)
-			dispatch({ type: "login", payload: FAKE_USER });
+	async function login(email, password) {
+		try {
+			(res = await fetch("http://localhost:8080/auth/login")),
+				{
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify(email, password),
+					credentials: "include",
+				};
+			if (!res.ok) {
+				throw new Error("Wrong credentials");
+			}
+
+			const data = await res.json();
+			dispatch({ type: "login", payload: data.user });
+			localStorage.setItem("accessToken", data.token);
+		} catch (err) {
+			console.log(err);
+		}
 	}
 
 	function logout() {

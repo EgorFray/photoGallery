@@ -41,7 +41,7 @@ function CreatePostForm() {
 					/>
 				</div>
 
-				<Button type="submit">Post </Button>
+				<Button type="submit">Post</Button>
 			</form>
 		</div>
 	);
