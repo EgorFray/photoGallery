@@ -8,4 +8,5 @@ type AuthRequst struct {
 type AuthResponse struct {
 	Token string `json:"token"`
 	Expired int `json:"expired"`
+	User UserResponse `json:"user"`
 }

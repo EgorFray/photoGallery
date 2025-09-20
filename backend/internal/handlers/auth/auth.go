@@ -54,8 +54,13 @@ func (h *AuthHandler) Auth(c *gin.Context) {
 	c.JSON(http.StatusOK, types.AuthResponse{
 		Token: accessToken,
 		Expired: int(time.Minute * 10),
+		User: types.UserResponse{
+			ID: userData.ID,
+			Name: userData.Name,
+			Email: userData.Email,
+			Avatar: userData.Avatar,
+		},
 	})
-
 }
 
 func setTokenToCookies(c *gin.Context, refreshToken string) {
