@@ -37,7 +37,7 @@ function AuthProvider({ children }) {
 			console.log(res);
 
 			if (!res.ok) {
-				throw new Error("Неверный логин или пароль");
+				throw new Error("Wrong credentials");
 			}
 
 			const data = await res.json();

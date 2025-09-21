@@ -14,9 +14,7 @@ function PostsProvider({ children }) {
 			try {
 				setIsLoading(true);
 				setError("");
-				const res = await fetch("http://localhost:8080/posts");
-				if (!res.ok) throw new Error("Something went wrong whil fetching data");
-				const data = await res.json();
+				const data = await fetchWithAuth("http://localhost:8080/posts");
 				setPosts(data);
 			} catch (err) {
 				if (err.name !== "AbortError") {
@@ -29,6 +27,39 @@ function PostsProvider({ children }) {
 		}
 		fetchGetData();
 	}, []);
+
+	async function fetchWithAuth(url, options = {}) {
+		const headers = {
+			...options.headers,
+			"Content-Type": "application/json",
+		};
+
+		const accessToken = localStorage.getItem("accessToken");
+		if (accessToken) {
+			headers["Authorization"] = `Bearer ${accessToken}`;
+		}
+
+		let res = await fetch(url, { ...options, headers, credentials: "include" });
+
+		if (res.status == 401) {
+			const refreshRes = await fetch("http://localhost:8080/auth/refresh", {
+				method: "POST",
+				credentials: "include",
+			});
+			if (refreshRes.ok) {
+				const data = await refreshRes.json();
+				const newToken = data.accessToken;
+				localStorage.setItem("accessToken", newToken);
+				headers["Authorization"] = `Bearer ${newToken}`;
+				res = await fetch(url, { ...options, headers, credentials: "include" });
+			}
+		}
+
+		if (!res.ok) {
+			throw new Error(`Request failed: ${res.status}`);
+		}
+		return res.json();
+	}
 
 	async function getSearchedPosts(query) {
 		try {
