@@ -26,18 +26,22 @@ function AuthProvider({ children }) {
 
 	async function login(email, password) {
 		try {
-			(res = await fetch("http://localhost:8080/auth/login")),
-				{
-					method: "POST",
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify(email, password),
-					credentials: "include",
-				};
+			const res = await fetch("http://localhost:8080/auth/login", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ email, password }),
+				credentials: "include",
+			});
+			console.log(res);
+
 			if (!res.ok) {
-				throw new Error("Wrong credentials");
+				throw new Error("Неверный логин или пароль");
 			}
 
 			const data = await res.json();
+			console.log(data);
 			dispatch({ type: "login", payload: data.user });
 			localStorage.setItem("accessToken", data.token);
 		} catch (err) {

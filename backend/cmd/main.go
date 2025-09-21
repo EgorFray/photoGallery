@@ -3,7 +3,7 @@ package main
 import (
 	"database/sql"
 
-	"gallery/backend/config"
+	cfg "gallery/backend/config"
 	"gallery/backend/internal/handlers/middleware"
 	PostsHandlers "gallery/backend/internal/handlers/posts"
 	postsRepo "gallery/backend/internal/repository/posts"
@@ -24,7 +24,7 @@ import (
 )
 
 func main() {
-	config := config.InitConfig()
+	config := cfg.InitConfig()
 	var err error
 	db, err := sql.Open("postgres", config.PsqlConnUri)
 	if err != nil {
@@ -56,7 +56,7 @@ func main() {
 
 	router.Static("/postsImg", "./images/postsImg")
 	router.Static("/avatars", "./images/avatars")
-	router.Use(cors.Default())
+	router.Use(cors.New(cfg.CorsConfig()))
 	// post routers
 	protected := router.Group("/")
 	protected.Use(middleware.Authorization(authSvc)) 

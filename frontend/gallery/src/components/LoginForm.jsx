@@ -5,8 +5,8 @@ import Button from "./Button";
 import styles from "./LoginForm.module.css";
 
 function LoginForm() {
-	const [email, setEmail] = useState("jackexample@gmail.com");
-	const [password, setPassword] = useState("qwerty");
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
 
 	const { login, isAuthenticated } = useAuth();
 	const navigate = useNavigate();
