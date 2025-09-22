@@ -31,7 +31,6 @@ function PostsProvider({ children }) {
 	async function fetchWithAuth(url, options = {}) {
 		const headers = {
 			...options.headers,
-			"Content-Type": "application/json",
 		};
 
 		const accessToken = localStorage.getItem("accessToken");
