@@ -64,11 +64,9 @@ function PostsProvider({ children }) {
 	async function getSearchedPosts(query) {
 		try {
 			setError("");
-			const res = await fetch(
+			const data = await fetchWithAuth(
 				`http://localhost:8080/posts/search?description=${query}`
 			);
-			const data = await res.json();
-			console.log(data);
 			setPosts(data);
 		} catch (err) {
 			if (err.name !== "AbortError") {
@@ -81,8 +79,7 @@ function PostsProvider({ children }) {
 	async function getPostById(id) {
 		try {
 			setIsLoading(true);
-			const res = await fetch(`http://localhost:8080/posts/${id}`);
-			const data = await res.json();
+			const data = await fetchWithAuth(`http://localhost:8080/posts/${id}`);
 			setPost(data);
 		} catch {
 			alert("There was an error loading post");
@@ -94,11 +91,10 @@ function PostsProvider({ children }) {
 	async function createPost(newPost) {
 		try {
 			setIsLoading(true);
-			const res = await fetch("http://localhost:8080/posts", {
+			const data = await fetchWithAuth("http://localhost:8080/posts", {
 				method: "POST",
 				body: newPost,
 			});
-			const data = await res.json();
 			setPosts((posts) => [...posts, data]);
 		} catch {
 			alert("There was an error loading data");
@@ -110,7 +106,7 @@ function PostsProvider({ children }) {
 	async function deletePost(id) {
 		try {
 			setIsLoading(true);
-			await fetch(`http://localhost:8080/posts/${id}`, {
+			await fetchWithAuth(`http://localhost:8080/posts/${id}`, {
 				method: "DELETE",
 			});
 			setPosts((posts) => posts.filter((post) => post.id !== id));
