@@ -42,13 +42,14 @@ func (s *PostService) GetPostById(id int, userId string) (*types.PostDetailModel
 }
 
 func (s *PostService) CreatePost(file *multipart.FileHeader, description string, userId string) (*types.PostModel, error) {
-	filePath := filepath.Join("postsImg", file.Filename)
+	savePath := filepath.Join("images", "postsImg", file.Filename)
+	publicPath := filepath.Join("postsImg", file.Filename)
 
-	if err := utils.SaveFile(file, filePath); err != nil {
+	if err := utils.SaveFile(file, savePath); err != nil {
 		return nil, fmt.Errorf("failed to save file: %w", err)
 	}
 
-	imagePath := "/" + filePath
+	imagePath := "/" + publicPath
 	insertedId, err := s.PostRepo.DbCallCreatePost(imagePath, description, userId)
 	if err != nil {
 		return nil, fmt.Errorf("failed to save file: %w", err)
