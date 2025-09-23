@@ -13,7 +13,7 @@ function User() {
 
 	return (
 		<div className={styles.user}>
-			<img src={user.avatar} alt={user.name} />
+			<img src={`http://localhost:8080${user.avatar}`} alt={user.name} />
 			<button onClick={handleClick}>Logout</button>
 		</div>
 	);
