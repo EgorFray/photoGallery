@@ -1,6 +1,7 @@
 package user
 
 import (
+	"fmt"
 	service "gallery/backend/internal/service/user"
 	"gallery/backend/internal/types"
 	"gallery/backend/internal/utils"
@@ -20,8 +21,10 @@ func NewUserHandler(userService service.UserServiceInterface) *UserHandler {
 func (u *UserHandler) CreateUser(c *gin.Context) {
 	var req types.UserRequest
 
-	if err := c.ShouldBindJSON(&req); err != nil {
+	if err := c.ShouldBind(&req); err != nil {
+		fmt.Println("Request:", req)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		fmt.Println("HERE IS THE PROBLEM", err)
       return
 	}
 

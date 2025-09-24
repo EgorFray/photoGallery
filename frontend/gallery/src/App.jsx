@@ -9,42 +9,45 @@ import Homepage from "./pages/Homepage";
 import Login from "./pages/Login";
 import { AuthProvider } from "./context/FakeAuthContext";
 import ProtectedRoute from "./pages/ProtectedRoute";
+import { UserProvider } from "./context/UserContext";
 
 function App() {
 	return (
 		<AuthProvider>
-			<PostsProvider>
-				<Routes>
-					<Route index element={<Homepage />} />
-					<Route path="/login" element={<Login />} />
-					<Route path="/createUser" element={<CreateUser />} />
-					<Route
-						path="/app"
-						element={
-							<ProtectedRoute>
-								<MainPage />
-							</ProtectedRoute>
-						}
-					/>
-					<Route
-						path="/create"
-						element={
-							<ProtectedRoute>
-								<CreatePost />
-							</ProtectedRoute>
-						}
-					/>
-					<Route
-						path="/app/posts/:id"
-						element={
-							<ProtectedRoute>
-								<PostDetail />
-							</ProtectedRoute>
-						}
-					/>
-					<Route path="*" element={<PageNotFound />} />
-				</Routes>
-			</PostsProvider>
+			<UserProvider>
+				<PostsProvider>
+					<Routes>
+						<Route index element={<Homepage />} />
+						<Route path="/login" element={<Login />} />
+						<Route path="/createUser" element={<CreateUser />} />
+						<Route
+							path="/app"
+							element={
+								<ProtectedRoute>
+									<MainPage />
+								</ProtectedRoute>
+							}
+						/>
+						<Route
+							path="/create"
+							element={
+								<ProtectedRoute>
+									<CreatePost />
+								</ProtectedRoute>
+							}
+						/>
+						<Route
+							path="/app/posts/:id"
+							element={
+								<ProtectedRoute>
+									<PostDetail />
+								</ProtectedRoute>
+							}
+						/>
+						<Route path="*" element={<PageNotFound />} />
+					</Routes>
+				</PostsProvider>
+			</UserProvider>
 		</AuthProvider>
 	);
 }
