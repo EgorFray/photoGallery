@@ -28,8 +28,10 @@ func (u *UserHandler) CreateUser(c *gin.Context) {
       return
 	}
 
-	if req.Avatar == "" {
-		req.Avatar = "/avatars/default-icon.png"
+	file, err := c.FormFile("avatar")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Image file is required"})
+		return
 	}
 
 	hashedPassword, err := utils.HashPassword(req.Password)
@@ -37,7 +39,7 @@ func (u *UserHandler) CreateUser(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
 
-	userId, err := u.userService.CreateUser(req, hashedPassword)
+	userId, err := u.userService.CreateUser(req, hashedPassword, file)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

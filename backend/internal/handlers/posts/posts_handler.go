@@ -2,7 +2,6 @@ package posts
 
 import (
 	"database/sql"
-	"fmt"
 	"gallery/backend/internal/service/posts"
 	"net/http"
 	"strconv"
@@ -68,14 +67,12 @@ func (h *PostHandler) CreatePost(c *gin.Context) {
 	}
 
 	file, err := c.FormFile("image")
-	fmt.Println(file)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Image file is required"})
 		return
 	}
 
 	description := c.PostForm("description")
-	fmt.Println(description)
 	if description == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Description is required"})
 		return
