@@ -22,7 +22,14 @@ function List() {
 			) : !posts || posts?.length === 0 ? (
 				<div className="noPostsWrapper">
 					<p className="noPosts">You have no posts yet.</p>
-					<p className="noPostsShow">Maybe it's time to create some?</p>
+					<motion.p
+						className="noPostsShow"
+						initial={{ clipPath: "inset(0 100% 0 0)" }}
+						animate={{ clipPath: "inset(0 0% 0 0)" }}
+						transition={{ duration: 1.2, ease: "easeInOut", delay: 1.5 }}
+					>
+						Maybe it's time to create some?
+					</motion.p>
 				</div>
 			) : (
 				<Masonry
