@@ -15,35 +15,36 @@ function List() {
 		500: 1,
 	};
 
-	if (!posts || posts.length === 0) {
-		return (
-			<div className="noPostsWrapper">
-				<p className="noPosts">There are no posts 🥲</p>
-			</div>
-		);
-	}
-
-	return isLoading ? (
-		<Spinner />
-	) : (
-		<Masonry
-			breakpointCols={breakpointColumnsObj}
-			className={styles.myMasonryGrid}
-			columnClassName={styles.myMasonryGridColumn}
-		>
-			{[...posts].reverse().map((post) => (
-				<motion.div
-					key={post.id}
-					initial={{ opacity: 0, y: 50 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{
-						duration: 0.5,
-					}}
+	return (
+		<>
+			{isLoading ? (
+				<Spinner />
+			) : !posts || posts?.length === 0 ? (
+				<div className="noPostsWrapper">
+					<p className="noPosts">You have no posts yet.</p>
+					<p className="noPostsShow">Maybe it's time to create some?</p>
+				</div>
+			) : (
+				<Masonry
+					breakpointCols={breakpointColumnsObj}
+					className={styles.myMasonryGrid}
+					columnClassName={styles.myMasonryGridColumn}
 				>
-					<Post post={post} />
-				</motion.div>
-			))}
-		</Masonry>
+					{[...posts].reverse().map((post) => (
+						<motion.div
+							key={post.id}
+							initial={{ opacity: 0, y: 50 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{
+								duration: 0.5,
+							}}
+						>
+							<Post post={post} />
+						</motion.div>
+					))}
+				</Masonry>
+			)}
+		</>
 	);
 }
 

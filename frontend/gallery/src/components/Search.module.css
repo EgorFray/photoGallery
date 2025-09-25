@@ -21,14 +21,26 @@
 }
 
 :global(.noPostsWrapper) {
+	position: absolute;
 	display: flex;
-	justify-content: center;
+	flex-direction: column;
 	align-items: center;
-
-	margin-bottom: 10.8rem;
+	justify-content: center;
+	top: 40%;
+	left: 50%;
+	transform: translateX(-50%);
 }
 
 :global(.noPosts) {
-	font-size: 6.8rem;
-	font-weight: 600;
+	position: relative;
+	font-size: 4rem;
+	font-weight: 400;
+
+	margin-bottom: 3rem;
+}
+
+:global(.noPostsShow) {
+	position: relative;
+	font-size: 2.8rem;
+	font-weight: 300;
 }
