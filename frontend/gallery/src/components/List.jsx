@@ -21,7 +21,7 @@ function List() {
 				<Spinner />
 			) : !posts || posts?.length === 0 ? (
 				<div className="noPostsWrapper">
-					<p className="noPosts">You have no posts yet.</p>
+					<p className="noPosts">You have no posts yet</p>
 					<motion.p
 						className="noPostsShow"
 						initial={{ clipPath: "inset(0 100% 0 0)" }}
