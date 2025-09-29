@@ -15,3 +15,6 @@ packages:
   gallery/backend/internal/repository/posts:
     config:
       all: true
+  gallery/backend/internal/repository/user:
+    config:
+      all: true
