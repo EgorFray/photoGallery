@@ -1,6 +1,7 @@
-package repository
+package repository_test
 
 import (
+	"gallery/backend/internal/testutils"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -9,14 +10,13 @@ import (
 
 
 func TestDbCallCreatePost(t *testing.T) {
-	db := setupTestDB(t)
-	repo := NewPostRepository(db)
+	repo := testutils.SetupTestRepo()
 
-	insertedID, err := repo.DbCallCreatePost("/images/test-img.jpg", "test", "1")
+	insertedID, err := repo.PostRepo.DbCallCreatePost("/images/test-img.jpg", "test", "1")
 	assert.NoError(t, err)
 	assert.NotZero(t, insertedID)
 
-	row := db.QueryRow("SELECT description FROM posts WHERE id = ?", insertedID)
+	row := repo.DB.QueryRow("SELECT description FROM posts WHERE id = ?", insertedID)
 	var desc string
 	err = row.Scan(&desc)
 	assert.NoError(t, err)

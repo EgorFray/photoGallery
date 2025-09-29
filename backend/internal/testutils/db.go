@@ -9,8 +9,8 @@ import (
 
 type TestRepo struct {
 	DB *sql.DB
-	PostRepo postRepo.PostRepo
-	UserRepo userRepo.UserRepository
+	PostRepo postRepo.PostRepositoryInterface
+	UserRepo userRepo.UserRepositoryInterface
 }
 
 func SetupTestRepo() *TestRepo {
@@ -35,7 +35,7 @@ func SetupTestRepo() *TestRepo {
 
 	return &TestRepo {
 		DB: db,
-		PostRepo: *postRepo.NewPostRepository(db),
-		UserRepo: *userRepo.NewUserRepository(db),
+		PostRepo: postRepo.NewPostRepository(db),
+		UserRepo: userRepo.NewUserRepository(db),
 	}
 }
