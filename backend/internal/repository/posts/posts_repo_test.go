@@ -2,6 +2,7 @@ package repository_test
 
 import (
 	"gallery/backend/internal/testutils"
+	"gallery/backend/internal/types"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -34,4 +35,24 @@ func TestDbCallGetPostById(t *testing.T) {
 	assert.Equal(t, "/images/test-img.jpg", post.Image)
 	assert.Equal(t, "test", post.Description)
 	assert.False(t, post.CreatedAt.IsZero())
+}
+
+func TestDbCallGetPosts(t *testing.T) {
+	repo := testutils.SetupTestRepo()
+
+	insertedID, err := repo.PostRepo.DbCallCreatePost("/images/test-img.jpg", "test", "1")
+	assert.NoError(t, err)
+	assert.NotZero(t, insertedID)
+
+	expected := []types.PostModel{
+		{
+			ID: 1,
+			Image: "/images/test-img.jpg",
+			Description: "test",
+		},
+	} 
+
+	posts, err := repo.PostRepo.DbCallGetPosts("1")
+	assert.NoError(t, err)
+	assert.Equal(t, expected, posts)
 }
