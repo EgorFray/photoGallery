@@ -75,3 +75,14 @@ func TestDbCallSearchPosts(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, expected, posts)
 }
+
+func TestDbCallDeletePost(t *testing.T) {
+	repo := testutils.SetupTestRepo(t)
+
+	insertedID, err := repo.PostRepo.DbCallCreatePost("/images/testing.jpg", "This is test description for the post", "1")
+	assert.NoError(t, err)
+	assert.NotZero(t, insertedID)
+
+	err = repo.PostRepo.DbCallDeletePost(int(insertedID), "1")
+	assert.NoError(t, err)
+}
