@@ -61,7 +61,7 @@ func SetupTestRepo(t *testing.T) *TestRepo {
 	`)
 
 	if err != nil {
-		log.Fatalf("failed to create table posts: %v", err)
+		log.Fatalf("failed to create table: %v", err)
 	}
 
 	t.Cleanup(func() {
