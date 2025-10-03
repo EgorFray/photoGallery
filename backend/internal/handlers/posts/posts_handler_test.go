@@ -2,6 +2,7 @@ package posts
 
 import (
 	postsSvc "gallery/backend/internal/service"
+	"gallery/backend/internal/types"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -11,21 +12,17 @@ import (
 )
 
 func TestCreatePost(t *testing.T) {
-
 	gin.SetMode(gin.TestMode)
- 
- 
 	router := gin.New()
 	svc := postsSvc.NewMockPostServiceInterface(t)
 	postsHandlers := NewPostHandler(svc) 
 
-	svc.EXPECT().CreatePost().Return()
+	svc.EXPECT().CreatePost().Return(&types.PostModel{ID: "1", Image: "test.jpg", Description: "test"}, nil)
 
 	router.POST("/posts", postsHandlers.CreatePost)
  
-	// body - multipart  
-	req, _ := http.NewRequest(http.MethodPost, "/posts", {})
- 
+  
+	req, _ := createMultipartRequest(t, "/posts")
 	w := httptest.NewRecorder()
  
  
