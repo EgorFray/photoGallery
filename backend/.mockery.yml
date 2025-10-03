@@ -12,9 +12,9 @@ require-template-schema-exists: true
 template: testify
 template-schema: "{{.Template}}.schema.json"
 packages:
-  gallery/backend/internal/repository/posts:
+  gallery/backend/internal/service/posts:
     config:
       all: true
-  gallery/backend/internal/repository/user:
+  gallery/backend/internal/service/user:
     config:
       all: true
