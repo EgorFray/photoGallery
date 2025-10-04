@@ -64,6 +64,7 @@ func (h *PostHandler) CreatePost(c *gin.Context) {
 	userId, exists := c.Get("userID")
 	if !exists {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "There is no userID"})
+		return
 	}
 
 	file, err := c.FormFile("image")

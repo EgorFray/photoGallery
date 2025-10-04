@@ -13,13 +13,14 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
-func createMultipartRequest(t *testing.T, target string) *http.Request {
+func createTestRequest(t *testing.T, target string) *http.Request {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 
-	fileWriter, err := writer.CreateFormFile("file", "test.jpg")
+	fileWriter, err := writer.CreateFormFile("image", "test.jpg")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -29,7 +30,7 @@ func createMultipartRequest(t *testing.T, target string) *http.Request {
 		t.Fatal(err)
 	}
 
-	_ = writer.WriteField("description", "test description")
+	_ = writer.WriteField("description", "test")
 	_ = writer.WriteField("user_id", "1")
 
 	writer.Close()
@@ -48,12 +49,17 @@ func TestCreatePost(t *testing.T) {
 	router := gin.New()
 	svc := postsMock.NewMockPostServiceInterface(t)
 	postsHandlers := NewPostHandler(svc) 
-
-	svc.EXPECT().CreatePost().Return(&types.PostModel{ID: 1, Image: "test.jpg", Description: "test"}, nil)
-
-	router.POST("/posts", postsHandlers.CreatePost)
+	// middleware for auth
+	userIDMiddleware := func(c *gin.Context) {
+    // Встановлюємо тестовий userID, який очікує хендлер
+    c.Set("userID", "1") // Встановлюємо ID, яке очікує ваш мок: "1"
+    c.Next()
+  }
+	router.POST("/posts", userIDMiddleware, postsHandlers.CreatePost)
  
-	req := createMultipartRequest(t, "/posts")
+	req := createTestRequest(t, "/posts")
+	svc.EXPECT().CreatePost(mock.AnythingOfType("*multipart.FileHeader"), "test", "1").Return(&types.PostModel{ID: 1, Image: "test.jpg", Description: "test"}, nil)
+
 	w := httptest.NewRecorder()
  
 	router.ServeHTTP(w, req)
