@@ -2,7 +2,7 @@
 // github.com/vektra/mockery
 // template: testify
 
-package posts
+package mocks
 
 import (
 	"gallery/backend/internal/types"

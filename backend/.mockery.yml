@@ -1,20 +1,19 @@
 all: false
 dir: "{{.InterfaceDir}}"
-filename: mocks_test.go
+filename: "{{.InterfaceName}}_mock.go"
 force-file-write: true
 formatter: goimports
 include-auto-generated: false
 log-level: info
-structname: "{{.Mock}}{{.InterfaceName}}"
-pkgname: "{{.SrcPackageName}}"
+structname: "Mock{{.InterfaceName}}"
+pkgname: "mocks"
 recursive: false
 require-template-schema-exists: true
 template: testify
 template-schema: "{{.Template}}.schema.json"
+
 packages:
   gallery/backend/internal/service/posts:
     config:
       all: true
-  gallery/backend/internal/service/user:
-    config:
-      all: true
+      dir: internal/service/mocks
