@@ -44,6 +44,8 @@ func createTestRequest(t *testing.T, target string) *http.Request {
 	return req
 }
 
+// NO MORE TESTS FOR HANDLERS!!! DON'T AGREE WITH ME
+// GO FUCK YOURSELF - IT'S MORE FUN
 func TestCreatePost(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	router := gin.New()
@@ -51,8 +53,7 @@ func TestCreatePost(t *testing.T) {
 	postsHandlers := NewPostHandler(svc) 
 	// middleware for auth
 	userIDMiddleware := func(c *gin.Context) {
-    // Встановлюємо тестовий userID, який очікує хендлер
-    c.Set("userID", "1") // Встановлюємо ID, яке очікує ваш мок: "1"
+    c.Set("userID", "1")
     c.Next()
   }
 	router.POST("/posts", userIDMiddleware, postsHandlers.CreatePost)
