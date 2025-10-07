@@ -18,8 +18,8 @@ type Config struct {
 func InitConfig() *Config {
 	LoadEnvVariables()
 	return &Config{
-		PsqlConnUri: os.Getenv("PSQL_CONN"),
-		SecretKey: os.Getenv("SECRET_KEY"),
+		PsqlConnUri: os.Getenv("DATABASE_URL"),
+		SecretKey: os.Getenv("JWT_SECRET"),
 		AccessTokenLife: time.Minute * 10,
 		RefreshTokenLife: time.Hour * 24 * 30,
 	}
