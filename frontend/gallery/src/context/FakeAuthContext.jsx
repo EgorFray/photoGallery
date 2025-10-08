@@ -26,7 +26,7 @@ function AuthProvider({ children }) {
 
 	async function login(email, password) {
 		try {
-			const res = await fetch("http://localhost:8080/auth/login", {
+			const res = await fetch(`${import.meta.env.BACKEND_URL}/auth/login`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

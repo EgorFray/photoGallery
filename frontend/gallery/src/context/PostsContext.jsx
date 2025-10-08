@@ -14,7 +14,7 @@ function PostsProvider({ children }) {
 			try {
 				setIsLoading(true);
 				setError("");
-				const data = await fetchWithAuth("http://localhost:8080/posts");
+				const data = await fetchWithAuth(`${import.meta.env.BACKEND_URL}/posts`);
 				setPosts(data);
 			} catch (err) {
 				if (err.name !== "AbortError") {
@@ -41,7 +41,7 @@ function PostsProvider({ children }) {
 		let res = await fetch(url, { ...options, headers, credentials: "include" });
 
 		if (res.status == 401) {
-			const refreshRes = await fetch("http://localhost:8080/auth/refresh", {
+			const refreshRes = await fetch(`${import.meta.env.BACKEND_URL}/auth/refresh`, {
 				method: "POST",
 				credentials: "include",
 			});
@@ -64,7 +64,7 @@ function PostsProvider({ children }) {
 		try {
 			setError("");
 			const data = await fetchWithAuth(
-				`http://localhost:8080/posts/search?description=${query}`
+				`${import.meta.env.BACKEND_URL}/posts/search?description=${query}`
 			);
 			setPosts(data);
 		} catch (err) {
@@ -78,7 +78,7 @@ function PostsProvider({ children }) {
 	async function getPostById(id) {
 		try {
 			setIsLoading(true);
-			const data = await fetchWithAuth(`http://localhost:8080/posts/${id}`);
+			const data = await fetchWithAuth(`${import.meta.env.BACKEND_URL}/posts/${id}`);
 			setPost(data);
 		} catch {
 			alert("There was an error loading post");
@@ -90,7 +90,7 @@ function PostsProvider({ children }) {
 	async function createPost(newPost) {
 		try {
 			setIsLoading(true);
-			const data = await fetchWithAuth("http://localhost:8080/posts", {
+			const data = await fetchWithAuth(`${import.meta.env.BACKEND_URL}/posts`, {
 				method: "POST",
 				body: newPost,
 			});
@@ -105,7 +105,7 @@ function PostsProvider({ children }) {
 	async function deletePost(id) {
 		try {
 			setIsLoading(true);
-			await fetchWithAuth(`http://localhost:8080/posts/${id}`, {
+			await fetchWithAuth(`${import.meta.env.BACKEND_URL}/posts/${id}`, {
 				method: "DELETE",
 			});
 			setPosts((posts) => posts.filter((post) => post.id !== id));

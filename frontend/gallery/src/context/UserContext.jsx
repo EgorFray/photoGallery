@@ -9,7 +9,7 @@ function UserProvider({ children }) {
 	async function createUser(newUser) {
 		try {
 			setIsLoading(true);
-			const data = await fetch("http://localhost:8080/user/create", {
+			const data = await fetch(`${import.meta.env.BACKEND_URL}/user/create`, {
 				method: "POST",
 				body: newUser,
 			});
