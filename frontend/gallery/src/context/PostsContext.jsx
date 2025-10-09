@@ -14,7 +14,9 @@ function PostsProvider({ children }) {
 			try {
 				setIsLoading(true);
 				setError("");
-				const data = await fetchWithAuth(`${import.meta.env.BACKEND_URL}/posts`);
+				const data = await fetchWithAuth(
+					`${import.meta.env.VITE_BACKEND_URL}/posts`
+				);
 				setPosts(data);
 			} catch (err) {
 				if (err.name !== "AbortError") {
@@ -41,10 +43,13 @@ function PostsProvider({ children }) {
 		let res = await fetch(url, { ...options, headers, credentials: "include" });
 
 		if (res.status == 401) {
-			const refreshRes = await fetch(`${import.meta.env.BACKEND_URL}/auth/refresh`, {
-				method: "POST",
-				credentials: "include",
-			});
+			const refreshRes = await fetch(
+				`${import.meta.env.VITE_BACKEND_URL}/auth/refresh`,
+				{
+					method: "POST",
+					credentials: "include",
+				}
+			);
 			if (refreshRes.ok) {
 				const data = await refreshRes.json();
 				const newToken = data.accessToken;
@@ -64,7 +69,7 @@ function PostsProvider({ children }) {
 		try {
 			setError("");
 			const data = await fetchWithAuth(
-				`${import.meta.env.BACKEND_URL}/posts/search?description=${query}`
+				`${import.meta.env.VITE_BACKEND_URL}/posts/search?description=${query}`
 			);
 			setPosts(data);
 		} catch (err) {
@@ -78,7 +83,9 @@ function PostsProvider({ children }) {
 	async function getPostById(id) {
 		try {
 			setIsLoading(true);
-			const data = await fetchWithAuth(`${import.meta.env.BACKEND_URL}/posts/${id}`);
+			const data = await fetchWithAuth(
+				`${import.meta.env.VITE_BACKEND_URL}/posts/${id}`
+			);
 			setPost(data);
 		} catch {
 			alert("There was an error loading post");
@@ -90,7 +97,7 @@ function PostsProvider({ children }) {
 	async function createPost(newPost) {
 		try {
 			setIsLoading(true);
-			const data = await fetchWithAuth(`${import.meta.env.BACKEND_URL}/posts`, {
+			const data = await fetchWithAuth(`${import.meta.env.VITE_BACKEND_URL}/posts`, {
 				method: "POST",
 				body: newPost,
 			});
@@ -105,7 +112,7 @@ function PostsProvider({ children }) {
 	async function deletePost(id) {
 		try {
 			setIsLoading(true);
-			await fetchWithAuth(`${import.meta.env.BACKEND_URL}/posts/${id}`, {
+			await fetchWithAuth(`${import.meta.env.VITE_BACKEND_URL}/posts/${id}`, {
 				method: "DELETE",
 			});
 			setPosts((posts) => posts.filter((post) => post.id !== id));
