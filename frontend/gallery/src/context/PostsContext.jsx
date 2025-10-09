@@ -101,7 +101,7 @@ function PostsProvider({ children }) {
 				method: "POST",
 				body: newPost,
 			});
-			setPosts((posts) => [...posts, data]);
+			setPosts((posts) => [...(posts || []), data]);
 		} catch {
 			alert("There was an error loading data");
 		} finally {

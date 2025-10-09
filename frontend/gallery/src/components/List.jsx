@@ -19,7 +19,7 @@ function List() {
 		<>
 			{isLoading ? (
 				<Spinner />
-			) : !posts || posts?.length === 0 ? (
+			) : !Array.isArray(posts) || posts.length === 0 ? (
 				<div className="noPostsWrapper">
 					<p className="noPosts">You have no posts yet</p>
 					<motion.p
