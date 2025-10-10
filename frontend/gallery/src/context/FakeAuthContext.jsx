@@ -34,18 +34,17 @@ function AuthProvider({ children }) {
 				body: JSON.stringify({ email, password }),
 				credentials: "include",
 			});
-			console.log(res);
 
 			if (!res.ok) {
+				alert("Wrong email or password");
 				throw new Error("Wrong credentials");
 			}
 
 			const data = await res.json();
-			console.log(data);
 			dispatch({ type: "login", payload: data.user });
 			localStorage.setItem("accessToken", data.token);
 		} catch (err) {
-			console.log(err);
+			throw new Error(err);
 		}
 	}
 
