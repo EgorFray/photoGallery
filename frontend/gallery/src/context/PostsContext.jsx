@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { createContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 const PostsContext = createContext();
 
@@ -8,6 +9,8 @@ function PostsProvider({ children }) {
 	const [post, setPost] = useState({});
 	const [error, setError] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
+
+	const navigate = useNavigate();
 
 	useEffect(function () {
 		async function fetchGetData() {
@@ -110,15 +113,18 @@ function PostsProvider({ children }) {
 	}
 
 	async function deletePost(id) {
+		setIsLoading(true);
+		setPosts((posts) => posts.filter((post) => post.id !== id));
+		navigate("/app");
 		try {
-			setIsLoading(true);
 			await fetchWithAuth(`${import.meta.env.VITE_BACKEND_URL}/posts/${id}`, {
 				method: "DELETE",
 			});
-			setPosts((posts) => posts.filter((post) => post.id !== id));
 		} catch {
 			alert("There was an error deleting post");
 		} finally {
+			const data = await fetchWithAuth(`${import.meta.env.VITE_BACKEND_URL}/posts`);
+			setPosts(data);
 			setIsLoading(false);
 		}
 	}

@@ -8,7 +8,7 @@ import Spinner from "./Spinner";
 function PostContent() {
 	const { id } = useParams();
 	const { post, getPostById, isLoading, deletePost } = usePosts();
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 
 	const formatDate = (date) =>
 		new Intl.DateTimeFormat("en", {
@@ -27,7 +27,7 @@ function PostContent() {
 
 	function handleClick() {
 		deletePost(id);
-		navigate("/app");
+		// navigate("/app");
 	}
 
 	if (isLoading) return <Spinner />;
