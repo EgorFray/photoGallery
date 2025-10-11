@@ -30,7 +30,7 @@ func TestDbCallGetPostById(t *testing.T) {
 	post, err := repo.PostRepo.DbCallGetPostById(int(insertedID), "1")
 	assert.NoError(t, err)
 	// DbCallGetPostById return types.PostDeetailModel, in which I have timestamp.
-	// to keep it simple and to avid mocking timestamp, I just check if fileds assert
+	// to keep it simple and to avoid mocking timestamp, I just check if fields assert
 	assert.Equal(t, "/images/test-img.jpg", post.Image)
 	assert.Equal(t, "test", post.Description)
 	assert.False(t, post.CreatedAt.IsZero())
