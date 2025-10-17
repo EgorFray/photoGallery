@@ -3,4 +3,5 @@
 	grid-template-columns: 15rem 1fr 15rem;
 	align-items: center;
 	border-bottom: 1px solid #494848;
+	max-width: 100%;
 }
