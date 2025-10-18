@@ -67,7 +67,9 @@ function CreateUserForm() {
 					</label>
 					<input type="file" name="avatar" id="avatar" />
 				</div>
-				<Button type="submit">Create user</Button>
+				<Button className={styles.btnForm} type="submit">
+					Create user
+				</Button>
 			</form>
 		</div>
 	);

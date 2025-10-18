@@ -6,7 +6,7 @@
 	height: 70vh;
 }
 
-.form {
+.createForm {
 	padding: 2rem;
 	width: 40rem;
 	max-width: 40rem;
@@ -36,8 +36,17 @@
 	margin-bottom: 2.4rem;
 }
 
+.btnForm {
+	align-self: center;
+}
+
 @media (max-width: 29em) {
-	.form {
-		background: red;
+	.createForm {
+		width: 30rem;
+		max-width: 30rem;
+	}
+
+	.row label {
+		font-size: 1.6rem;
 	}
 }
