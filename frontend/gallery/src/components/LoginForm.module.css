@@ -44,3 +44,14 @@
 .btnForm {
 	align-self: center;
 }
+
+@media (max-width: 29em) {
+	.form {
+		width: 30rem;
+		max-width: 30rem;
+	}
+
+	.row label {
+		font-size: 1.6rem;
+	}
+}
