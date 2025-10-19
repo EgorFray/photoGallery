@@ -9,7 +9,7 @@ services:
     # env_file:
     #   - ./backend/.env
     ports:
-      - "8080:8080"
+      - "8081:8081"
     environment:
       JWT_SECRET: some-secret-key
       DATABASE_URL: your-database-url
@@ -20,7 +20,7 @@ services:
     # env_file:
     #   - ./frontend/gallery/.env
     ports:
-      - "3000:3000"
+      - "3001:3001"
     environment:
       BACKEND_HOST: backend
       BACKEND_PORT: 8080
