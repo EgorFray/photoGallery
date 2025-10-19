@@ -6,5 +6,4 @@ RUN npm i -g serve
 COPY . .
 RUN npm run build
 RUN npm install -g serve
-EXPOSE 3000
 CMD [ "serve", "-s", "dist" ]

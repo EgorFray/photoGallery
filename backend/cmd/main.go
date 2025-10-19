@@ -73,5 +73,5 @@ func main() {
 	// login
 	router.POST("/auth/login", authHandlers.Auth)
 	router.POST("/auth/refresh", authHandlers.Refresh)
-	router.Run(":8080")
+	router.Run(":8081")
 }
