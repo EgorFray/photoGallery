@@ -17,6 +17,9 @@ services:
     image: memorize-frontend
     build:
       context: ./frontend/gallery
+      args:
+        # The value for GIT_COMMIT_TAG is pulled from the host's BUILD_TAG variable
+        VITE_BACKEND_URL: ${VITE_BACKEND_URL}
     # env_file:
     #   - ./frontend/gallery/.env
     ports:
