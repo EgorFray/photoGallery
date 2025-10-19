@@ -8,7 +8,7 @@ function Post({ post }) {
 			<Link to={`/app/posts/${id}`}>
 				<img
 					className={styles.postImg}
-					src={`http://localhost:8080${image}`}
+					src={`${import.meta.env.VITE_BACKEND_URL}${image}`}
 					alt="Something beeautiful here"
 				/>
 				{/* <div className={styles.postBox}>
