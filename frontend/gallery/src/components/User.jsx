@@ -13,7 +13,10 @@ function User() {
 
 	return (
 		<div className={styles.user}>
-			<img src={`http://localhost:8080${user.avatar}`} alt={user.name} />
+			<img
+				src={`${import.meta.env.VITE_BACKEND_URL}${user.avatar}`}
+				alt={user.name}
+			/>
 			<button onClick={handleClick}>Logout</button>
 		</div>
 	);
