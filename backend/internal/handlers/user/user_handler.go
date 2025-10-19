@@ -1,7 +1,6 @@
 package user
 
 import (
-	"fmt"
 	service "gallery/backend/internal/service/user"
 	"gallery/backend/internal/types"
 	"gallery/backend/internal/utils"
