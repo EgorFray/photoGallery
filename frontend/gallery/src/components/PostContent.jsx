@@ -27,7 +27,6 @@ function PostContent() {
 
 	function handleClick() {
 		deletePost(id);
-		// navigate("/app");
 	}
 
 	if (isLoading) return <Spinner />;
@@ -35,7 +34,7 @@ function PostContent() {
 	return (
 		<div className={styles.detailLayout}>
 			<img
-				src={`http://localhost:8080${post.image}`}
+				src={`${import.meta.env.VITE_BACKEND_URL}${post.image}`}
 				className={styles.detailImage}
 			/>
 			<div className={styles.detailBox}>

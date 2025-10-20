@@ -53,7 +53,7 @@
 
 @media (max-width: 31em) {
 	.searchInput {
-		padding: 0.5rem;
+		padding: 1rem;
 		font-size: 1.4rem;
 	}
 }
