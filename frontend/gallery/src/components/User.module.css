@@ -8,22 +8,7 @@
 }
 
 .user img {
+	cursor: pointer;
 	border-radius: 10rem;
 	height: 4rem;
-}
-
-.user button {
-	cursor: pointer;
-	padding: 0.5rem 1rem;
-	border: none;
-	font-family: "Montserrat";
-	color: #f9feff;
-	background-color: #494848;
-}
-
-/* Need to think how to combine user-icon and logout button */
-@media (max-width: 29em) {
-	/* .user button {
-		font-size: 1rem;
-	} */
 }
