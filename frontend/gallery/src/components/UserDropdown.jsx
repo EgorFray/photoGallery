@@ -1,22 +1,37 @@
 import { GrLogout } from "react-icons/gr";
 import { CgProfile } from "react-icons/cg";
+import { motion } from "motion/react";
 import styles from "./UserDropdown.module.css";
+import { useAuth } from "../context/FakeAuthContext";
+import { useNavigate } from "react-router-dom";
 
 function UserDropdown() {
-	return (
-		<div>
-			<ul className={styles.userDropList}>
-				<div className={styles.dropOption}>
-					<CgProfile />
-					<li>Profile</li>
-				</div>
+	const { logout } = useAuth();
+	const navigate = useNavigate();
 
-				<div className={styles.dropOption}>
-					<GrLogout />
-					<li>Logout</li>
-				</div>
-			</ul>
-		</div>
+	function handleClick() {
+		logout();
+		navigate("/login");
+	}
+
+	return (
+		<motion.ul
+			className={styles.userDropList}
+			initial={{ opacity: 0, y: -10 }}
+			animate={{ opacity: 1, y: 0 }}
+			exit={{ opacity: 0, y: -10 }}
+			transition={{ duration: 0.25 }}
+		>
+			<div className={styles.dropOption}>
+				<CgProfile />
+				<li>Profile</li>
+			</div>
+
+			<div className={styles.dropOption}>
+				<GrLogout />
+				<li onClick={handleClick}>Logout</li>
+			</div>
+		</motion.ul>
 	);
 }
 

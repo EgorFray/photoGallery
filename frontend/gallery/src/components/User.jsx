@@ -1,11 +1,11 @@
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { useAuth } from "../context/FakeAuthContext";
 import styles from "./User.module.css";
 import UserDropdown from "./UserDropdown";
 
 function User() {
-	const { user, logout } = useAuth();
-	const navigate = useNavigate();
+	const [isOpenDrop, setIsOpenDrop] = useState(false);
+	const { user } = useAuth();
 
 	return (
 		<>
@@ -13,9 +13,10 @@ function User() {
 				<img
 					src={`${import.meta.env.VITE_BACKEND_URL}${user.avatar}`}
 					alt={user.name}
+					onClick={() => setIsOpenDrop(!isOpenDrop)}
 				/>
 			</div>
-			<UserDropdown />
+			{isOpenDrop && <UserDropdown />}
 		</>
 	);
 }
