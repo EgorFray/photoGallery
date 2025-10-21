@@ -9,3 +9,10 @@
 .footerText {
 	font-size: 1.6rem;
 }
+
+/* BELOW 464px */
+@media (max-width: 29em) {
+	.footerText {
+		font-size: 1.2rem;
+	}
+}
