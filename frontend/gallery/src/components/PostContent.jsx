@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { usePosts } from "../context/PostsContext";
 import styles from "./PostContent.module.css";
 import Button from "./Button";
@@ -8,7 +8,6 @@ import Spinner from "./Spinner";
 function PostContent() {
 	const { id } = useParams();
 	const { post, getPostById, isLoading, deletePost } = usePosts();
-	// const navigate = useNavigate();
 
 	const formatDate = (date) =>
 		new Intl.DateTimeFormat("en", {
