@@ -10,6 +10,7 @@ import (
 type UserRepositoryInterface interface {
 	DbCallCreateUser(name, email, password, avatar string) (int, error)
 	DbCallGetUserByEmail(email string) (types.UserModel, error)
+	DbCallUpdateUser(id string, updatedData *types.UserUpdate) (error)
 }
 
 type UserRepository struct {
@@ -59,5 +60,4 @@ func (u *UserRepository) DbCallUpdateUser(id string, updatedData *types.UserUpda
 
 	_, err := u.db.Exec(query, args...)
 	return err
-
 }

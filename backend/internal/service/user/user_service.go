@@ -12,6 +12,7 @@ import (
 type UserServiceInterface interface {
 	CreateUser(req types.UserRequest, hashedPassword string, file *multipart.FileHeader) (*int, error)
 	GetUserByEmail(email string) (*types.UserModel, error)
+	UpdateUser(id string, updatedData *types.UserUpdate) error
 }
 
 type UserService struct {
@@ -44,4 +45,12 @@ func (s *UserService) GetUserByEmail(email string) (*types.UserModel, error) {
 		return nil, err
 	}
 	return &userData, nil
+}
+
+func (s *UserService) UpdateUser(id string, updatedData *types.UserUpdate) error {
+	err := s.UserRepo.DbCallUpdateUser(id, updatedData)
+	if err != nil {
+		return err
+	}
+	return nil
 }
