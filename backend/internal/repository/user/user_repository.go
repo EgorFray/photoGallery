@@ -36,22 +36,26 @@ func (u *UserRepository) DbCallGetUserByEmail(email string) (types.UserModel, er
 }
 
 func (u *UserRepository) DbCallUpdateUser(id string, updatedData *types.UserUpdate) (error) {
-	query := "UPDATE users SET"
+	query := "UPDATE users SET "
 	args := []interface{} {}
+	i := 1
 
 	if updatedData.Name != nil {
-		query += fmt.Sprintf("name = $%d, ", 1)
+		query += fmt.Sprintf("name = $%d, ", i)
 		args = append(args, *updatedData.Name)
+		i++
 	}
 
 	if updatedData.Password != nil {
-		query += fmt.Sprintf("password = $%d, ", 2)
+		query += fmt.Sprintf("password = $%d, ", i)
 		args = append(args, *updatedData.Password)
+		i++
 	}
 
 	if updatedData.Avatar != nil {
-		query += fmt.Sprintf("avatar = $%d, ", 3)
+		query += fmt.Sprintf("avatar = $%d, ", i)
 		args = append(args, *updatedData.Avatar)
+		i++
 	}
 
 	query = strings.TrimSuffix(query, ", ")

@@ -1,6 +1,7 @@
 package user
 
 import (
+	"fmt"
 	service "gallery/backend/internal/service/user"
 	"gallery/backend/internal/types"
 	"gallery/backend/internal/utils"
@@ -56,7 +57,7 @@ func (u *UserHandler) UpdateUser(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request"})
 		return
 	}
-
+	fmt.Println(&updatedData)
 	err := u.userService.UpdateUser(userId.(string), &updatedData)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to update user"})
