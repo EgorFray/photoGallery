@@ -48,6 +48,14 @@ func (s *UserService) GetUserByEmail(email string) (*types.UserModel, error) {
 }
 
 func (s *UserService) UpdateUser(id string, updatedData *types.UserUpdate) error {
+	if updatedData.Password != nil {
+		hashedPassword, err := utils.HashPassword(*updatedData.Password)
+		if err != nil {
+			return err
+		}
+		updatedData.Password = &hashedPassword 
+	}
+	
 	err := s.UserRepo.DbCallUpdateUser(id, updatedData)
 	if err != nil {
 		return err
