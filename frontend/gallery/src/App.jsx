@@ -10,6 +10,7 @@ import Login from "./pages/Login";
 import { AuthProvider } from "./context/FakeAuthContext";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import { UserProvider } from "./context/UserContext";
+import UserContent from "./components/UserContent";
 
 function App() {
 	return (
@@ -20,6 +21,14 @@ function App() {
 						<Route index element={<Homepage />} />
 						<Route path="/login" element={<Login />} />
 						<Route path="/createUser" element={<CreateUser />} />
+						<Route
+							path="/profile"
+							element={
+								<ProtectedRoute>
+									<UserContent />
+								</ProtectedRoute>
+							}
+						/>
 						<Route
 							path="/app"
 							element={

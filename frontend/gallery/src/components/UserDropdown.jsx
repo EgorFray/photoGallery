@@ -9,7 +9,11 @@ function UserDropdown() {
 	const { logout } = useAuth();
 	const navigate = useNavigate();
 
-	function handleClick() {
+	function handleClickProfile() {
+		navigate("/profile");
+	}
+
+	function handleClickLogout() {
 		logout();
 		navigate("/login");
 	}
@@ -24,12 +28,12 @@ function UserDropdown() {
 		>
 			<div className={styles.dropOption}>
 				<CgProfile />
-				<li>Profile</li>
+				<li onClick={handleClickProfile}>Profile</li>
 			</div>
 
 			<div className={styles.dropOption}>
 				<GrLogout />
-				<li onClick={handleClick}>Logout</li>
+				<li onClick={handleClickLogout}>Logout</li>
 			</div>
 		</motion.ul>
 	);
