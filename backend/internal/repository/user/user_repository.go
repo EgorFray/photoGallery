@@ -2,7 +2,9 @@ package user
 
 import (
 	"database/sql"
+	"fmt"
 	"gallery/backend/internal/types"
+	"strings"
 )
 
 type UserRepositoryInterface interface {
@@ -30,4 +32,32 @@ func (u *UserRepository) DbCallGetUserByEmail(email string) (types.UserModel, er
 
 	err := u.db.QueryRow("SELECT id, name, email, password, avatar FROM users WHERE email = $1", email).Scan(&user.ID, &user.Name, &user.Email, &user.Password, &user.Avatar)
 	return user, err
+}
+
+func (u *UserRepository) DbCallUpdateUser(id string, updatedData *types.UserUpdate) (error) {
+	query := "UPDATE users SET"
+	args := []interface{} {}
+
+	if updatedData.Name != nil {
+		query += fmt.Sprintf("name = $%d, ", 1)
+		args = append(args, *updatedData.Name)
+	}
+
+	if updatedData.Password != nil {
+		query += fmt.Sprintf("password = $%d, ", 2)
+		args = append(args, *updatedData.Password)
+	}
+
+	if updatedData.Avatar != nil {
+		query += fmt.Sprintf("avatar = $%d, ", 3)
+		args = append(args, *updatedData.Avatar)
+	}
+
+	query = strings.TrimSuffix(query, ", ")
+	query += fmt.Sprintf(" WHERE id = $%d", i)
+	args = append(args, id)
+
+	_, err := u.db.Exec(query, args...)
+	return err
+
 }

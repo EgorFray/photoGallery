@@ -20,3 +20,9 @@ type UserResponse struct {
 	Email string `json:"email"`
 	Avatar string `json:"avatar"`
 }
+
+type UserUpdate struct {
+	Name *string `json:"id"`
+	Password *string `json:"password"`
+	Avatar *string `json:"avatar"`
+}
