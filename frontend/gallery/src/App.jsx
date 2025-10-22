@@ -10,7 +10,7 @@ import Login from "./pages/Login";
 import { AuthProvider } from "./context/FakeAuthContext";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import { UserProvider } from "./context/UserContext";
-import UserContent from "./components/UserContent";
+import UserDetail from "./pages/UserDetail";
 
 function App() {
 	return (
@@ -25,7 +25,7 @@ function App() {
 							path="/profile"
 							element={
 								<ProtectedRoute>
-									<UserContent />
+									<UserDetail />
 								</ProtectedRoute>
 							}
 						/>
