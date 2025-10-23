@@ -10,7 +10,7 @@ import (
 type UserRepositoryInterface interface {
 	DbCallCreateUser(name, email, password, avatar string) (int, error)
 	DbCallGetUserByEmail(email string) (types.UserModel, error)
-	DbCallUpdateUser(id string, updatedData *types.UserUpdate) (error)
+	DbCallUpdateUser(id string, name, password, avatar *string ) (error)
 }
 
 type UserRepository struct {
@@ -35,28 +35,32 @@ func (u *UserRepository) DbCallGetUserByEmail(email string) (types.UserModel, er
 	return user, err
 }
 
-func (u *UserRepository) DbCallUpdateUser(id, name, password, avatar string ) (error) {
+func (u *UserRepository) DbCallUpdateUser(id string, name, password, avatar *string ) (error) {
 	query := "UPDATE users SET "
 	args := []interface{} {}
 	i := 1
 
-	if name != "" {
+	if name != nil {
 		query += fmt.Sprintf("name = $%d, ", i)
-		args = append(args, name)
+		args = append(args, *name)
 		i++
 	}
 
-	if password != "" {
+	if password != nil {
 		query += fmt.Sprintf("password = $%d, ", i)
-		args = append(args, password)
+		args = append(args, *password)
 		i++
 	}
 
-	if avatar != "" {
+	if avatar != nil {
 		query += fmt.Sprintf("avatar = $%d, ", i)
-		args = append(args, avatar)
+		args = append(args, *avatar)
 		i++
 	}
+
+	if len(args) == 0 {
+		return nil
+}
 
 	query = strings.TrimSuffix(query, ", ")
 	query += fmt.Sprintf(" WHERE id = $%d", i)

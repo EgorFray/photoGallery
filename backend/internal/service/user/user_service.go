@@ -48,6 +48,14 @@ func (s *UserService) GetUserByEmail(email string) (*types.UserModel, error) {
 }
 
 func (s *UserService) UpdateUser(id, name, password string, file *multipart.FileHeader) error {
+	var namePtr *string
+	if name != "" {
+		n := name
+		namePtr = &n
+	}
+
+	var imagePath *string
+	if file != nil {
 	savePath := filepath.Join("images", "avatars", file.Filename)
 	publicPath := filepath.Join("avatars", file.Filename)
 
@@ -55,16 +63,20 @@ func (s *UserService) UpdateUser(id, name, password string, file *multipart.File
 		return fmt.Errorf("failed to save file: %w", err)
 	}
 
-	imagePath := "/" + publicPath
+	path := "/" + publicPath
+	imagePath = &path
+	}
 
+	var hashedPassword *string
 	if password != "" {
-		hashedPassword, err := utils.HashPassword(password)
+		hp, err := utils.HashPassword(password)
 		if err != nil {
 			return err
 		}
+		hashedPassword = &hp
 	}
 	
-	err := s.UserRepo.DbCallUpdateUser(id, name, hashedPassword, imagePath)
+	err := s.UserRepo.DbCallUpdateUser(id, namePtr, hashedPassword, imagePath)
 	if err != nil {
 		return err
 	}
