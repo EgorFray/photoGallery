@@ -66,6 +66,7 @@ func main() {
 		protected.GET("/posts/search", postsHandlers.SearchPosts)
 		protected.POST("/posts", postsHandlers.CreatePost)
 		protected.DELETE("/posts/:id", postsHandlers.DeletePost)
+		protected.GET("/user", userHandlers.GetUserById)
 		protected.PATCH("user/update", userHandlers.UpdateUser)
 	}
 

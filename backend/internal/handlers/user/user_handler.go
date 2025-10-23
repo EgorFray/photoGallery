@@ -50,6 +50,14 @@ func (u *UserHandler) GetUserById(c *gin.Context) {
 	if !exists {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "There is no userID"})
 	}
+
+	user, err := u.userService.GetUserById(userId.(string))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid user id"})
+		return
+	}
+
+	c.JSON(http.StatusOK, user)
 }
 
 func (u *UserHandler) UpdateUser(c *gin.Context) {
