@@ -12,6 +12,7 @@ import (
 type UserServiceInterface interface {
 	CreateUser(req types.UserRequest, hashedPassword string, file *multipart.FileHeader) (*int, error)
 	GetUserByEmail(email string) (*types.UserModel, error)
+	GetUserById(id string) (*types.UserResponse, error)
 	UpdateUser(id, name, password string, file *multipart.FileHeader) error
 }
 
@@ -41,6 +42,14 @@ func (s *UserService) CreateUser(req types.UserRequest, hashedPassword string, f
 
 func (s *UserService) GetUserByEmail(email string) (*types.UserModel, error) {
 	userData, err := s.UserRepo.DbCallGetUserByEmail(email)
+	if err != nil {
+		return nil, err
+	}
+	return &userData, nil
+}
+
+func (s *UserService) GetUserById(id string) (*types.UserResponse, error) {
+	userData, err := s.UserRepo.DbCallGetUserById(id)
 	if err != nil {
 		return nil, err
 	}
