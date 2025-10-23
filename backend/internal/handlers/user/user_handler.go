@@ -1,7 +1,6 @@
 package user
 
 import (
-	"fmt"
 	service "gallery/backend/internal/service/user"
 	"gallery/backend/internal/types"
 	"gallery/backend/internal/utils"
@@ -52,13 +51,16 @@ func (u *UserHandler) UpdateUser(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "There is no userID"})
 	}
 
-	var updatedData types.UserUpdate
-	if err:= c.ShouldBindJSON(&updatedData); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request"})
+	name := c.PostForm("name")
+	password := c.PostForm("password")
+
+	file, err := c.FormFile("avatar")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Image file is required"})
 		return
 	}
-	fmt.Println(&updatedData)
-	err := u.userService.UpdateUser(userId.(string), &updatedData)
+
+	err = u.userService.UpdateUser(userId.(string), name, password, file)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to update user"})
 		return

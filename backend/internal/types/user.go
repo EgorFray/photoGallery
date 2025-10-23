@@ -22,7 +22,6 @@ type UserResponse struct {
 }
 
 type UserUpdate struct {
-	Name *string `json:"name"`
-	Password *string `json:"password"`
-	Avatar *string `json:"avatar"`
+	Name string `json:"name"`
+	Password string `json:"password"`
 }

@@ -12,7 +12,7 @@ import (
 type UserServiceInterface interface {
 	CreateUser(req types.UserRequest, hashedPassword string, file *multipart.FileHeader) (*int, error)
 	GetUserByEmail(email string) (*types.UserModel, error)
-	UpdateUser(id string, updatedData *types.UserUpdate) error
+	UpdateUser(id, name, password string, file *multipart.FileHeader) error
 }
 
 type UserService struct {
@@ -47,16 +47,24 @@ func (s *UserService) GetUserByEmail(email string) (*types.UserModel, error) {
 	return &userData, nil
 }
 
-func (s *UserService) UpdateUser(id string, updatedData *types.UserUpdate) error {
-	if updatedData.Password != nil {
-		hashedPassword, err := utils.HashPassword(*updatedData.Password)
+func (s *UserService) UpdateUser(id, name, password string, file *multipart.FileHeader) error {
+	savePath := filepath.Join("images", "avatars", file.Filename)
+	publicPath := filepath.Join("avatars", file.Filename)
+
+	if err := utils.SaveFile(file, savePath); err != nil {
+		return fmt.Errorf("failed to save file: %w", err)
+	}
+
+	imagePath := "/" + publicPath
+
+	if password != "" {
+		hashedPassword, err := utils.HashPassword(password)
 		if err != nil {
 			return err
 		}
-		updatedData.Password = &hashedPassword 
 	}
 	
-	err := s.UserRepo.DbCallUpdateUser(id, updatedData)
+	err := s.UserRepo.DbCallUpdateUser(id, name, hashedPassword, imagePath)
 	if err != nil {
 		return err
 	}

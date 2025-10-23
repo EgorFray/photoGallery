@@ -35,26 +35,26 @@ func (u *UserRepository) DbCallGetUserByEmail(email string) (types.UserModel, er
 	return user, err
 }
 
-func (u *UserRepository) DbCallUpdateUser(id string, updatedData *types.UserUpdate) (error) {
+func (u *UserRepository) DbCallUpdateUser(id, name, password, avatar string ) (error) {
 	query := "UPDATE users SET "
 	args := []interface{} {}
 	i := 1
 
-	if updatedData.Name != nil {
+	if name != "" {
 		query += fmt.Sprintf("name = $%d, ", i)
-		args = append(args, *updatedData.Name)
+		args = append(args, name)
 		i++
 	}
 
-	if updatedData.Password != nil {
+	if password != "" {
 		query += fmt.Sprintf("password = $%d, ", i)
-		args = append(args, *updatedData.Password)
+		args = append(args, password)
 		i++
 	}
 
-	if updatedData.Avatar != nil {
+	if avatar != "" {
 		query += fmt.Sprintf("avatar = $%d, ", i)
-		args = append(args, *updatedData.Avatar)
+		args = append(args, avatar)
 		i++
 	}
 
