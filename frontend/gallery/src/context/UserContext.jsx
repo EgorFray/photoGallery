@@ -1,8 +1,10 @@
 import { createContext, useContext, useState } from "react";
+import { useAuth } from "./FakeAuthContext";
 
 const UserContext = createContext();
 
 function UserProvider({ children }) {
+	const { fetchWithAuth } = useAuth();
 	const [user, setUser] = useState({});
 	const [isLoading, setIsLoading] = useState(false);
 
@@ -24,10 +26,13 @@ function UserProvider({ children }) {
 	async function updateUser(updatedUser) {
 		try {
 			setIsLoading(true);
-			const data = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user/update`, {
-				method: "PATCH",
-				body: updatedUser,
-			});
+			const data = await fetchWithAuth(
+				`${import.meta.env.VITE_BACKEND_URL}/user/update`,
+				{
+					method: "PATCH",
+					body: updatedUser,
+				}
+			);
 			setUser(data);
 		} catch {
 			alert("There was an error loading data");

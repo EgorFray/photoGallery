@@ -1,10 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { createContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "./FakeAuthContext";
 
 const PostsContext = createContext();
 
 function PostsProvider({ children }) {
+	const { fetchWithAuth } = useAuth();
 	const [posts, setPosts] = useState([]);
 	const [post, setPost] = useState({});
 	const [error, setError] = useState("");
@@ -32,41 +34,6 @@ function PostsProvider({ children }) {
 		}
 		fetchGetData();
 	}, []);
-
-	async function fetchWithAuth(url, options = {}) {
-		const headers = {
-			...options.headers,
-		};
-
-		const accessToken = localStorage.getItem("accessToken");
-		if (accessToken) {
-			headers["Authorization"] = `Bearer ${accessToken}`;
-		}
-
-		let res = await fetch(url, { ...options, headers, credentials: "include" });
-
-		if (res.status == 401) {
-			const refreshRes = await fetch(
-				`${import.meta.env.VITE_BACKEND_URL}/auth/refresh`,
-				{
-					method: "POST",
-					credentials: "include",
-				}
-			);
-			if (refreshRes.ok) {
-				const data = await refreshRes.json();
-				const newToken = data.accessToken;
-				localStorage.setItem("accessToken", newToken);
-				headers["Authorization"] = `Bearer ${newToken}`;
-				res = await fetch(url, { ...options, headers, credentials: "include" });
-			}
-		}
-
-		if (!res.ok) {
-			throw new Error(`Request failed: ${res.status}`);
-		}
-		return res.json();
-	}
 
 	async function getSearchedPosts(query) {
 		try {

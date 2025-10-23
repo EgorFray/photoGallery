@@ -45,6 +45,13 @@ func (u *UserHandler) CreateUser(c *gin.Context) {
 	c.IndentedJSON(http.StatusCreated, userId)
 }
 
+func (u *UserHandler) GetUserById(c *gin.Context) {
+	userId, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "There is no userID"})
+	}
+}
+
 func (u *UserHandler) UpdateUser(c *gin.Context) {
 	userId, exists := c.Get("userID")
 	if !exists {
@@ -54,13 +61,9 @@ func (u *UserHandler) UpdateUser(c *gin.Context) {
 	name := c.PostForm("name")
 	password := c.PostForm("password")
 
-	file, err := c.FormFile("avatar")
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Image file is required"})
-		return
-	}
+	file, _ := c.FormFile("avatar")
 
-	err = u.userService.UpdateUser(userId.(string), name, password, file)
+	err := u.userService.UpdateUser(userId.(string), name, password, file)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to update user"})
 		return

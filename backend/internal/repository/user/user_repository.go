@@ -10,6 +10,7 @@ import (
 type UserRepositoryInterface interface {
 	DbCallCreateUser(name, email, password, avatar string) (int, error)
 	DbCallGetUserByEmail(email string) (types.UserModel, error)
+	DbCallGetUserById(id string) (types.UserResponse, error)
 	DbCallUpdateUser(id string, name, password, avatar *string ) (error)
 }
 
@@ -32,6 +33,13 @@ func (u *UserRepository) DbCallGetUserByEmail(email string) (types.UserModel, er
 	var user types.UserModel
 
 	err := u.db.QueryRow("SELECT id, name, email, password, avatar FROM users WHERE email = $1", email).Scan(&user.ID, &user.Name, &user.Email, &user.Password, &user.Avatar)
+	return user, err
+}
+
+func (u *UserRepository) DbCallGetUserById(id string) (types.UserResponse, error) {
+	var user types.UserResponse
+
+	err := u.db.QueryRow("SELECT id, name, email, avatar FROM users WHERE id = $1", id).Scan(&user.ID, &user.Name, &user.Email, &user.Avatar)
 	return user, err
 }
 

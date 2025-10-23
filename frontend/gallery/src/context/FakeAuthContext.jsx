@@ -52,8 +52,45 @@ function AuthProvider({ children }) {
 		dispatch({ type: "logout" });
 	}
 
+	async function fetchWithAuth(url, options = {}) {
+		const headers = {
+			...options.headers,
+		};
+
+		const accessToken = localStorage.getItem("accessToken");
+		if (accessToken) {
+			headers["Authorization"] = `Bearer ${accessToken}`;
+		}
+
+		let res = await fetch(url, { ...options, headers, credentials: "include" });
+
+		if (res.status == 401) {
+			const refreshRes = await fetch(
+				`${import.meta.env.VITE_BACKEND_URL}/auth/refresh`,
+				{
+					method: "POST",
+					credentials: "include",
+				}
+			);
+			if (refreshRes.ok) {
+				const data = await refreshRes.json();
+				const newToken = data.accessToken;
+				localStorage.setItem("accessToken", newToken);
+				headers["Authorization"] = `Bearer ${newToken}`;
+				res = await fetch(url, { ...options, headers, credentials: "include" });
+			}
+		}
+
+		if (!res.ok) {
+			throw new Error(`Request failed: ${res.status}`);
+		}
+		return res.json();
+	}
+
 	return (
-		<AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
+		<AuthContext.Provider
+			value={{ user, isAuthenticated, login, logout, fetchWithAuth }}
+		>
 			{children}
 		</AuthContext.Provider>
 	);
