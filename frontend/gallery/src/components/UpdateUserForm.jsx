@@ -2,11 +2,13 @@ import { motion } from "motion/react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/FakeAuthContext";
+import { useUser } from "../context/UserContext";
 import Button from "./Button";
 import styles from "./UpdateUserForm.module.css";
 
 function UpdateUserForm() {
 	const { user } = useAuth();
+	const { updateUser } = useUser();
 
 	const [newName, setNewName] = useState(user.name);
 	const [newPassword, setNewPassword] = useState("");

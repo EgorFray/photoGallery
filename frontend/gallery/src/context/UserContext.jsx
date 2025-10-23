@@ -21,8 +21,23 @@ function UserProvider({ children }) {
 		}
 	}
 
+	async function updateUser(updatedUser) {
+		try {
+			setIsLoading(true);
+			const data = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user/update`, {
+				method: "PATCH",
+				body: updatedUser,
+			});
+			setUser(data);
+		} catch {
+			alert("There was an error loading data");
+		} finally {
+			setIsLoading(false);
+		}
+	}
+
 	return (
-		<UserContext.Provider value={{ user, isLoading, createUser }}>
+		<UserContext.Provider value={{ user, isLoading, createUser, updateUser }}>
 			{children}
 		</UserContext.Provider>
 	);
