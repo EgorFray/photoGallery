@@ -11,6 +11,7 @@ import { AuthProvider } from "./context/FakeAuthContext";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import { UserProvider } from "./context/UserContext";
 import UserDetail from "./pages/UserDetail";
+import UpdateUser from "./pages/UpdateUser";
 
 function App() {
 	return (
@@ -26,6 +27,14 @@ function App() {
 							element={
 								<ProtectedRoute>
 									<UserDetail />
+								</ProtectedRoute>
+							}
+						/>
+						<Route
+							path="/profile/update"
+							element={
+								<ProtectedRoute>
+									<UpdateUser />
 								</ProtectedRoute>
 							}
 						/>

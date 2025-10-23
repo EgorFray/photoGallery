@@ -1,0 +1,62 @@
+.formContainer {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 70vh;
+}
+
+.updateHeading {
+	font-size: 2rem;
+	margin: 4.8rem 0 2rem 0;
+}
+
+.updateHeadingMotion {
+	font-size: 1.4rem;
+	font-weight: 300;
+}
+
+.updateForm {
+	padding: 2rem;
+	width: 40rem;
+	max-width: 40rem;
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+}
+
+.row {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+}
+
+.row label {
+	font-size: 2rem;
+	font-weight: 400;
+}
+
+.row input {
+	background-color: transparent;
+	color: #f9feff;
+	border: 1px solid #494848;
+	outline: none;
+
+	padding: 1.2rem 2.4rem;
+	margin-bottom: 2.4rem;
+}
+
+.btnForm {
+	align-self: center;
+}
+
+@media (max-width: 29em) {
+	.updateForm {
+		width: 30rem;
+		max-width: 30rem;
+	}
+
+	.row label {
+		font-size: 1.6rem;
+	}
+}

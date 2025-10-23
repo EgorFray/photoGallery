@@ -19,6 +19,11 @@
 	font-size: 2rem;
 }
 
+.updateBtn {
+	margin-top: 2.4rem;
+	margin-left: 11rem;
+}
+
 /* BELOW 464px */
 @media (max-width: 29em) {
 	.userImg {
