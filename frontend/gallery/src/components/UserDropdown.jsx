@@ -4,12 +4,15 @@ import { motion } from "motion/react";
 import styles from "./UserDropdown.module.css";
 import { useAuth } from "../context/FakeAuthContext";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../context/UserContext";
 
 function UserDropdown() {
-	const { logout } = useAuth();
+	const { user, logout } = useAuth();
+	const { getCurrentUser } = useUser();
 	const navigate = useNavigate();
 
 	function handleClickProfile() {
+		getCurrentUser(user.Id);
 		navigate("/profile");
 	}
 

@@ -8,7 +8,7 @@ import styles from "./UpdateUserForm.module.css";
 
 function UpdateUserForm() {
 	const { user } = useAuth();
-	const { updateUser } = useUser();
+	const { getCurrentUser, updateUser } = useUser();
 
 	const [newName, setNewName] = useState(user.name);
 	const [newPassword, setNewPassword] = useState("");
@@ -20,6 +20,7 @@ function UpdateUserForm() {
 
 		const formData = new FormData(e.target);
 		await updateUser(formData);
+		await getCurrentUser(user.Id);
 		navigate("/profile");
 	}
 

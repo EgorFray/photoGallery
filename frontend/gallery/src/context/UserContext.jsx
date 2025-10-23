@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { createContext, useContext, useState } from "react";
 import { useAuth } from "./FakeAuthContext";
 
@@ -5,10 +6,24 @@ const UserContext = createContext();
 
 function UserProvider({ children }) {
 	const { fetchWithAuth } = useAuth();
-	const [user, setUser] = useState({});
-	const [curUser, setCurUser] = useState({}),
+	const [newUser, setNewUser] = useState({});
+	const [curUser, setCurUser] = useState({});
 	const [isLoading, setIsLoading] = useState(false);
 
+	async function getCurrentUser(userId) {
+		try {
+			setIsLoading(true);
+			const data = await fetchWithAuth(`${import.meta.env.VITE_BACKEND_URL}/user`, {
+				method: "GET",
+				body: userId,
+			});
+			setCurUser(data);
+		} catch {
+			alert("There was an error loading data");
+		} finally {
+			setIsLoading(false);
+		}
+	}
 	async function createUser(newUser) {
 		try {
 			setIsLoading(true);
@@ -16,24 +31,7 @@ function UserProvider({ children }) {
 				method: "POST",
 				body: newUser,
 			});
-			setUser(data);
-		} catch {
-			alert("There was an error loading data");
-		} finally {
-			setIsLoading(false);
-		}
-	}
-
-	async function getCurrentUser(userId) {
-		try{
-			setIsLoading(true);
-			const data = await fetchWithAuth(`${import.meta.env.VITE_BACKEND_URL}/user`, 
-			{
-				method: "GET", 
-				body: userId,
-			}
-		);
-		setCurUser(data);
+			setNewUser(data);
 		} catch {
 			alert("There was an error loading data");
 		} finally {
@@ -51,7 +49,7 @@ function UserProvider({ children }) {
 					body: updatedUser,
 				}
 			);
-			setUser(data);
+			setNewUser(data);
 		} catch {
 			alert("There was an error loading data");
 		} finally {
@@ -60,7 +58,9 @@ function UserProvider({ children }) {
 	}
 
 	return (
-		<UserContext.Provider value={{ user, curUser, isLoading, createUser, getCurrentUser, updateUser }}>
+		<UserContext.Provider
+			value={{ newUser, curUser, isLoading, createUser, getCurrentUser, updateUser }}
+		>
 			{children}
 		</UserContext.Provider>
 	);
