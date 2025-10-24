@@ -23,25 +23,25 @@ function CreatePostForm() {
 			<form className={styles.createForm} onSubmit={handleSubmit}>
 				<h2 className={styles.createFormHeading}>Add your memory</h2>
 
-				<div className={styles.imageContainer}>
-					<label htmlFor="image" className={styles.createFormImage}>
-						Add picture
-					</label>
-					<input type="file" name="image" id="image" />
+				<div className={styles.row}>
+					<label htmlFor="image">Add picture</label>
+					<input type="file" className={styles.formInput} name="image" id="image" />
 				</div>
 
-				<div className={styles.descriptionContainer}>
-					<label htmlFor="description" className={styles.createFormDescription}>
-						Add description
-					</label>
+				<div className={styles.row}>
+					<label htmlFor="description">Add description</label>
 					<textarea
 						id="description"
+						className={styles.formInput}
 						name="description"
 						placeholder="Add description"
 					/>
 				</div>
-
-				<Button type="submit">Post</Button>
+				<div className={styles.btnWrapper}>
+					<Button className={styles.btnForm} type="submit">
+						Post
+					</Button>
+				</div>
 			</form>
 		</div>
 	);
