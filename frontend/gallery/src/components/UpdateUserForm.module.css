@@ -46,8 +46,8 @@
 	margin-bottom: 2.4rem;
 }
 
-.btnForm {
-	align-self: center;
+.btnWrapper {
+	text-align: center;
 }
 
 @media (max-width: 29em) {

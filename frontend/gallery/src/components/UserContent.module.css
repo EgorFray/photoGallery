@@ -19,9 +19,9 @@
 	font-size: 2rem;
 }
 
-.updateBtn {
-	margin-top: 2.4rem;
-	margin-left: 11rem;
+.btnWrapper {
+	margin-top: 4.8rem;
+	text-align: center;
 }
 
 /* BELOW 464px */

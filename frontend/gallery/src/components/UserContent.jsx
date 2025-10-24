@@ -9,7 +9,6 @@ function UserContent() {
 	const { curUser } = useUser();
 
 	const navigate = useNavigate();
-	console.log(curUser);
 
 	return (
 		<>
@@ -24,12 +23,9 @@ function UserContent() {
 					<p>{curUser.email}</p>
 				</div>
 			</div>
-			<Button
-				className={styles.updateBtn}
-				onClick={() => navigate("/profile/update")}
-			>
-				Update
-			</Button>
+			<div className={styles.btnWrapper}>
+				<Button onClick={() => navigate("/profile/update")}>Update</Button>
+			</div>
 		</>
 	);
 }
