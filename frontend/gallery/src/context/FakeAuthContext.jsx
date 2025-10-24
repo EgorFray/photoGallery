@@ -74,7 +74,7 @@ function AuthProvider({ children }) {
 			);
 			if (refreshRes.ok) {
 				const data = await refreshRes.json();
-				const newToken = data.accessToken;
+				const newToken = data.token;
 				localStorage.setItem("accessToken", newToken);
 				headers["Authorization"] = `Bearer ${newToken}`;
 				res = await fetch(url, { ...options, headers, credentials: "include" });
