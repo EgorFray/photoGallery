@@ -56,6 +56,15 @@
 		max-width: 30rem;
 	}
 
+	.updateHeading {
+		font-size: 1.6rem;
+	}
+
+	.updateHeadingMotion {
+		font-size: 1rem;
+		font-weight: 300;
+	}
+
 	.row label {
 		font-size: 1.6rem;
 	}

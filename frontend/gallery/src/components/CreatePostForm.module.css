@@ -49,13 +49,17 @@
 	text-align: center;
 }
 
-/* BELOW 640px */
-@media (max-width: 40em) {
+/* BELOW 464px */
+@media (max-width: 29em) {
 	.createForm {
 		max-width: 30rem;
 	}
 
 	.createFormHeading {
 		font-size: 2rem;
+	}
+
+	.row label {
+		font-size: 1.6rem;
 	}
 }
