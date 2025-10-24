@@ -18,11 +18,13 @@ function UserContent() {
 					alt={user.name}
 					className={styles.userImg}
 				/>
+
 				<div className={styles.userInfoRight}>
 					<p>{curUser.name}</p>
 					<p>{curUser.email}</p>
 				</div>
 			</div>
+
 			<div className={styles.btnWrapper}>
 				<Button onClick={() => navigate("/profile/update")}>Update</Button>
 			</div>

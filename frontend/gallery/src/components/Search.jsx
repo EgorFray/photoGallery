@@ -1,11 +1,11 @@
-import styles from "./Search.module.css";
 import { debounce } from "lodash-es";
 import { useCallback, useEffect, useState } from "react";
 import { usePosts } from "../context/PostsContext";
+import styles from "./Search.module.css";
 
 function Search() {
-	const { getSearchedPosts } = usePosts();
 	const [query, setQuery] = useState("");
+	const { getSearchedPosts } = usePosts();
 
 	const debouncedSearch = useCallback(debounce(getSearchedPosts, 800), []);
 

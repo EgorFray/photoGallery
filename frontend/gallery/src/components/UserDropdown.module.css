@@ -22,6 +22,7 @@ div li {
 	font-size: 1.4rem;
 }
 
+/* BELOW 464px */
 @media (max-width: 29em) {
 	div li {
 		font-size: 1.2rem;

@@ -6,6 +6,7 @@
 	max-width: 100%;
 }
 
+/* BELOW 464px */
 @media (max-width: 29em) {
 	.navbar {
 		grid-template-columns: 10rem 1fr 10rem;

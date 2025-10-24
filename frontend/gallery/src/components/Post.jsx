@@ -11,9 +11,6 @@ function Post({ post }) {
 					src={`${import.meta.env.VITE_BACKEND_URL}${image}`}
 					alt="Something beeautiful here"
 				/>
-				{/* <div className={styles.postBox}>
-					<p className={styles.postDesc}>{description} </p>
-				</div> */}
 			</Link>
 		</li>
 	);

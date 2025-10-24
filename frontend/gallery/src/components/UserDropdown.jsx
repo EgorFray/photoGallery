@@ -1,10 +1,10 @@
 import { GrLogout } from "react-icons/gr";
 import { CgProfile } from "react-icons/cg";
 import { motion } from "motion/react";
-import styles from "./UserDropdown.module.css";
 import { useAuth } from "../context/FakeAuthContext";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
+import styles from "./UserDropdown.module.css";
 
 function UserDropdown() {
 	const { user, logout } = useAuth();

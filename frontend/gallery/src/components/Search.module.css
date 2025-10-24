@@ -45,12 +45,14 @@
 	font-weight: 300;
 }
 
+/* BELOW 700px */
 @media (max-width: 43.75em) {
 	.searchInput {
 		width: 100%;
 	}
 }
 
+/* BELOW 496 */
 @media (max-width: 31em) {
 	.searchInput {
 		padding: 1rem;

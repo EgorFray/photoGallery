@@ -1,6 +1,6 @@
 import { usePosts } from "../context/PostsContext";
-import styles from "./CreatePostForm.module.css";
 import { useNavigate } from "react-router-dom";
+import styles from "./CreatePostForm.module.css";
 import Spinner from "./Spinner";
 import Button from "./Button";
 
@@ -37,6 +37,7 @@ function CreatePostForm() {
 						placeholder="Add description"
 					/>
 				</div>
+
 				<div className={styles.btnWrapper}>
 					<Button className={styles.btnForm} type="submit">
 						Post

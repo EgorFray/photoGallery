@@ -1,10 +1,10 @@
+import { useActionData, useLocation } from "react-router-dom";
+import { useAuth } from "../context/FakeAuthContext";
 import styles from "./NavBar.module.css";
 import Search from "../components/Search";
 import Logo from "./Logo";
 import Empty from "./Empty";
-import { useActionData, useLocation } from "react-router-dom";
 import SearchPlaceholder from "./SearchPlaceholder";
-import { useAuth } from "../context/FakeAuthContext";
 import User from "./User";
 
 function NavBar() {

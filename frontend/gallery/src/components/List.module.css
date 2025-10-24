@@ -10,6 +10,7 @@
 	background-clip: padding-box;
 }
 
+/* BELOW 1136px */
 @media (max-width: 71em) {
 	.myMasonryGrid {
 		margin-left: 0rem;

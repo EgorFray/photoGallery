@@ -21,6 +21,7 @@ function Presentation() {
 					Create your own beautifull gallery
 				</motion.p>
 			</div>
+
 			<div className={styles.imgBox}>
 				<div className={styles.imgWrapper}>
 					<motion.img
@@ -30,6 +31,7 @@ function Presentation() {
 						transition={{ duration: 0.8, ease: "easeOut", delay: 1 }}
 					/>
 				</div>
+
 				<div className={styles.imgWrapper}>
 					<motion.img
 						src="/mist.jpg"
@@ -38,6 +40,7 @@ function Presentation() {
 						transition={{ duration: 0.8, ease: "easeOut", delay: 2 }}
 					/>
 				</div>
+
 				<div className={styles.imgWrapper}>
 					<motion.img
 						src="/tent.jpg"
@@ -47,6 +50,7 @@ function Presentation() {
 					/>
 				</div>
 			</div>
+
 			<div className={styles.btnBox}>
 				<MotionButton
 					handleClick={() => navigate("/login")}

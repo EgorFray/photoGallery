@@ -67,6 +67,7 @@ function UpdateUserForm() {
 					</label>
 					<input type="file" name="avatar" id="avatar" />
 				</div>
+
 				<div className={styles.btnWrapper}>
 					<Button type="submit">Update user</Button>
 				</div>

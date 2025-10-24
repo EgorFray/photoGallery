@@ -9,6 +9,7 @@
 	font-size: 2rem;
 }
 
+/* BELOW 464px */
 @media (max-width: 29em) {
 	.button {
 		padding: 1rem 2rem;

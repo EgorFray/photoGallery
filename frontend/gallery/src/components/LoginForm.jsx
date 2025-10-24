@@ -9,6 +9,7 @@ function LoginForm() {
 	const [password, setPassword] = useState("");
 
 	const { login, isAuthenticated } = useAuth();
+
 	const navigate = useNavigate();
 
 	function handleSubmit(e) {
@@ -57,6 +58,7 @@ function LoginForm() {
 			</form>
 
 			<h3 className={styles.headingCreateUser}>Or if you don't have an account</h3>
+
 			<Button handleClick={handleClick}>Create user</Button>
 		</div>
 	);
