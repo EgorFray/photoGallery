@@ -129,6 +129,10 @@
 
 /* BELOW 608px */
 @media (max-width: 38em) {
+	.container {
+		margin-top: 6rem;
+	}
+
 	.text {
 		font-size: 2rem;
 	}
