@@ -52,6 +52,10 @@
 
 /* BELOW 464px */
 @media (max-width: 29em) {
+	.formContainer {
+		margin-top: 4.8rem;
+	}
+
 	.updateForm {
 		width: 30rem;
 		max-width: 30rem;
