@@ -7,6 +7,7 @@
 }
 
 .createForm {
+	margin-top: 4.8rem;
 	padding: 2rem;
 	width: 40rem;
 	max-width: 40rem;
@@ -42,7 +43,12 @@
 
 /* BELOW 464px */
 @media (max-width: 29em) {
+	.formContainer {
+		height: 100vh;
+	}
+
 	.createForm {
+		margin-top: 0rem;
 		width: 30rem;
 		max-width: 30rem;
 	}
