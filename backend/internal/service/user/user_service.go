@@ -33,6 +33,16 @@ func (s *UserService) CreateUser(req types.UserRequest, hashedPassword string, f
 	}
 
 	imagePath := "/" + publicPath
+	// Check if email has already been used
+	userData, err := s.UserRepo.DbCallGetUserByEmail(req.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	if (userData != nil) {
+		return nil, fmt.Errorf("this email has already been used")
+	}
+
 	userId, err := s.UserRepo.DbCallCreateUser(req.Name, req.Email, hashedPassword, imagePath)
 	if err != nil {
 		return nil, err
@@ -45,7 +55,7 @@ func (s *UserService) GetUserByEmail(email string) (*types.UserModel, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &userData, nil
+	return userData, nil
 }
 
 func (s *UserService) GetUserById(id string) (*types.UserResponse, error) {
