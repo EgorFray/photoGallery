@@ -35,13 +35,16 @@ function UserProvider({ children }) {
 			});
 			if (!res.ok) {
 				const data = await res.json();
-				setError(data.Error || "Failed to create user");
-				return;
+				console.log(data);
+				setError(data.error);
+				return false;
 			}
 			const data = await res.json();
 			setNewUser(data);
+			return true;
 		} catch (err) {
 			setError("There was an error while creating the user");
+			return false;
 		} finally {
 			setIsLoading(false);
 		}
@@ -67,7 +70,15 @@ function UserProvider({ children }) {
 
 	return (
 		<UserContext.Provider
-			value={{ newUser, curUser, isLoading, createUser, getCurrentUser, updateUser }}
+			value={{
+				newUser,
+				curUser,
+				isLoading,
+				error,
+				createUser,
+				getCurrentUser,
+				updateUser,
+			}}
 		>
 			{children}
 		</UserContext.Provider>

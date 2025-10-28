@@ -6,7 +6,7 @@ import styles from "./CreateUserForm.module.css";
 import Spinner from "./Spinner";
 
 function CreateUserForm() {
-	const { createUser, isLoading } = useUser();
+	const { createUser, isLoading, error } = useUser();
 	const [email, setEmail] = useState("");
 	const [name, setName] = useState("");
 	const [password, setPassword] = useState("");
@@ -17,8 +17,10 @@ function CreateUserForm() {
 		e.preventDefault();
 
 		const formData = new FormData(e.target);
-		await createUser(formData);
-		navigate("/login");
+		const success = await createUser(formData);
+		if (success) {
+			navigate("/login");
+		}
 	}
 
 	if (isLoading) return <Spinner />;
@@ -49,6 +51,8 @@ function CreateUserForm() {
 						value={email}
 					/>
 				</div>
+
+				{error && <p className={styles.error}>{error}</p>}
 
 				<div className={styles.row}>
 					<label htmlFor="password">Password</label>
