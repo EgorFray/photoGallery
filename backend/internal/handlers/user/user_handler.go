@@ -4,6 +4,7 @@ import (
 	service "gallery/backend/internal/service/user"
 	"gallery/backend/internal/types"
 	"gallery/backend/internal/utils"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -38,6 +39,7 @@ func (u *UserHandler) CreateUser(c *gin.Context) {
 
 	userId, err := u.userService.CreateUser(req, hashedPassword, file)
 	if err != nil {
+		log.Println("Create user error:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}

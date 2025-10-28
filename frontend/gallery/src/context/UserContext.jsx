@@ -27,13 +27,19 @@ function UserProvider({ children }) {
 	async function createUser(newUser) {
 		try {
 			setIsLoading(true);
-			const data = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user/create`, {
+			const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user/create`, {
 				method: "POST",
 				body: newUser,
 			});
+			const data = await res.json();
+			if (!res.ok) {
+				throw new Error(data.Error || "Failed to create user");
+			}
 			setNewUser(data);
-		} catch {
-			alert("There was an error loading data");
+		} catch (err) {
+			if (err.message.includes("email")) {
+				alert("This email has already been used");
+			}
 		} finally {
 			setIsLoading(false);
 		}
