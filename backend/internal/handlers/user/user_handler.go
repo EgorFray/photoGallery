@@ -39,6 +39,10 @@ func (u *UserHandler) CreateUser(c *gin.Context) {
 
 	userId, err := u.userService.CreateUser(req, hashedPassword, file)
 	if err != nil {
+		if err.Error() == "this email has already been used" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
 		log.Println("Create user error:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

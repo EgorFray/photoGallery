@@ -9,6 +9,7 @@ function UserProvider({ children }) {
 	const [newUser, setNewUser] = useState({});
 	const [curUser, setCurUser] = useState({});
 	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState("");
 
 	async function getCurrentUser(userId) {
 		try {
@@ -27,19 +28,20 @@ function UserProvider({ children }) {
 	async function createUser(newUser) {
 		try {
 			setIsLoading(true);
+			setError("");
 			const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user/create`, {
 				method: "POST",
 				body: newUser,
 			});
-			const data = await res.json();
 			if (!res.ok) {
-				throw new Error(data.Error || "Failed to create user");
+				const data = await res.json();
+				setError(data.Error || "Failed to create user");
+				return;
 			}
+			const data = await res.json();
 			setNewUser(data);
 		} catch (err) {
-			if (err.message.includes("email")) {
-				alert("This email has already been used");
-			}
+			setError("There was an error while creating the user");
 		} finally {
 			setIsLoading(false);
 		}

@@ -33,6 +33,12 @@ func (u *UserRepository) DbCallGetUserByEmail(email string) (*types.UserModel, e
 	var user types.UserModel
 
 	err := u.db.QueryRow("SELECT id, name, email, password, avatar FROM users WHERE email = $1", email).Scan(&user.ID, &user.Name, &user.Email, &user.Password, &user.Avatar)
+	if err == sql.ErrNoRows {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
 	return &user, err
 }
 
